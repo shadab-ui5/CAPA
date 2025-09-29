@@ -1,0 +1,974 @@
+<mvc:View controllerName="hodek.capa.controller.ObjectPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true" showNavButton="true" navButtonPress="onNavBack">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox>
+                            <m:Text text="First Line Info" />
+                            <m:Text text="Second Line Info" />
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                <ObjectPageSection id="info" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subinfo">
+                            <blocks>
+                                <sf:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+                                    <m:Label text="Supplier" design="Bold" />
+                                    <m:Text text="{selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                                </sf:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+                <ObjectPageSection id="secProblemHeader" title="Problem Header" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subProblemHeader">
+                            <blocks>
+                                <sf:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+
+                                    <!-- Type of NC -->
+                                    <m:HBox justifyContent="Center" alignItems="Center">
+                                        <m:HBox width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
+                                            <m:Label text="Type of NC :" design="Bold" />
+                                            <m:Input value="{capaModel>/typeOfNC}" editable="true" valueState="None" class="sapUiTinyMarginBegin"/>
+                                        </m:HBox>
+                                        <!-- Ref / Message -->
+                                        <m:HBox width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
+                                            <m:Label text="Ref :" design="Bold" />
+                                            <m:Input value="{capaModel>/refMessage}" editable="true" class="sapUiTinyMarginBegin"/>
+                                        </m:HBox>
+                                        <!-- 8D Initiated Date -->
+                                        <m:HBox width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
+                                            <m:Label text="8D Initiated Date :" design="Bold"/>
+                                            <m:DatePicker id="id8dInitiated" value="{capaModel>/initiatedDate}" valueFormat="dd-MM-yyyy" displayFormat="long" class="sapUiTinyMarginBegin"/>
+                                        </m:HBox>
+                                    </m:HBox>
+                                    <!-- Part Name -->
+                                    <m:Label text="Part Name" design="Bold"/>
+                                    <m:Input value="{capaModel>/partName}" editable="true" />
+
+                                    <!-- Customer Name -->
+                                    <m:Label text="Customer Name" design="Bold"/>
+                                    <m:Input value="{capaModel>/customerName}" editable="true" />
+
+                                    <!-- Hodek / Customer Part No -->
+                                    <m:Label text="Hodek / Customer Part No" design="Bold"/>
+                                    <m:Input value="{capaModel>/customerPartNo}" editable="true" />
+
+                                    <!-- Vehicle Model -->
+                                    <m:Label text="Vehicle Model" design="Bold"/>
+                                    <m:Input value="{capaModel>/vehicleModel}" editable="true" />
+
+                                    <!-- Drg Ref No -->
+                                    <m:Label text="Drg Ref No" design="Bold"/>
+                                    <m:Input value="{capaModel>/drgRefNo}" editable="true" />
+
+                                    <!-- Problem -->
+                                    <m:Label text="Problem" design="Bold"/>
+                                    <m:TextArea value="{capaModel>/problem}" rows="2" width="100%" />
+
+                                    <!-- Drg Rev -->
+                                    <m:Label text="Drg Rev" design="Bold"/>
+                                    <m:Input value="{capaModel>/drgRev}" editable="true" />
+                                </sf:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <ObjectPageSection id="secProblemAwareness" title="Problem Awareness" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subProblemAwareness" titleUppercase="false">
+                            <blocks>
+                                <sf:SimpleForm id="formProblemAwareness" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+
+                                    <!-- Problem Scope -->
+                                    <!-- <m:Label text="Problem Scope" design="Bold" />
+                                    <m:Select selectedKey="Safety">
+                                        <m:items>
+                                            <core:Item key="New" text="New" />
+                                            <core:Item key="Existing" text="Existing" />
+                                            <core:Item key="Reopened" text="Reopened/Repeat" />
+
+                                        </m:items>
+                                    </m:Select> -->
+
+                                    <!-- Problem Type (New / Existing / Reopened) -->
+                                    <m:Label text="Problem Scope" design="Bold" />
+                                    <m:SegmentedButton selectedKey="{capaModel>/problemType}">
+                                        <m:items>
+                                            <m:SegmentedButtonItem key="New" text="New" />
+                                            <m:SegmentedButtonItem key="Existing" text="Existing" />
+                                            <m:SegmentedButtonItem key="Reopened" text="Reopened" />
+                                        </m:items>
+                                    </m:SegmentedButton>
+                                    <!-- Problem Severity -->
+                                    <m:Label text="Problem Severity" design="Bold" />
+                                    <m:MultiComboBox selectedKeys="Safety">
+                                        <m:items>
+                                            <core:Item key="Safety" text="Safety" />
+                                            <core:Item key="Regulatory" text="Regulatory" />
+                                            <core:Item key="FitFunctional" text="Fit Functional" />
+                                            <core:Item key="Aesthetic" text="Aesthetic" />
+                                            <core:Item key="Reliability" text="Reliability" />
+                                            <core:Item key="Other" text="Other" />
+                                        </m:items>
+                                    </m:MultiComboBox>
+
+
+                                    <!-- Details if any -->
+                                    <m:Label text="Details (if any)" design="Bold" />
+                                    <m:TextArea value="{capaModel>/problemDetails}" rows="3" width="100%" />
+
+
+
+                                    <!-- Problem Source -->
+                                    <m:Label text="Problem Source" design="Bold" />
+                                    <m:MultiComboBox selectedKeys="{capaModel>/problemSource}">
+                                        <m:items>
+                                            <core:Item key="InHouse" text="In-House MFG / Line" />
+                                            <core:Item key="Supplier" text="Supplier / Incoming" />
+                                            <core:Item key="Design" text="Design" />
+                                            <core:Item key="Process" text="Process" />
+                                            <core:Item key="Material" text="Material" />
+                                            <core:Item key="Other" text="Other" />
+                                        </m:items>
+                                    </m:MultiComboBox>
+
+                                    <!-- % Defect -->
+                                    <m:Label text="% Defect" design="Bold" />
+                                    <m:Input value="{capaModel>/percentDefect}" type="Number" />
+
+                                    <!-- Process History / Metrics -->
+                                    <m:Label text="Process History  Metrics" design="Bold" />
+                                    <m:VBox>
+                                        <m:HBox>
+                                            <m:VBox width="20%" class="sapUiTinyMarginEnd">
+                                                <m:Label text="PPAP - Ppk" design="Bold" />
+                                                <m:Input value="{capaModel>/ppapPpk}" />
+                                            </m:VBox>
+                                            <m:VBox width="20%" class="sapUiTinyMarginEnd">
+                                                <m:Label text="RPN Rating" design="Bold" />
+                                                <m:Input value="{capaModel>/rpnRating}" />
+                                            </m:VBox>
+                                            <m:VBox width="20%" class="sapUiTinyMarginEnd">
+                                                <m:Label text="Present Ppk / Cpk" design="Bold" />
+                                                <m:Input value="{capaModel>/presentPpkCpk}" />
+                                            </m:VBox>
+                                            <m:VBox width="20%" class="sapUiTinyMarginEnd">
+                                                <m:Label text="Present PPM" design="Bold" />
+                                                <m:Input value="{capaModel>/presentPpm}" />
+                                            </m:VBox>
+                                            <m:VBox width="20%" class="sapUiTinyMarginEnd">
+                                                <m:Label text="Internal Audit Rating / Score" design="Bold" />
+                                                <m:Input value="{capaModel>/internalAuditScore}" />
+                                            </m:VBox>
+                                        </m:HBox>
+                                    </m:VBox>
+
+                                    <!-- Free space / Remarks -->
+                                    <m:Label text="Remarks" design="Bold" />
+                                    <m:TextArea value="{capaModel>/remarks}" rows="2" width="100%" />
+
+                                </sf:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- ================= 2. ESTABLISHING THE TEAM ================= -->
+                <ObjectPageSection id="secTeam" title="Establishing the Team" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subTeam">
+                            <blocks>
+                                <m:Table id="teamTable" items="{capaModel>/team}" growing="true" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:Title text="Team Members"/>
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add Member" press="onAddTeamMember"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <m:columns>
+                                        <!-- Counter -->
+                                        <m:Column hAlign="Center" width="3em">
+                                            <m:Text text="No."/>
+                                        </m:Column>
+
+                                        <!-- Name -->
+                                        <m:Column width="20rem">
+                                            <m:Text text="Name"/>
+                                        </m:Column>
+
+                                        <!-- Champion checkbox -->
+                                        <m:Column hAlign="Center" width="5em">
+                                            <m:Text text="Champion"/>
+                                        </m:Column>
+
+                                        <!-- Leader checkbox -->
+                                        <m:Column hAlign="Center" width="5em">
+                                            <m:Text text="Leader"/>
+                                        </m:Column>
+
+                                        <!-- Team Member checkbox -->
+                                        <m:Column hAlign="Center" width="5em">
+                                            <m:Text text="Team Member"/>
+                                        </m:Column>
+
+                                        <!-- Role -->
+                                        <m:Column>
+                                            <m:Text text="Role"/>
+                                        </m:Column>
+
+                                        <!-- Department -->
+                                        <m:Column>
+                                            <m:Text text="Department"/>
+                                        </m:Column>
+
+                                        <!-- Responsibility -->
+                                        <m:Column>
+                                            <m:Text text="Responsibility"/>
+                                        </m:Column>
+
+                                        <!-- Contact -->
+                                        <m:Column>
+                                            <m:Text text="Contact"/>
+                                        </m:Column>
+
+                                        <!-- Delete -->
+                                        <m:Column>
+                                            <m:Text text="Delete"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <!-- Row counter -->
+                                                <m:Text text="{capaModel>index}"/>
+
+                                                <!-- Name -->
+                                                <m:Input value="{capaModel>name}"/>
+
+                                                <!-- Checkboxes -->
+                                                <m:CheckBox selected="{capaModel>isChampion}" text=""/>
+                                                <m:CheckBox selected="{capaModel>isLeader}" text=""/>
+                                                <m:CheckBox selected="{capaModel>isTeamMember}" text=""/>
+
+                                                <!-- Role, Department, Responsibility, Contact -->
+                                                <m:Input value="{capaModel>role}"/>
+                                                <m:Input value="{capaModel>department}"/>
+                                                <m:Input value="{capaModel>responsibility}"/>
+                                                <m:Input value="{capaModel>contact}"/>
+
+                                                <!-- Delete button: only show if rowIndex > 0 -->
+                                                <m:Button icon="sap-icon://delete" press="onDeleteTeamMember" visible="{= ${capaModel>index} > 1 }"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- ================= Problem Definition ================= -->
+                <ObjectPageSection id="problemDefinitionSection" title="Problem Definition" showTitle="true">
+                    <subSections>
+                        <ObjectPageSubSection id="problemDefinition" title="1. Definition" showTitle="true">
+                            <blocks>
+                                <sf:SimpleForm id="formProblemDefinition" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+
+                                    <!-- Attachments Section -->
+                                    <m:Label text="Attachments" />
+                                    <m:VBox>
+                                        <m:HBox justifyContent="SpaceAround">
+                                            <m:CheckBox text="Photo / Sketch" selected="{capaModel>/attachments/photo}" />
+                                            <m:CheckBox text="Trend Chart" selected="{capaModel>/attachments/trend}" />
+                                            <m:CheckBox text="Pareto Analysis" selected="{capaModel>/attachments/pareto}" />
+                                            <m:CheckBox text="Control Chart" selected="{capaModel>/attachments/control}" />
+                                            <m:CheckBox text="Warranty Data" selected="{capaModel>/attachments/warranty}" />
+                                        </m:HBox>
+                                    </m:VBox>
+                                    <!-- File Upload for selected option -->
+                                    <m:Label text="Upload File" />
+                                    <un:FileUploader id="fileUploader" name="uploadFile" uploadUrl="/upload" width="300px" placeholder="Choose a file..." />
+
+                                    <!-- Good Part Image -->
+                                    <m:Label text="Description" />
+                                    <m:TextArea value="{capaModel>/problemDef/description}" rows="4"/>
+
+                                </sf:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="problemDescription" title="2. Description" showTitle="true">
+                            <blocks>
+
+                                <sf:SimpleForm id="formProblemDescription" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+
+                                    <!-- Symptoms of Failure -->
+                                    <m:Label text="What are the symptoms of the failure? (details of failure)" />
+                                    <m:Input value="Wrong Barcode Label pasted." width="100%" />
+
+                                    <!-- Impact of Failure -->
+                                    <m:Label text="What product feature or process had the failure? (Impact of failure)" />
+                                    <m:Input value="Wrong Part No from scan caused Engine line not to accept and stopped line production." width="100%" />
+
+                                    <!-- Failure Location -->
+                                    <m:Label text="Where is the failure occurring?" />
+                                    <m:Input value="Failure occurring at TCL J, Engine line." width="100%" />
+
+                                    <!-- Detection Method -->
+                                    <m:Label text="How was the failure detected?" />
+                                    <m:Input value="Wrong Barcode Label pasted detected at TCL J Engine line by Line Operator during scanning." width="100%" />
+
+                                    <!-- Failure Date -->
+                                    <m:Label text="When did the failure occur?" />
+                                    <m:Input value="Issue communicated by our representative Mr. Arunkumar dated 23.02.2025 at 3 pm." width="100%" />
+
+                                </sf:SimpleForm>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- ================= 3. CONTAINMENT ACTIONS ================= -->
+                <ObjectPageSection id="secContainment" title="Containment Actions" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subContainment">
+                            <blocks>
+                                <m:Table id="containmentTable" items="{capaModel>/containmentActions}" growing="true">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add" press=".onAddContainment"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="No"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Immediate Action Taken"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Completion"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Responsible"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Break Point"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Status"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Action"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <!-- Row Number -->
+                                                <m:Text text="{= ${capaModel>rowIndex}}"/>
+
+                                                <!-- Immediate Action Taken -->
+                                                <m:Input value="{capaModel>immediateAction}" />
+
+                                                <!-- Completion -->
+                                                <m:DatePicker value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+
+                                                <!-- Responsible -->
+                                                <m:Input value="{capaModel>responsible}" />
+
+                                                <!-- Break Point -->
+                                                <m:Input value="{capaModel>breakPoint}" />
+
+                                                <!-- Status -->
+                                                <m:Input value="{capaModel>status}" />
+
+                                                <!-- Delete button for rows except first -->
+                                                <m:Button icon="sap-icon://delete" press=".onDeleteContainment" visible="{= ${capaModel>rowIndex} > 1 }" />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- ================= 4. ROOT CAUSE ANALYSIS ================= -->
+                <ObjectPageSection id="secRootCause" title="Root Cause Analysis" titleUppercase="false">
+                    <subSections>
+                        <!-- 5-Why dynamic table -->
+                        <ObjectPageSubSection id="subRootCause2" title="5-Why Analysis">
+                            <blocks>
+                                <m:VBox>
+                                    <m:HBox justifyContent="Start" alignItems="Center">
+                                        <m:Label class="sapUiSmallMarginEnd" text="Method Used: " design="Bold" />
+                                        <m:Select selectedKey="{capaModel>/rcaMethod}" width="10rem">
+                                            <m:items>
+                                                <core:Item key="5Why" text="5 Why" />
+                                                <core:Item key="Fishbone" text="Fishbone / Ishikawa" />
+                                            </m:items>
+                                        </m:Select>
+                                    </m:HBox>
+                                    <m:Table id="tbl5Why" items="{capaModel>/fiveWhys}" inset="false">
+                                        <m:headerToolbar>
+                                            <m:Toolbar>
+                                                <m:Title text="4.1. Preventive ( Occurrence )-  Why did the process make the defect?"/>
+                                                <m:ToolbarSpacer/>
+                                                <m:Button icon="sap-icon://add" text="Add Why" press="onAddWhy"/>
+                                            </m:Toolbar>
+                                        </m:headerToolbar>
+
+                                        <!-- Columns -->
+                                        <m:columns>
+                                            <m:Column width="6rem">
+                                                <m:Text text="#"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="Probable Cause"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="Problem Definition"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="1 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="2 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="3 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="4 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="5 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="% Contribution"/>
+                                            </m:Column>
+                                            <m:Column width="5rem">
+                                                <m:Text text=""/>
+                                            </m:Column>
+                                        </m:columns>
+
+                                        <!-- Items -->
+                                        <m:items>
+                                            <m:ColumnListItem>
+                                                <m:cells>
+                                                    <m:Text text="Cause-{capaModel>stepNumber}"/>
+                                                    <m:TextArea value="{capaModel>cause}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>definition}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why1}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why2}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why3}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why4}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why5}" rows="3"/>
+                                                    <m:Input value="{capaModel>contribution}" type="Number"/>
+                                                    <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteWhy" visible="{= ${capaModel>/fiveWhys}.length > 1 }"/>
+                                                </m:cells>
+                                            </m:ColumnListItem>
+                                        </m:items>
+                                    </m:Table>
+
+
+                                    <m:Table id="tbl5Why2protect" class="sapUiLargeMarginTop" items="{capaModel>/fiveWhysprotect}" inset="false">
+                                        <m:headerToolbar>
+                                            <m:Toolbar>
+                                                <m:Title text="4.2. Protect ( Non Detection ) -  Why did the process not detect or contain the defect?"/>
+                                                <m:ToolbarSpacer/>
+                                                <m:Button icon="sap-icon://add" text="Add Why" press="onAddWhyProtect"/>
+                                            </m:Toolbar>
+                                        </m:headerToolbar>
+
+                                        <!-- Columns -->
+                                        <m:columns>
+                                            <m:Column width="6rem">
+                                                <m:Text text="#"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="Probable Cause"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="Problem Definition"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="1 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="2 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="3 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="4 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="5 Why?"/>
+                                            </m:Column>
+                                            <m:Column>
+                                                <m:Text text="% Contribution"/>
+                                            </m:Column>
+                                            <m:Column width="5rem">
+                                                <m:Text text=""/>
+                                            </m:Column>
+                                        </m:columns>
+
+                                        <!-- Items -->
+                                        <m:items>
+                                            <m:ColumnListItem>
+                                                <m:cells>
+                                                    <m:Text text="Cause-{capaModel>stepNumber}"/>
+                                                    <m:TextArea value="{capaModel>cause}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>definition}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why1}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why2}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why3}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why4}" rows="3"/>
+                                                    <m:TextArea value="{capaModel>why5}" rows="3"/>
+                                                    <m:Input value="{capaModel>contribution}" type="Number"/>
+                                                    <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteWhyprotect" visible="{= ${capaModel>/fiveWhysprotect}.length > 1 }"/>
+                                                </m:cells>
+                                            </m:ColumnListItem>
+                                        </m:items>
+                                    </m:Table>
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- ================= 5. CORRECTIVE ACTION PLAN ================= -->
+                <!-- <ObjectPageSection id="secCorrective" title="Corrective Action Plan" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subCorrectiveActions">
+                            <blocks>
+                                <m:Table id="correctiveTable" items="{capaModel>/correctiveActions}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:Title text="Corrective Actions"/>
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add Action" press="onAddCorrective"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                            
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="#"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Identified Root Cause (from 5 Why)"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Corrective Action Planned/Taken"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Error-Proofing"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Responsible"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Date"/>
+                                        </m:Column>
+                                        <m:Column width="5rem">
+                                            <m:Text text=""/>
+                                        </m:Column>
+                                    </m:columns>
+
+                      
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>stepNumber}"/>
+                                                <m:Input value="{capaModel>rootCause}"/>
+                                                <m:Input value="{capaModel>action}"/>
+                                                <m:Input value="{capaModel>errorProofing}"/>
+                                                <m:Input value="{capaModel>responsible}"/>
+                                                <m:DatePicker value="{capaModel>date}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/correctiveActions}.length > 1 }"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection> -->
+
+                <!-- ================= 6. PREVENTIVE ACTION PLAN ================= -->
+                <ObjectPageSection id="seccorrective" title="CORRECTIVE ACTIONS / LONG TERM ACTION (Attach Photographs of actions taken)" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subcorrectiveActions">
+                            <blocks>
+                                <m:Table id="correctiveTable" items="{capaModel>/corrective}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:Title text="corrective Effectiveness"/>
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add Entry" press="onAddCorrective"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="#"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Corrective Action Taken"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Target"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Actual"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Result of Actions"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Responsibility"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Status"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Attachment"/>
+                                        </m:Column>
+                                        <m:Column width="7rem">
+                                            <m:Text text=""/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>stepNumber}"/>
+                                                <m:Input value="{capaModel>actionTaken}"/>
+
+                                                <m:DatePicker value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:Input value="{capaModel>result}"/>
+                                                <m:Input value="{capaModel>responsibe}"/>
+
+                                                <m:Select selectedKey="{capaModel>status}">
+                                                    <m:items>
+                                                        <core:Item key="Open" text="Open"/>
+                                                        <core:Item key="In Progress" text="In Progress"/>
+                                                        <core:Item key="Closed" text="Closed"/>
+                                                    </m:items>
+                                                </m:Select>
+                                                <!-- Show attached filename -->
+                                                <m:Text text="{capaModel>attachment}"/>
+
+                                                <!-- Actions: Upload + Delete -->
+                                                <m:HBox>
+                                                    <m:Button icon="sap-icon://upload" type="Emphasized" press="onUploadFilePress" class="sapUiSmallMarginEnd"/>
+                                                    <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/corrective}.length > 1 }"/>
+                                                </m:HBox>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                
+                <!-- ================= 6. PREVENTIVE ACTION PLAN ================= -->
+                <ObjectPageSection id="secPreventive" title="Preventive Action Plan" titleUppercase="false" showTitle="true">
+                    <subSections>
+                        <ObjectPageSubSection id="subPreventiveActions" title="A. Prevention" titleUppercase="false">
+                            <blocks>
+                                <m:Table id="preventiveTable" items="{capaModel>/preventiveActions}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <!-- <m:Title text="Preventive Actions"/> -->
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add" press="onAddPreventive"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="#"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Processes/Products"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Preventive Actions"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Error Proofing"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Date"/>
+                                        </m:Column>
+                                        <m:Column width="7rem">
+                                            <m:Text text=""/>
+                                        </m:Column>                                        <!-- Actions: Delete -->
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>stepNumber}"/>
+                                                <!-- Index -->
+                                                <m:Input value="{capaModel>process}"/>
+                                                <!-- Processes/Products -->
+                                                <m:Input value="{capaModel>preventiveAction}"/>
+                                                <!-- Preventive Actions -->
+                                                <m:Input value="{capaModel>errorProofing}"/>
+                                                <!-- Error Proofing -->
+                                                <m:DatePicker value="{capaModel>actionDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+
+                                                <!-- Actions column: Delete button -->
+                                                <m:Button icon="sap-icon://delete" type="Reject" press="onDeletePreventive" visible="{= ${capaModel>/preventiveActions}.length > 1 }"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="subReviewActions" title="B. Review" titleUppercase="false" showTitle="true">
+                            <blocks>
+                                <m:Table id="qmsTable" items="{capaModel>/qmsDocuments}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:Title text="QMS Documents"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="#"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="QMS Document"/>
+                                        </m:Column>
+                                        <m:Column width="4rem">
+                                            <m:Text text="If Yes"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Responsible"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Planned Date"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Actual Date"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Status"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>stepNumber}"/>
+                                                <m:Text text="{capaModel>qmsDoc}"/>
+                                                <m:CheckBox selected="{capaModel>ifYes}"/>
+                                                <m:Input value="{capaModel>responsible}"/>
+                                                <m:DatePicker value="{capaModel>plannedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker value="{capaModel>actualDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:Select selectedKey="{capaModel>status}">
+                                                    <m:items>
+                                                        <core:Item key="Open" text="Open"/>
+                                                        <core:Item key="In Progress" text="In Progress"/>
+                                                        <core:Item key="Closed" text="Closed"/>
+                                                    </m:items>
+                                                </m:Select>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+
+                    </subSections>
+                </ObjectPageSection>
+                <ObjectPageSection id="secproblemClosure" title="PROBLEM CLOSURE and SIGN-OFF" titleUppercase="false" showTitle="true">
+                    <subSections>
+                        <ObjectPageSubSection id="subproblemClosure" title="PROBLEM CLOSURE and SIGN-OFF" titleUppercase="false">
+                            <blocks>
+                                <m:Table id="closureTable" items="{path: 'capaModel>/closureData'}" inset="false">
+
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <!-- <m:Title text="Problem Closure and Sign-Off"/> -->
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column>
+                                            <m:Text text="No"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Phase"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Start Date"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Completion"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Team Member"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Area"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Sign-off"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items Template -->
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>no}"/>
+                                                <m:Text text="{capaModel>phase}"/>
+                                                <m:DatePicker value="{capaModel>startDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker value="{capaModel>completion}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:Input value="{capaModel>teamMember}"/>
+                                                <m:Input value="{capaModel>area}"/>
+                                                <m:Input value="{capaModel>signOff}"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+                <!-- ================= 11. MANAGEMENT VERIFICATION  CLOSURE ================= -->
+                <ObjectPageSection id="secManagement" title="Management Verification  Closure" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection>
+                            <blocks>
+                                <m:Table id="signOffTable" inset="false" class="sapUiTableGrid" width="100%">
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column>
+                                            <m:Text text="Head"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Production Chief"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Quality Chief/MR"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Design Chief"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Process Chief"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="PLANT HEAD"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <!-- Data Rows -->
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Sign"/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Date"/>
+                                                <m:DatePicker value=""/>
+                                                <m:DatePicker value=""/>
+                                                <m:DatePicker value=""/>
+                                                <m:DatePicker value=""/>
+                                                <m:DatePicker value=""/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Name"/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                                <m:Input value=""/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+
+                                        <!-- Footer row as "column names" -->
+                                        <!-- <m:ColumnListItem type="Inactive" class="footerRow">
+                                            <m:cells>
+                                                <m:Text text="Head"/>
+                                                <m:Text text="Production Chief"/>
+                                                <m:Text text="Quality Chief/MR"/>
+                                                <m:Text text="Design Chief"/>
+                                                <m:Text text="Process Chief"/>
+                                                <m:Text text="PLANT HEAD"/>
+                                            </m:cells>
+                                        </m:ColumnListItem> -->
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+            </sections>
+        </ObjectPageLayout>
+    </m:Page>
+</mvc:View>
