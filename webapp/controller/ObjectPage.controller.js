@@ -15,12 +15,7 @@ sap.ui.define([
 
         onInit: function () {
             let oSelectModel = this.getOwnerComponent().getModel('selectedModel');
-            if (!oSelectModel) {
-                this.getOwnerComponent().getRouter().navTo("RouteMain", {
-                }, true);
-                return;
-            }
-            this.getView().setModel(oSelectModel, 'selectedModel');
+
             let oModel = new sap.ui.model.json.JSONModel({
                 team: [{ index: 1, name: "", isChampion: false, isLeader: false, isTeamMember: false, role: "", department: "", responsibility: "", contact: "" }],
                 containmentActions: [
@@ -82,12 +77,24 @@ sap.ui.define([
                         attachmentContent: ""  // base64 content
                     }
                 ],
-                preventiveActions: [{
+                validating: [
+                    {
+                        stepNumber: 1,
+                        actionTaken: "",
+                        target: "",
+                        actual: "",
+                        result: "",
+                        responsibe: "",
+                        status: "Open",
+                    }
+                ],
+                horizontalDeployment: [{
                     stepNumber: 1,
-                    process: "",
-                    preventiveAction: "",
-                    errorProofing: "",
-                    actionDate: ""
+                    Product: "",
+                    ActionDetail: "",
+                    ErrorProofing: "",
+                    Responsible: "",
+                    When: ""
                 }],
                 qmsDocuments: [
                     { stepNumber: 1, qmsDoc: "Control Plan", ifYes: false, responsible: "", plannedDate: "", actualDate: "", status: "Open" },
@@ -115,9 +122,72 @@ sap.ui.define([
                     { "text": "Pareto Analysis", "selected": false },
                     { "text": "Control Chart", "selected": false },
                     { "text": "Warranty Data", "selected": true }
-                ]
+                ],
+                preventiveActions: [{
+                    stepNumber: 1,
+                    PreventiveAction: "",
+                    Target: "",
+                    Actual: "",
+                    Result: "",
+                    Resp: "",
+                    Status: ""
+                }],
+                effectivenessData: [
+                    { stepNumber: 1, Month: "", MfgQty: "", DefQty: "", Date: "" }],
+                dcpData: [
+                    { stepNumber: 1, "qmsDocument": "PFMEA / DFMEA", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed" },
+                    { stepNumber: 2, "qmsDocument": "Control Plan", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed" },
+                    { stepNumber: 3, "qmsDocument": "SOP / WI", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed" },
+                    { stepNumber: 4, "qmsDocument": "OPL / Quality Alert", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed" }
+                ],
+                totalTimeDays: 10,
+                qmsOptions: [
+                    "Quality Management System",
+                    "Safety",
+                    "PFD / PFC",
+                    "Process Drawing",
+                    "PFMEA / DFMEA",
+                    "Control Plan",
+                    "SOP / WI",
+                    "SOS / JES",
+                    "Poka-Yoke",
+                    "Firewall",
+                    "IR / MISQ",
+                    "OPL / Quality Alert",
+                    "Tool Layout",
+                    "Process Sheet / Process Mapping",
+                    "Tool Life",
+                    "Fixture Drawing",
+                    "Gauge Drawing",
+                    "IMTE / GAUGE",
+                    "Cali Plan / Frequency",
+                    "Packing Change",
+                    "DVP & R",
+                    "HEP - Reactive",
+                    "HEP - Proactive",
+                    "PHR - Part Handling",
+                    "Acceptance Criteria",
+                    "Hodek Standard",
+                    "CSR",
+                    "Training Plan",
+                    "Skill Matrix",
+                    "PM Check",
+                    "Lesson Learn"
+                ],
+                fishbone: [{
+                    stepNumber: 1, man: "", machine: "", material: "", method: "", measurment: "", environment: ""
+                }]
             });
+            if (!oModel.getProperty("/rcaMethod")) {
+                oModel.setProperty("/rcaMethod", "5Why");
+            }
             this.getView().setModel(oModel, "capaModel");
+            if (!oSelectModel) {
+                this.getOwnerComponent().getRouter().navTo("RouteMain", {
+                }, true);
+                return;
+            }
+            this.getView().setModel(oSelectModel, 'selectedModel');
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("RouteObject").attachPatternMatched(this._onRouteMatched, this);
         },
@@ -208,6 +278,16 @@ sap.ui.define([
 
             oModel.setProperty("/fiveWhys", aWhys);
         },
+        onAddfish: function () {
+            let oModel = this.getView().getModel("capaModel");
+            let aWhys = oModel.getProperty("/fishbone");
+
+            aWhys.push({
+                stepNumber: aWhys.length + 1, man: "", machine: "", material: "", method: "", measurment: "", environment: ""
+            });
+
+            oModel.setProperty("/fishbone", aWhys);
+        },
         onAddWhyProtect: function () {
             let oModel = this.getView().getModel("capaModel");
             let aWhys = oModel.getProperty("/fiveWhysprotect");
@@ -255,6 +335,21 @@ sap.ui.define([
 
             oModel.setProperty("/fiveWhys", aWhys);
         },
+        onDeletefish: function (oEvent) {
+            let oModel = this.getView().getModel("capaModel");
+            let aWhys = oModel.getProperty("/fishbone");
+
+            let oItem = oEvent.getSource().getParent(); // Row
+            let oContext = oItem.getBindingContext("capaModel");
+            let iIndex = oContext.getPath().split("/").pop();
+
+            aWhys.splice(iIndex, 1);
+
+            // Re-index step numbers
+            aWhys.forEach((e, i) => e.stepNumber = i + 1);
+
+            oModel.setProperty("/fishbone", aWhys);
+        },
         onAddCorrective: function () {
             let oModel = this.getView().getModel("capaModel");
             let aActions = oModel.getProperty("/corrective");
@@ -287,6 +382,39 @@ sap.ui.define([
             aActions.forEach((e, i) => e.stepNumber = i + 1);
 
             oModel.setProperty("/corrective", aActions);
+        },
+        onAddvalidating: function () {
+            let oModel = this.getView().getModel("capaModel");
+            let aActions = oModel.getProperty("/validating");
+            aActions.push({
+                stepNumber: aActions.length + 1,
+                actionTaken: "",
+                target: "",
+                actual: "",
+                result: "",
+                responsibe: "",
+                status: "Open",
+                attachment: "", // will hold filename
+                attachmentContent: ""  // base64 content
+            });
+
+            oModel.setProperty("/validating", aActions);
+        },
+
+        onDeletevalidating: function (oEvent) {
+            let oModel = this.getView().getModel("capaModel");
+            let aActions = oModel.getProperty("/validating");
+
+            let oItem = oEvent.getSource().getParent(); // Row
+            let oContext = oItem.getBindingContext("capaModel");
+            let iIndex = oContext.getPath().split("/").pop();
+
+            aActions.splice(iIndex, 1);
+
+            // Re-index step numbers
+            aActions.forEach((e, i) => e.stepNumber = i + 1);
+
+            oModel.setProperty("/validating", aActions);
         },
         onAddMonitoring: function () {
             let oModel = this.getView().getModel("capaModel");
@@ -389,22 +517,54 @@ sap.ui.define([
 
             this._oUploadDialog.open();
         },
-        onAddPreventive: function () {
-            let oModel = this.getView().getModel("capaModel");
-            let aData = oModel.getProperty("/preventiveActions") || [];
+        // onAddPreventive: function () {
+        //     let oModel = this.getView().getModel("capaModel");
+        //     let aData = oModel.getProperty("/preventiveActions") || [];
 
+        //     aData.push({
+        //         stepNumber: aData.length + 1,
+        //         process: "",
+        //         preventiveAction: "",
+        //         errorProofing: "",
+        //         actionDate: ""
+        //     });
+
+        //     oModel.setProperty("/preventiveActions", aData);
+        // },
+
+        // onDeletePreventive: function (oEvent) {
+        //     let oModel = this.getView().getModel("capaModel");
+        //     let aData = oModel.getProperty("/preventiveActions");
+
+        //     let oItem = oEvent.getSource().getParent(); // ColumnListItem
+        //     let oContext = oItem.getBindingContext("capaModel");
+        //     let iIndex = oContext.getPath().split("/").pop();
+
+        //     aData.splice(iIndex, 1);
+
+        //     // Re-index step numbers
+        //     aData.forEach((e, i) => e.stepNumber = i + 1);
+
+        //     oModel.setProperty("/preventiveActions", aData);
+        // },
+
+
+        onAddPreventiveRow: function () {
+            var oModel = this.getView().getModel("capaModel");
+            var aData = oModel.getProperty("/preventiveActions") || [];
             aData.push({
                 stepNumber: aData.length + 1,
-                process: "",
-                preventiveAction: "",
-                errorProofing: "",
-                actionDate: ""
+                PreventiveAction: "",
+                Target: "",
+                Actual: "",
+                Result: "",
+                Resp: "",
+                Status: ""
             });
-
             oModel.setProperty("/preventiveActions", aData);
         },
 
-        onDeletePreventive: function (oEvent) {
+        onDeletePreventiveRow: function (oEvent) {
             let oModel = this.getView().getModel("capaModel");
             let aData = oModel.getProperty("/preventiveActions");
 
@@ -419,6 +579,100 @@ sap.ui.define([
 
             oModel.setProperty("/preventiveActions", aData);
         },
+
+        onAddHorizontalRow: function () {
+            var oModel = this.getView().getModel("capaModel");
+            var aData = oModel.getProperty("/horizontalDeployment") || [];
+            aData.push({
+                stepNumber: aData.length + 1,
+                Product: "",
+                ActionDetail: "",
+                ErrorProofing: "",
+                Responsible: "",
+                When: ""
+            });
+            oModel.setProperty("/horizontalDeployment", aData);
+        },
+
+        onDeleteHorizontalRow: function (oEvent) {
+            let oModel = this.getView().getModel("capaModel");
+            let aData = oModel.getProperty("/horizontalDeployment");
+
+            let oItem = oEvent.getSource().getParent(); // ColumnListItem
+            let oContext = oItem.getBindingContext("capaModel");
+            let iIndex = oContext.getPath().split("/").pop();
+
+            aData.splice(iIndex, 1);
+
+            // Re-index step numbers
+            aData.forEach((e, i) => e.stepNumber = i + 1);
+
+            oModel.setProperty("/horizontalDeployment", aData);
+        },
+        onAddEffectivenessRow: function () {
+            var oModel = this.getView().getModel("capaModel");
+            var aData = oModel.getProperty("/effectivenessData") || [];
+
+            aData.push({
+                stepNumber: aData.length + 1,
+                Month: "",
+                MfgQty: "",
+                DefQty: "",
+                Date: ""
+            });
+
+            oModel.setProperty("/effectivenessData", aData);
+        },
+
+        onDeleteEffectivenessRow: function (oEvent) {
+            let oModel = this.getView().getModel("capaModel");
+            let aData = oModel.getProperty("/effectivenessData");
+
+            let oItem = oEvent.getSource().getParent(); // ColumnListItem
+            let oContext = oItem.getBindingContext("capaModel");
+            let iIndex = oContext.getPath().split("/").pop();
+
+            aData.splice(iIndex, 1);
+
+            // Re-index step numbers
+            aData.forEach((e, i) => e.stepNumber = i + 1);
+
+            oModel.setProperty("/effectivenessData", aData);
+        },
+        onAddClosureRow: function () {
+            var oModel = this.getView().getModel("capaModel");
+            var aData = oModel.getProperty("/dcpData") || [];
+
+            aData.push({
+                stepNumber: aData.length + 1,
+                qmsDocument: "",
+                pIfYes: false,
+                documentNo: "",
+                revNoDate: "",
+                resp: "",
+                plannedDate: "",
+                actualDate: "",
+                status: "Pending"
+            });
+
+            oModel.setProperty("/dcpData", aData);
+        },
+
+        onDeleteClosureRow: function () {
+            let oModel = this.getView().getModel("capaModel");
+            let aData = oModel.getProperty("/dcpData");
+
+            let oItem = oEvent.getSource().getParent(); // ColumnListItem
+            let oContext = oItem.getBindingContext("capaModel");
+            let iIndex = oContext.getPath().split("/").pop();
+
+            aData.splice(iIndex, 1);
+
+            // Re-index step numbers
+            aData.forEach((e, i) => e.stepNumber = i + 1);
+
+            oModel.setProperty("/dcpData", aData);
+        }
 
 
 
