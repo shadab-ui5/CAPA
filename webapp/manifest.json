@@ -16,7 +16,7 @@
       "toolsId": "7196f774-3d59-4a94-8bed-f874b41d89ef"
     },
     "dataSources": {
-       "ZVENDOR_QUALITYNOTIF_VAN": {
+      "ZVENDOR_QUALITYNOTIF_VAN": {
         "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZVENDOR_QUALITYNOTIF_VAN',Version='0001')/$value/",
         "type": "ODataAnnotation",
         "settings": {
@@ -31,6 +31,14 @@
             "ZVENDOR_QUALITYNOTIF_VAN"
           ],
           "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "vendorService": {
+        "uri": "/sap/opu/odata/sap/ZMM_VEND_PORT_SER_BIND/",
+        "type": "OData",
+        "settings": {
+          "localUri": "localService/vendorService/metadata.xml",
           "odataVersion": "2.0"
         }
       }
@@ -92,6 +100,15 @@
         "dataSource": "mainService",
         "preload": true,
         "settings": {}
+      },
+      "vendorModel": {
+        "dataSource": "vendorService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
       }
     },
     "resources": {

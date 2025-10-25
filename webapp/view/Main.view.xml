@@ -25,7 +25,12 @@
                         <!-- <Panel id="idPanelRAPO" class="sapUiContentPadding" headerText="General Data" visible="true"> -->
                         <fb:FilterBar id="filterbar" useToolbar="false" search=".onFilterGo" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
                             <fb:filterGroupItems>
-                                <!-- Company Code -->
+                                <fb:FilterGroupItem id="_IDGenFilterGroupItem8" name="Search" label="Search" groupName="Group1" visibleInFilterBar="true">
+                                    <fb:control>
+                                        <SearchField id="searchField" width="90%" class="" placeholder="Search..." liveChange=".onLiveChange" search=".onSearch" />
+
+                                    </fb:control>
+                                </fb:FilterGroupItem>
 
                                 <!-- Accounting Document -->
                                 <fb:FilterGroupItem id="FilterGroupItem2" name="Material Number" label="Material Number" groupName="Group1" visibleInFilterBar="true">
@@ -34,34 +39,22 @@
                                     </fb:control>
                                 </fb:FilterGroupItem>
                                 <!-- Supplier -->
-                                <fb:FilterGroupItem id="FilterGroupItem5" name="ASN" label="ASN" groupName="Group1" visibleInFilterBar="true">
+                                <!-- <fb:FilterGroupItem id="FilterGroupItem5" name="ASN" label="ASN" groupName="Group1" visibleInFilterBar="true">
                                     <fb:control>
                                         <MultiInput id="idAsn" showValueHelp="true" valueHelpRequest="onAsnValueHelp" width="75%" placeholder="Select ASN" />
                                     </fb:control>
-                                </fb:FilterGroupItem>
-                                <fb:FilterGroupItem id="FilterGroupItem55" name="Vendor" label="Vendor" groupName="Group1" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <MultiInput id="idVendor" showValueHelp="true" valueHelpRequest="onVendorValueHelp" width="75%" placeholder="Select Vendor" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                                <!-- <fb:FilterGroupItem id="FilterGroupItem6" name="invoice Date" label="Invoice Date" groupName="Group1" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <DateRangeSelection id="idPostingDate" class="DRS1" displayFormat="dd-MM-yyyy" change="handleChange" />
-                                    </fb:control>
                                 </fb:FilterGroupItem> -->
 
-
-                                <!-- <fb:FilterGroupItem id="FilterGroupItemStatus" name="Status" label="Status" groupName="Group1" visibleInFilterBar="true">
+                                <fb:FilterGroupItem id="FilterGroupItem55" name="Supplier" label="Supplier" groupName="Group1" visibleInFilterBar="true">
                                     <fb:control>
-                                        <MultiComboBox id="idStatus" width="75%" placeholder="Select Status" selectionChange="onStatusChange">
-                                            <core:Item id="_IDGenItem1" key="ASN Created" text="ASN Created" />
-                                            <core:Item id="_IDGenItem2" key="ASN Cancelled" text="ASN Cancelled" />
-                                            <core:Item id="_IDGenItem3" key="Gate Entry Completed" text="Gate Entry Completed" />
-                                            <core:Item id="_IDGenItem4" key="Goods Receipt Rejected" text="Goods Receipt Rejected" />
-                                            <core:Item id="_IDGenItem5" key="Goods Receipt Accepted" text="Goods Receipt Accepted" />
-                                        </MultiComboBox>
+                                        <!-- <MultiInput id="idVendor" showValueHelp="true" valueHelpRequest="onVendorValueHelp" width="75%" placeholder="Select Supplier" /> -->
+                                        <ComboBox id="idVendor" selectedKey="" width="100%" items="{
+                                        path: 'SupplierModel>/'
+                                        }">
+                                            <core:Item id="_IDGenItem212" key="{SupplierModel>Supplier}" text="{SupplierModel>Supplier} - {SupplierModel>Suppliername}"/>
+                                        </ComboBox>
                                     </fb:control>
-                                </fb:FilterGroupItem> -->
+                                </fb:FilterGroupItem>
                             </fb:filterGroupItems>
                         </fb:FilterBar>
                     </f:content>
@@ -84,9 +77,15 @@
 
                         <!-- Columns aligned with metadata -->
                         <columns>
-                            <Column id="colASN" app:p13nKey="ASN_No_col">
+                            <Column id="colProduct" app:p13nKey="Product_col" width="20%">
                                 <header>
-                                    <Text text="ASN Number"/>
+                                    <Text text="Material"/>
+                                </header>
+                            </Column>
+
+                            <Column id="colPurchaseOrder" app:p13nKey="PurchaseOrder_col">
+                                <header>
+                                    <Text text="Purchasing Document"/>
                                 </header>
                             </Column>
                             <Column id="colItem" app:p13nKey="ItemNo_col">
@@ -94,23 +93,6 @@
                                     <Text text="Item"/>
                                 </header>
                             </Column>
-                            <Column id="colProduct" app:p13nKey="Product_col">
-                                <header>
-                                    <Text text="Material"/>
-                                </header>
-                            </Column>
-                    
-                            <Column id="colPurchaseOrder" app:p13nKey="PurchaseOrder_col">
-                                <header>
-                                    <Text text="Purchasing Document"/>
-                                </header>
-                            </Column>
-                            <Column id="colVendor" app:p13nKey="Vendor_col">
-                                <header>
-                                    <Text text="Supplier"/>
-                                </header>
-                            </Column>
-                        
                             <Column id="colInvoiceNo" app:p13nKey="InvoiceNumber_col">
                                 <header>
                                     <Text text="Invoice No"/>
@@ -121,7 +103,22 @@
                                     <Text text="Invoice Date"/>
                                 </header>
                             </Column>
-                            <Column id="colMatDoc" app:p13nKey="MaterialDocument_col">
+                            <Column id="colASN" app:p13nKey="ASN_No_col">
+                                <header>
+                                    <Text text="ASN Number"/>
+                                </header>
+                            </Column>
+
+
+                            <Column id="colVendor" app:p13nKey="Vendor_col" width="18%">
+                                <header>
+                                    <Text text="Supplier"/>
+                                </header>
+                            </Column>
+
+
+
+                            <Column id="colMatDoc" app:p13nKey="MaterialDocument_col" visible="false">
                                 <header>
                                     <Text text="Material Document"/>
                                 </header>
@@ -131,15 +128,16 @@
                         <items>
                             <ColumnListItem vAlign="Middle" type="Navigation">
                                 <cells>
-                                    <Text text="{getListReport>ASN_No}"/>
-                                    <Text text="{getListReport>ItemNo}"/>
                                     <Text text="{getListReport>MaterialDescription}({getListReport>Product})"/>
-                           
                                     <Text text="{getListReport>PurchaseOrder}"/>
-                                    <Text text="{getListReport>VendorName}({getListReport>Vendor})"/>
-                                
+                                    <Text text="{getListReport>ItemNo}"/>
                                     <Text text="{getListReport>InvoiceNumber}"/>
                                     <Text text="{path:'getListReport>InvoiceDate', formatter:'.formatter.formatDateToYyyyMmDd'}"/>
+                                    <Text text="{getListReport>ASN_No}"/>
+
+                                    <Text text="{getListReport>VendorName}({getListReport>Vendor})"/>
+
+
                                     <Text text="{getListReport>MaterialDocument}"/>
                                 </cells>
                             </ColumnListItem>

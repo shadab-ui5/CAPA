@@ -19,6 +19,6 @@ builder:
           name: ZCAPA
           description: Deployment of CAPA Application
           package: ZMM_VENDOR_PORTAL
-          transport: TMOK900639
+          transport: TMOK901191
         exclude:
           - /test/

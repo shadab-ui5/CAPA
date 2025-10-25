@@ -34,10 +34,16 @@ sap.ui.define([
 			var oSelectedModel = new sap.ui.model.json.JSONModel([]);
 			this.getOwnerComponent().setModel(oSelectedModel, "selectedModel");
 			// this._registerForP13n();
-			// this.onFilterGo();
+			
 			this._aCurrentFilters = [];
-
-			this._loadBillingDocumentData(null, true);
+			let oPlantModel = new sap.ui.model.json.JSONModel({});
+			this.getView().setModel(oPlantModel, "PlantModel");
+			let oSupplierModel = new sap.ui.model.json.JSONModel({});
+			this.getView().setModel(oSupplierModel, "SupplierModel");
+			this.byId("idVendor").setBusy(true);
+            this.getPlantData();
+			// this._loadBillingDocumentData(null, true);
+			
 			const oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("RouteMain").attachPatternMatched(this._onRouteMatched, this);
 
@@ -67,371 +73,7 @@ sap.ui.define([
 			oDateRange.setDateValue(oToday);
 			oDateRange.setSecondDateValue(oNext7);
 		},
-		// _registerForP13n: function () {
-		// 	const oTable = this.byId("persoTable");
 
-		// 	this.oMetadataHelper = new MetadataHelper([
-		// 		// Newly added visible fields
-		// 		{
-		// 			key: "AsnNo_col",
-		// 			label: "ASN No",
-		// 			path: "AsnNo"
-		// 		},
-		// 		{
-		// 			key: "invoice_no_col",
-		// 			label: "Invoice No",
-		// 			path: "invoice_no"
-		// 		},
-		// 		{
-		// 			key: "invoice_date_col",
-		// 			label: "Invoice Date",
-		// 			path: "invoice_date"
-		// 		},
-		// 		{
-		// 			key: "ponumber_col",
-		// 			label: "PO Number",
-		// 			path: "ponumber"
-		// 		},
-		// 		{
-		// 			key: "Status_Desc_col",
-		// 			label: "Status Description",
-		// 			path: "Status_Desc"
-		// 		},
-
-
-
-		// 		// Hidden fields (can be enabled later in personalization)
-		// 		{
-		// 			key: "PlantName_col",
-		// 			label: "Plant Name",
-		// 			path: "PlantName"
-		// 		},
-		// 		{
-		// 			key: "amount_col",
-		// 			label: "Amount",
-		// 			path: "amount"
-		// 		},
-		// 	]);
-
-
-		// 	Engine.getInstance().register(oTable, {
-		// 		helper: this.oMetadataHelper,
-		// 		controller: {
-		// 			Columns: new SelectionController({
-		// 				targetAggregation: "columns",
-		// 				control: oTable
-		// 			}),
-		// 			Sorter: new SortController({
-		// 				control: oTable
-		// 			}),
-		// 			Groups: new GroupController({
-		// 				control: oTable
-		// 			}),
-		// 			ColumnWidth: new ColumnWidthController({
-		// 				control: oTable
-		// 			}),
-		// 			Filter: new FilterController({
-		// 				control: oTable
-		// 			})
-		// 		}
-		// 	});
-
-		// 	Engine.getInstance().attachStateChange(this.handleStateChange, this);
-		// },
-
-		// openPersoDialog: function (oEvt) {
-		// 	this._openPersoDialog(["Columns", "Sorter", "Groups", "Filter"], oEvt.getSource());
-		// },
-
-		// _openPersoDialog: function (aPanels, oSource) {
-		// 	var oTable = this.byId("persoTable");
-
-		// 	Engine.getInstance().show(oTable, aPanels, {
-		// 		contentHeight: aPanels.length > 1 ? "50rem" : "35rem",
-		// 		contentWidth: aPanels.length > 1 ? "45rem" : "32rem",
-		// 		source: oSource || oTable
-		// 	});
-		// },
-
-		// _getKey: function (oControl) {
-		// 	return oControl.data("p13nKey");
-		// },
-
-		// handleStateChange: function (oEvt) {
-		// 	const oTable = this.byId("persoTable");
-		// 	const oState = oEvt.getParameter("state");
-		// 	let that = this;
-		// 	if (!oState) {
-		// 		return;
-		// 	}
-
-		// 	//Update the columns per selection in the state
-		// 	this.updateColumns(oState);
-
-		// 	//Create Filters & Sorters
-		// 	const aFilter = this.createFilters(oState);
-		// 	const aGroups = this.createGroups(oState);
-		// 	const aSorter = this.createSorters(oState, aGroups);
-
-		// 	const aCells = oState.Columns.map(function (oColumnState) {
-		// 		const oProperty = this.oMetadataHelper.getProperty(oColumnState.key);
-
-		// 		switch (oColumnState.key) {
-		// 			case "invoice_date_col":   // format invoice date
-		// 				return new sap.m.Text({
-		// 					text: {
-		// 						path: "getListReport>" + oProperty.path,
-		// 						formatter: that.formatter.formatDateToYyyyMmDd
-		// 					}
-		// 				});
-
-		// 			case "Status_Desc_col":   // format with ObjectStatus
-		// 				return new sap.m.ObjectStatus({
-		// 					text: "{getListReport>Status_Desc}",
-		// 					inverted: true,
-		// 					active: true,
-		// 					icon: {
-		// 						path: "getListReport>Status_Desc",
-		// 						formatter: that.formatter.formatIcon
-		// 					},
-		// 					state: {
-		// 						path: "getListReport>Status_Desc",
-		// 						formatter: that.formatter.formatState
-		// 					}
-		// 				});
-
-		// 			case "PlantName_col":   // custom concat PlantName (Plant)
-		// 				return new sap.m.Text({
-		// 					text: {
-		// 						parts: [
-		// 							{ path: "getListReport>PlantName" },
-		// 							{ path: "getListReport>plant" }
-		// 						],
-		// 						formatter: function (sName, sPlant) {
-		// 							return sName && sPlant ? `${sName} (${sPlant})` : sName || sPlant || "";
-		// 						}
-		// 					}
-		// 				});
-
-		// 			default:   // default plain text binding
-		// 				return new sap.m.Text({
-		// 					text: "{getListReport>" + oProperty.path + "}"
-		// 				});
-		// 		}
-		// 	}.bind(this));
-
-
-		// 	//rebind the table with the updated cell template
-		// 	oTable.bindItems({
-		// 		templateShareable: false,
-		// 		path: 'getListReport>/',
-		// 		sorter: aSorter.concat(aGroups),
-		// 		filters: aFilter,
-		// 		template: new ColumnListItem({
-		// 			cells: aCells,
-		// 			vAlign: "Middle",
-		// 			type: "Navigation"
-		// 		})
-		// 	});
-
-		// },
-
-		// createFilters: function (oState) {
-		// 	const aFilter = [];
-		// 	Object.keys(oState.Filter).forEach((sFilterKey) => {
-		// 		const filterPath = this.oMetadataHelper.getProperty(sFilterKey).path;
-
-		// 		oState.Filter[sFilterKey].forEach(function (oConditon) {
-		// 			aFilter.push(new Filter(filterPath, oConditon.operator, oConditon.values[0]));
-		// 		});
-		// 	});
-
-		// 	this.byId("filterInfo").setVisible(aFilter.length > 0);
-
-		// 	return aFilter;
-		// },
-
-		// createSorters: function (oState, aExistingSorter) {
-		// 	const aSorter = aExistingSorter || [];
-		// 	oState.Sorter.forEach(function (oSorter) {
-		// 		const oExistingSorter = aSorter.find(function (oSort) {
-		// 			return oSort.sPath === this.oMetadataHelper.getProperty(oSorter.key).path;
-		// 		}.bind(this));
-
-		// 		if (oExistingSorter) {
-		// 			oExistingSorter.bDescending = !!oSorter.descending;
-		// 		} else {
-		// 			aSorter.push(new Sorter(this.oMetadataHelper.getProperty(oSorter.key).path, oSorter.descending));
-		// 		}
-		// 	}.bind(this));
-
-		// 	oState.Sorter.forEach((oSorter) => {
-		// 		const oCol = this.byId("persoTable").getColumns().find((oColumn) => oColumn.data("p13nKey") === oSorter.key);
-		// 		if (oSorter.sorted !== false) {
-		// 			oCol.setSortIndicator(oSorter.descending ? coreLibrary.SortOrder.Descending : coreLibrary.SortOrder.Ascending);
-		// 		}
-		// 	});
-
-		// 	return aSorter;
-		// },
-
-		// createGroups: function (oState) {
-		// 	const aGroupings = [];
-		// 	oState.Groups.forEach(function (oGroup) {
-		// 		aGroupings.push(new Sorter(this.oMetadataHelper.getProperty(oGroup.key).path, false, true));
-		// 	}.bind(this));
-
-		// 	oState.Groups.forEach((oSorter) => {
-		// 		const oCol = this.byId("persoTable").getColumns().find((oColumn) => oColumn.data("p13nKey") === oSorter.key);
-		// 		oCol.data("grouped", true);
-		// 	});
-
-		// 	return aGroupings;
-		// },
-
-		// updateColumns: function (oState) {
-		// 	const oTable = this.byId("persoTable");
-
-		// 	oTable.getColumns().forEach((oColumn, iIndex) => {
-		// 		oColumn.setVisible(false);
-		// 		oColumn.setWidth(oState.ColumnWidth[this._getKey(oColumn)]);
-		// 		oColumn.setSortIndicator(coreLibrary.SortOrder.None);
-		// 		oColumn.data("grouped", false);
-		// 	});
-
-		// 	oState.Columns.forEach((oProp, iIndex) => {
-		// 		const oCol = oTable.getColumns().find((oColumn) => oColumn.data("p13nKey") === oProp.key);
-		// 		oCol.setVisible(true);
-
-		// 		oTable.removeColumn(oCol);
-		// 		oTable.insertColumn(oCol, iIndex);
-		// 	});
-		// },
-
-		// beforeOpenColumnMenu: function (oEvt) {
-		// 	const oMenu = this.byId("menu");
-		// 	const oColumn = oEvt.getParameter("openBy");
-		// 	const oSortItem = oMenu.getQuickActions()[0].getItems()[0];
-		// 	const oGroupItem = oMenu.getQuickActions()[1].getItems()[0];
-
-		// 	oSortItem.setKey(this._getKey(oColumn));
-		// 	oSortItem.setLabel(oColumn.getHeader().getText());
-		// 	oSortItem.setSortOrder(oColumn.getSortIndicator());
-
-		// 	oGroupItem.setKey(this._getKey(oColumn));
-		// 	oGroupItem.setLabel(oColumn.getHeader().getText());
-		// 	oGroupItem.setGrouped(oColumn.data("grouped"));
-		// },
-
-		// onFilterInfoPress: function (oEvt) {
-		// 	this._openPersoDialog(["Filter"], oEvt.getSource());
-		// },
-
-		// onSort: function (oEvt) {
-		// 	const oSortItem = oEvt.getParameter("item");
-		// 	const oTable = this.byId("persoTable");
-		// 	const sAffectedProperty = oSortItem.getKey();
-		// 	const sSortOrder = oSortItem.getSortOrder();
-
-		// 	//Apply the state programatically on sorting through the column menu
-		// 	//1) Retrieve the current personalization state
-		// 	Engine.getInstance().retrieveState(oTable).then(function (oState) {
-
-		// 		//2) Modify the existing personalization state --> clear all sorters before
-		// 		oState.Sorter.forEach(function (oSorter) {
-		// 			oSorter.sorted = false;
-		// 		});
-
-		// 		if (sSortOrder !== coreLibrary.SortOrder.None) {
-		// 			oState.Sorter.push({
-		// 				key: sAffectedProperty,
-		// 				descending: sSortOrder === coreLibrary.SortOrder.Descending
-		// 			});
-		// 		}
-
-		// 		//3) Apply the modified personalization state to persist it in the VariantManagement
-		// 		Engine.getInstance().applyState(oTable, oState);
-		// 	});
-		// },
-
-		// onGroup: function (oEvt) {
-		// 	const oGroupItem = oEvt.getParameter("item");
-		// 	const oTable = this.byId("persoTable");
-		// 	const sAffectedProperty = oGroupItem.getKey();
-
-		// 	//1) Retrieve the current personalization state
-		// 	Engine.getInstance().retrieveState(oTable).then(function (oState) {
-
-		// 		//2) Modify the existing personalization state --> clear all groupings before
-		// 		oState.Groups.forEach(function (oSorter) {
-		// 			oSorter.grouped = false;
-		// 		});
-
-		// 		if (oGroupItem.getGrouped()) {
-		// 			oState.Groups.push({
-		// 				key: sAffectedProperty
-		// 			});
-		// 		}
-
-		// 		//3) Apply the modified personalization state to persist it in the VariantManagement
-		// 		Engine.getInstance().applyState(oTable, oState);
-		// 	});
-		// },
-
-		// onColumnMove: function (oEvt) {
-		// 	const oDraggedColumn = oEvt.getParameter("draggedControl");
-		// 	const oDroppedColumn = oEvt.getParameter("droppedControl");
-
-		// 	if (oDraggedColumn === oDroppedColumn) {
-		// 		return;
-		// 	}
-
-		// 	const oTable = this.byId("persoTable");
-		// 	const sDropPosition = oEvt.getParameter("dropPosition");
-		// 	const iDraggedIndex = oTable.indexOfColumn(oDraggedColumn);
-		// 	const iDroppedIndex = oTable.indexOfColumn(oDroppedColumn);
-		// 	const iNewPos = iDroppedIndex + (sDropPosition == "Before" ? 0 : 1) + (iDraggedIndex < iDroppedIndex ? -1 : 0);
-		// 	const sKey = this._getKey(oDraggedColumn);
-
-		// 	Engine.getInstance().retrieveState(oTable).then(function (oState) {
-
-		// 		const oCol = oState.Columns.find(function (oColumn) {
-		// 			return oColumn.key === sKey;
-		// 		}) || {
-		// 			key: sKey
-		// 		};
-		// 		oCol.position = iNewPos;
-
-		// 		Engine.getInstance().applyState(oTable, {
-		// 			Columns: [oCol]
-		// 		});
-		// 	});
-		// },
-
-		// onColumnResize: function (oEvt) {
-		// 	const oColumn = oEvt.getParameter("column");
-		// 	const sWidth = oEvt.getParameter("width");
-		// 	const oTable = this.byId("persoTable");
-
-		// 	const oColumnState = {};
-		// 	oColumnState[this._getKey(oColumn)] = sWidth;
-
-		// 	Engine.getInstance().applyState(oTable, {
-		// 		ColumnWidth: oColumnState
-		// 	});
-		// },
-
-		// onClearFilterPress: function (oEvt) {
-		// 	const oTable = this.byId("persoTable");
-		// 	Engine.getInstance().retrieveState(oTable).then(function (oState) {
-		// 		for (var sKey in oState.Filter) {
-		// 			oState.Filter[sKey].map((condition) => {
-		// 				condition.filtered = false;
-		// 			});
-		// 		}
-		// 		Engine.getInstance().applyState(oTable, oState);
-		// 	});
-		// },
 		onInvoiceValueHelp: function () {
 			var that = this;
 
@@ -890,7 +532,7 @@ sap.ui.define([
 
 				// --- Step B: If no results, fallback to server-side search ---
 				if (oBinding.getLength() === 0) {
-					var oModel = that.getView().getModel();
+					var oModel = that.getOwnerComponent().getModel("vendorModel");
 					// Server-side (ODataModel)
 					oModel.read("/VendorVh", {
 						filters: [oOrFilter],        // <-- use Filter object, not string
@@ -947,7 +589,7 @@ sap.ui.define([
 			// ===================================================
 			// 6. Prefill Search with existing value (if any)
 			// ===================================================
-			var sPrefill = this.byId("idAsn").getValue();
+			var sPrefill = this.byId("idVendor").getValue();
 			oBasicSearch.setValue(sPrefill);
 			oVHCustomer.setBasicSearchText(sPrefill);
 
@@ -1030,7 +672,7 @@ sap.ui.define([
 			}
 		},
 
-		onFilterGo: function (oEvent) {
+		onFilterGo: function () {
 			this.getView().setBusy(true);
 			var oFilterBar = this.byId("idFilterBar"); // your filterbar id
 			var oModel = this.getOwnerComponent().getModel(); // OData Model
@@ -1074,47 +716,47 @@ sap.ui.define([
 			// }
 
 			// ====== Customer / ASN (MultiInput) ======
-			var oAsnInput = this.byId("idAsn");
-			var aCustomers = oAsnInput.getTokens();
-			var sAsnRaw = oAsnInput.getValue(); // NEW: catch raw typed ASN
+			// var oAsnInput = this.byId("idAsn");
+			// var aCustomers = oAsnInput.getTokens();
+			// var sAsnRaw = oAsnInput.getValue(); // NEW: catch raw typed ASN
 
-			if (aCustomers.length > 0) {
-				aCustomers.forEach(function (oToken) {
-					aFilters.push(new sap.ui.model.Filter(
-						"ASN_No",
-						sap.ui.model.FilterOperator.EQ,
-						oToken.getKey() || oToken.getText()
-					));
-				});
-			}
-			// if user typed directly without pressing enter
-			if (sAsnRaw) { // NEW
-				aFilters.push(new sap.ui.model.Filter(
-					"AsnNo",
-					sap.ui.model.FilterOperator.Contains,
-					sAsnRaw
-				));
-			}
+			// if (aCustomers.length > 0) {
+			// 	aCustomers.forEach(function (oToken) {
+			// 		aFilters.push(new sap.ui.model.Filter(
+			// 			"ASN_No",
+			// 			sap.ui.model.FilterOperator.EQ,
+			// 			oToken.getKey() || oToken.getText()
+			// 		));
+			// 	});
+			// }
+			// // if user typed directly without pressing enter
+			// if (sAsnRaw) { // NEW
+			// 	aFilters.push(new sap.ui.model.Filter(
+			// 		"AsnNo",
+			// 		sap.ui.model.FilterOperator.Contains,
+			// 		sAsnRaw
+			// 	));
+			// }
 			// ====== Vendor / ASN (MultiInput) ======
-			var oVendorInput = this.byId("idVendor");
-			var aCustomers = oVendorInput.getTokens();
-			var sVendorRaw = oVendorInput.getValue(); // NEW: catch raw typed Vendor
+			var oVendorInput = this.byId("idVendor").getSelectedKey();
+			// var aCustomers = oVendorInput.getTokens();
+			// var sVendorRaw = oVendorInput.getValue(); // NEW: catch raw typed Vendor
 
-			if (aCustomers.length > 0) {
-				aCustomers.forEach(function (oToken) {
-					aFilters.push(new sap.ui.model.Filter(
-						"Supplier",
-						sap.ui.model.FilterOperator.EQ,
-						oToken.getKey() || oToken.getText()
-					));
-				});
-			}
+			// if (aCustomers.length > 0) {
+			// 	aCustomers.forEach(function (oToken) {
+			// 		aFilters.push(new sap.ui.model.Filter(
+			// 			"Supplier",
+			// 			sap.ui.model.FilterOperator.EQ,
+			// 			oToken.getKey() || oToken.getText()
+			// 		));
+			// 	});
+			// }
 			// if user typed directly without pressing enter
-			if (sVendorRaw) { // NEW
+			if (oVendorInput) { // NEW
 				aFilters.push(new sap.ui.model.Filter(
-					"Supplier",
+					"Vendor",
 					sap.ui.model.FilterOperator.Contains,
-					sVendorRaw
+					oVendorInput
 				));
 			}
 
@@ -1147,7 +789,93 @@ sap.ui.define([
 			this.getOwnerComponent().getRouter().navTo("RouteObject", {
 			}, true); // replace with actual route
 
-		}
+		},
+		onLiveChange: function (oEvent) {
+			var sQuery = oEvent.getParameter("newValue");
+			this._applySearchFilter(sQuery);
+		},
 
+		onSearch: function (oEvent) {
+			var sQuery = oEvent.getParameter("query");
+			this._applySearchFilter(sQuery);
+		},
+
+		_applySearchFilter: function (sQuery) {
+			var oTable = this.byId("persoTable");
+			var oBinding = oTable.getBinding("items");
+
+			if (sQuery && sQuery.trim() !== "") {
+				// Build OR filter for all searchable properties
+				var aFilters = [
+					new sap.ui.model.Filter("ASN_No", sap.ui.model.FilterOperator.Contains, sQuery),
+					new sap.ui.model.Filter("InvoiceNumber", sap.ui.model.FilterOperator.Contains, sQuery),
+					new sap.ui.model.Filter("PurchaseOrder", sap.ui.model.FilterOperator.Contains, sQuery),
+					// new sap.ui.model.Filter("Supplier", sap.ui.model.FilterOperator.Contains, sQuery),
+					// new sap.ui.model.Filter("PurchaseOrderDate", sap.ui.model.FilterOperator.Contains, sQuery),
+					// new sap.ui.model.Filter("SupplierRespSalesPersonName", sap.ui.model.FilterOperator.Contains, sQuery),
+					// new sap.ui.model.Filter("PlantName", sap.ui.model.FilterOperator.Contains, sQuery),
+					// new sap.ui.model.Filter("Plant", sap.ui.model.FilterOperator.Contains, sQuery)
+				];
+
+				var oFilter = new sap.ui.model.Filter({
+					filters: aFilters,
+					and: false // OR across all fields
+				});
+
+				// Apply search as "Application" filter so it works with other filters
+				oBinding.filter([oFilter], "Application");
+			} else {
+				// Clear only the search filter
+				oBinding.filter([], "Application");
+			}
+		},
+		getPlantData: function () {
+			let oModel = this.getOwnerComponent().getModel("vendorModel");
+			let oPlantModel = this.getView().getModel('PlantModel');
+			let sUser = sap.ushell?.Container?.getUser().getId() || "CB9980000018";
+			let aFilters = [new sap.ui.model.Filter("Userid", "EQ", sUser)];
+			// let aFilters = [];
+			let that = this;
+			oModel.read("/UserIdToPlant", {
+				filters: aFilters,
+				urlParameters: {
+					"$top": 1000,
+					"$skip": 0
+				},
+				success: (oData) => {
+					oPlantModel.setData(oData.results);
+					that.getUserSupplier();
+				},
+				error: () => {
+					sap.m.MessageToast.show("Error fetching Plants.");
+				}
+			});
+		},
+		getUserSupplier: function () {
+			let sUser = sap.ushell?.Container?.getUser().getId() || "CB9980000018";
+			let oSupplierModel = this.getView().getModel('SupplierModel');
+			let that = this;
+			return new Promise((resolve, reject) => {
+				let oModel = this.getOwnerComponent().getModel("vendorModel");
+				oModel.read("/supplierListByUser", {
+					filters: [
+						new sap.ui.model.Filter("Userid", sap.ui.model.FilterOperator.EQ, sUser)
+					],
+					success: function (oData) {
+						console.log("Fetched supplier list:", oData.results);
+						oSupplierModel.setData(oData.results);
+						that.getView().byId("idVendor").setSelectedKey(oData.results[0].Supplier);
+						that.byId("idVendor").setBusy(false);
+						that.onFilterGo();
+						resolve(oData);
+					},
+					error: function (oError) {
+						console.error("Error fetching supplier list", oError);
+						reject(oError)
+					}
+				});
+			})
+
+		},
 	});
 });
