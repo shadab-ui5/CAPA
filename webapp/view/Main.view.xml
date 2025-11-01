@@ -33,11 +33,11 @@
                                 </fb:FilterGroupItem>
 
                                 <!-- Accounting Document -->
-                                <fb:FilterGroupItem id="FilterGroupItem2" name="Material Number" label="Material Number" groupName="Group1" visibleInFilterBar="true">
+                                <!-- <fb:FilterGroupItem id="FilterGroupItem2" name="Material Number" label="Material Number" groupName="Group1" visibleInFilterBar="true">
                                     <fb:control>
                                         <MultiInput id="idAccountingDocument" width="100%" placeholder="Enter Material Number" showValueHelp="true" valueHelpRequest="onInvoiceValueHelp" submit=".onInvoiceValueSubmit" />
                                     </fb:control>
-                                </fb:FilterGroupItem>
+                                </fb:FilterGroupItem> -->
                                 <!-- Supplier -->
                                 <!-- <fb:FilterGroupItem id="FilterGroupItem5" name="ASN" label="ASN" groupName="Group1" visibleInFilterBar="true">
                                     <fb:control>
@@ -66,79 +66,94 @@
                     <Table id="persoTable" items="{path: 'getListReport>/'}" ariaLabelledBy="title" fixedLayout="Strict" autoPopinMode="true" growing="true" sticky="ColumnHeaders,HeaderToolbar" popinLayout="GridSmall" growingScrollToLoad="true" growingThreshold="20" updateStarted="onUpdateStartPoHeaderTable" itemPress="onLineItemPress" selectionChange="onSelectionChange">
 
                         <headerToolbar>
-                            <OverflowToolbar>
-                                <ToolbarSpacer/>
+                            <OverflowToolbar id="_IDGenOverflowToolbar">
+                                <ToolbarSpacer id="_IDGenToolbarSpacer9"/>
                             </OverflowToolbar>
                         </headerToolbar>
 
                         <noData>
-                            <IllustratedMessage/>
+                            <IllustratedMessage id="_IDGenIllustratedMessage"/>
                         </noData>
 
                         <!-- Columns aligned with metadata -->
                         <columns>
-                            <Column id="colProduct" app:p13nKey="Product_col" width="20%">
+                            <Column id="colProduct" app:p13nKey="Product_col">
                                 <header>
-                                    <Text text="Material"/>
+                                    <Text id="_IDGenText64" text="Material"/>
                                 </header>
                             </Column>
 
                             <Column id="colPurchaseOrder" app:p13nKey="PurchaseOrder_col">
                                 <header>
-                                    <Text text="Purchasing Document"/>
+                                    <Text id="_IDGenText114" text="Purchasing Document"/>
                                 </header>
                             </Column>
                             <Column id="colItem" app:p13nKey="ItemNo_col">
                                 <header>
-                                    <Text text="Item"/>
+                                    <Text id="_IDGenText115" text="Item"/>
                                 </header>
                             </Column>
                             <Column id="colInvoiceNo" app:p13nKey="InvoiceNumber_col">
                                 <header>
-                                    <Text text="Invoice No"/>
+                                    <Text id="_IDGenText116" text="Invoice No"/>
                                 </header>
                             </Column>
                             <Column id="colInvoiceDate" app:p13nKey="InvoiceDate_col">
                                 <header>
-                                    <Text text="Invoice Date"/>
+                                    <Text id="_IDGenText117" text="Invoice Date"/>
                                 </header>
                             </Column>
                             <Column id="colASN" app:p13nKey="ASN_No_col">
                                 <header>
-                                    <Text text="ASN Number"/>
+                                    <Text id="_IDGenText118" text="ASN Number"/>
                                 </header>
                             </Column>
 
 
-                            <Column id="colVendor" app:p13nKey="Vendor_col" width="18%">
+                            <!-- <Column id="colVendor" app:p13nKey="Vendor_col">
                                 <header>
                                     <Text text="Supplier"/>
                                 </header>
-                            </Column>
+                            </Column> -->
 
 
 
                             <Column id="colMatDoc" app:p13nKey="MaterialDocument_col" visible="false">
                                 <header>
-                                    <Text text="Material Document"/>
+                                    <Text id="_IDGenText119" text="Material Document"/>
+                                </header>
+                            </Column>
+                            <Column id="colCapa" app:p13nKey="CapaDate_col" width="12rem">
+                                <header>
+                                    <Text id="_IDGenText120" text="Remaining Days"/>
+                                </header>
+                            </Column>
+                            <Column id="colok" app:p13nKey="Ok_col">
+                                <header>
+                                    <Text id="_IDGenText121" text="OK Qty"/>
+                                </header>
+                            </Column>
+                            <Column id="colNotOk" app:p13nKey="NotOk_col">
+                                <header>
+                                    <Text id="_IDGenText122" text="Not OK Qty"/>
                                 </header>
                             </Column>
                         </columns>
 
                         <items>
-                            <ColumnListItem vAlign="Middle" type="Navigation">
+                            <ColumnListItem id="_IDGenColumnListItem14" vAlign="Middle" type="Navigation">
                                 <cells>
-                                    <Text text="{getListReport>MaterialDescription}({getListReport>Product})"/>
-                                    <Text text="{getListReport>PurchaseOrder}"/>
-                                    <Text text="{getListReport>ItemNo}"/>
-                                    <Text text="{getListReport>InvoiceNumber}"/>
-                                    <Text text="{path:'getListReport>InvoiceDate', formatter:'.formatter.formatDateToYyyyMmDd'}"/>
-                                    <Text text="{getListReport>ASN_No}"/>
-
-                                    <Text text="{getListReport>VendorName}({getListReport>Vendor})"/>
-
-
-                                    <Text text="{getListReport>MaterialDocument}"/>
+                                    <Text id="_IDGenText123" text="{getListReport>MaterialDescription}({getListReport>Product})"/>
+                                    <Text id="_IDGenText124" text="{getListReport>PurchaseOrder}"/>
+                                    <Text id="_IDGenText125" text="{getListReport>ItemNo}"/>
+                                    <Text id="_IDGenText126" text="{getListReport>InvoiceNumber}"/>
+                                    <Text id="_IDGenText127" text="{path:'getListReport>InvoiceDate', formatter:'.formatter.formatDateToYyyyMmDd'}"/>
+                                    <Text id="_IDGenText128" text="{getListReport>ASN_No}"/>
+                                    <!-- <Text text="{getListReport>VendorName}({getListReport>Vendor})"/> -->
+                                    <Text id="_IDGenText129" text="{getListReport>MaterialDocument}"/>
+                                    <ObjectStatus id="_IDGenObjectStatus1" text="{path:'getListReport>capaDate', formatter:'.formatter.getCapaCountDown'}"  state="{path:'getListReport>capaDate', formatter:'.formatter.getCapaStatus'}" />
+                                    <Text id="_IDGenText130" text="{getListReport>InspectionLotOKQty}"/>
+                                    <Text id="_IDGenText131" text="{getListReport>InspectionLotNOTOKQty}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>

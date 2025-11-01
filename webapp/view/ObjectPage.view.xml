@@ -5,14 +5,14 @@
     xmlns:sf="sap.ui.layout.form"
     xmlns:un="sap.ui.unified"
     xmlns="sap.uxap">
-    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true" showNavButton="true" navButtonPress="onNavBack">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true" showNavButton="true" navButtonPress="onNavBack" floatingFooter="true">
         <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
             <headerTitle>
                 <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
                     <actions>
                         <m:VBox id="_IDGenVBox1">
-                            <m:Text id="_IDGenText" text="First Line Info" />
-                            <m:Text id="_IDGenText1" text="Second Line Info" />
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
                         </m:VBox>
                     </actions>
                 </ObjectPageHeader>
@@ -91,18 +91,6 @@
                         <ObjectPageSubSection id="subProblemAwareness" titleUppercase="false">
                             <blocks>
                                 <sf:SimpleForm id="formProblemAwareness" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
-
-                                    <!-- Problem Scope -->
-                                    <!-- <m:Label text="Problem Scope" design="Bold" />
-                                    <m:Select selectedKey="Safety">
-                                        <m:items>
-                                            <core:Item key="New" text="New" />
-                                            <core:Item key="Existing" text="Existing" />
-                                            <core:Item key="Reopened" text="Reopened/Repeat" />
-
-                                        </m:items>
-                                    </m:Select> -->
-
                                     <!-- Problem Type (New / Existing / Reopened) -->
                                     <m:Label id="_IDGenLabel11" text="Problem Scope" design="Bold" />
                                     <m:SegmentedButton id="_IDGenSegmentedButton" selectedKey="{capaModel>/problemType}">
@@ -316,34 +304,31 @@
                         </ObjectPageSubSection>
                         <ObjectPageSubSection id="problemDescription" title="2. Description" showTitle="true">
                             <blocks>
-
                                 <sf:SimpleForm id="formProblemDescription" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
 
                                     <!-- Symptoms of Failure -->
-                                    <m:Label id="_IDGenLabel26" text="What are the symptoms of the failure? (details of failure)" />
-                                    <m:Input id="_IDGenInput19" value="Wrong Barcode Label pasted." width="100%" />
+                                    <m:Label text="What are the symptoms of the failure? (details of failure)" />
+                                    <m:Input value="{capaModel>/details_failure}" width="100%" placeholder="Enter details of failure" />
 
                                     <!-- Impact of Failure -->
-                                    <m:Label id="_IDGenLabel27" text="What product feature or process had the failure? (Impact of failure)" />
-                                    <m:Input id="_IDGenInput20" value="Wrong Part No from scan caused Engine line not to accept &amp; stopped line production." width="100%" />
+                                    <m:Label text="What product feature or process had the failure? (Impact of failure)" />
+                                    <m:Input value="{capaModel>/impact_failure}" width="100%" placeholder="Enter impact of failure" />
 
                                     <!-- Failure Location -->
-                                    <m:Label id="_IDGenLabel28" text="Where is the failure occurring?" />
-                                    <m:Input id="_IDGenInput21" value="Failure occurring at TCL J, Engine line." width="100%" />
+                                    <m:Label text="Where is the failure occurring?" />
+                                    <m:Input value="{capaModel>/failure_occurring}" width="100%" placeholder="Enter failure location" />
 
                                     <!-- Detection Method -->
-                                    <m:Label id="_IDGenLabel29" text="How was the failure detected?" />
-                                    <m:Input id="_IDGenInput22" value="Wrong Barcode Label pasted detected at TCL J Engine line by Line Operator during scanning." width="100%" />
+                                    <m:Label text="How was the failure detected?" />
+                                    <m:Input value="{capaModel>/failure_detected}" width="100%" placeholder="Enter detection method" />
 
                                     <!-- Failure Date -->
-                                    <m:Label id="_IDGenLabel30" text="When did the failure occur?" />
-                                    <m:Input id="_IDGenInput23" value="Issue communicated by our representative Mr. Arunkumar dated 23.02.2025 at 3 pm." width="100%" />
-
+                                    <m:Label text="When did the failure occur?" />
+                                    <m:Input value="{capaModel>/failure_occur}" width="100%" placeholder="Enter date/time of failure" />
                                 </sf:SimpleForm>
-
-
                             </blocks>
                         </ObjectPageSubSection>
+
                     </subSections>
                 </ObjectPageSection>
 
@@ -434,7 +419,7 @@
                                             </m:items>
                                         </m:Select>
                                     </m:HBox>
-                                    <m:Table id="tbl5Why" items="{capaModel>/fiveWhys}"  visible="{= ${capaModel>/rcaMethod} === '5Why' }"  inset="false">
+                                    <m:Table id="tbl5Why" items="{capaModel>/fiveWhys}" visible="{= ${capaModel>/rcaMethod} === '5Why' }" inset="false">
                                         <m:headerToolbar>
                                             <m:Toolbar id="_IDGenToolbar3">
                                                 <m:Title id="_IDGenTitle1" text="4.1. Preventive ( Occurrence )-  Why did the process make the defect?"/>
@@ -495,61 +480,61 @@
                                             </m:ColumnListItem>
                                         </m:items>
                                     </m:Table>
-                                    <m:Table id="tblfish" items="{capaModel>/fishbone}" inset="false"  visible="{= ${capaModel>/rcaMethod} === 'Fishbone' }" >
+                                    <m:Table id="tblfish" items="{capaModel>/fishbone}" inset="false" visible="{= ${capaModel>/rcaMethod} === 'Fishbone' }">
                                         <m:headerToolbar>
-                                            <m:Toolbar >
-                                                 <m:Title  text="Fishbone / Ishikawa"/>
-                                                <m:ToolbarSpacer />
-                                                <m:Button  icon="sap-icon://add" text="Add" press="onAddfish"/>
+                                            <m:Toolbar id="_IDGenToolbar7">
+                                                <m:Title id="_IDGenTitle3" text="Fishbone / Ishikawa"/>
+                                                <m:ToolbarSpacer id="_IDGenToolbarSpacer11" />
+                                                <m:Button id="_IDGenButton17" icon="sap-icon://add" text="Add" press="onAddfish"/>
                                             </m:Toolbar>
                                         </m:headerToolbar>
 
                                         <!-- Columns -->
                                         <m:columns>
-                                            <m:Column  width="6rem">
-                                                <m:Text  text="#"/>
+                                            <m:Column id="_IDGenColumn96" width="6rem">
+                                                <m:Text id="_IDGenText132" text="#"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Man"/>
+                                            <m:Column id="_IDGenColumn97">
+                                                <m:Text id="_IDGenText133" text="Man"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Machine"/>
+                                            <m:Column id="_IDGenColumn98">
+                                                <m:Text id="_IDGenText134" text="Machine"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Material"/>
+                                            <m:Column id="_IDGenColumn99">
+                                                <m:Text id="_IDGenText135" text="Material"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Method"/>
+                                            <m:Column id="_IDGenColumn100">
+                                                <m:Text id="_IDGenText136" text="Method"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Ennvironment"/>
+                                            <m:Column id="_IDGenColumn101">
+                                                <m:Text id="_IDGenText137" text="Ennvironment"/>
                                             </m:Column>
-                                            <m:Column >
-                                                <m:Text  text="Measurement"/>
+                                            <m:Column id="_IDGenColumn102">
+                                                <m:Text id="_IDGenText138" text="Measurement"/>
                                             </m:Column>
-                                            <m:Column >
-                                                
+                                            <m:Column id="_IDGenColumn103">
+
                                             </m:Column>
-                                           
+
                                         </m:columns>
 
                                         <!-- Items -->
                                         <m:items>
-                                            <m:ColumnListItem >
+                                            <m:ColumnListItem id="_IDGenColumnListItem15">
                                                 <m:cells>
-                                                    <m:Text  text="Cause-{capaModel>stepNumber}"/>
-                                                    <m:TextArea  value="{capaModel>man}" rows="3"/>
-                                                    <m:TextArea  value="{capaModel>machine}" rows="3"/>
-                                                    <m:TextArea  value="{capaModel>material}" rows="3"/>
-                                                    <m:TextArea  value="{capaModel>method}" rows="3"/>
-                                                    <m:TextArea  value="{capaModel>environment}" rows="3"/>
-                                                    <m:TextArea  value="{capaModel>measurment}" rows="3"/>
-                                                    <m:Button  icon="sap-icon://delete" type="Reject" press="onDeletefish" visible="{= ${capaModel>/fishbone}.length > 1 }"/>
+                                                    <m:Text id="_IDGenText139" text="Cause-{capaModel>stepNumber}"/>
+                                                    <m:TextArea id="_IDGenTextArea22" value="{capaModel>man}" rows="3"/>
+                                                    <m:TextArea id="_IDGenTextArea24" value="{capaModel>machine}" rows="3"/>
+                                                    <m:TextArea id="_IDGenTextArea25" value="{capaModel>material}" rows="3"/>
+                                                    <m:TextArea id="_IDGenTextArea26" value="{capaModel>method}" rows="3"/>
+                                                    <m:TextArea id="_IDGenTextArea27" value="{capaModel>environment}" rows="3"/>
+                                                    <m:TextArea id="_IDGenTextArea28" value="{capaModel>measurment}" rows="3"/>
+                                                    <m:Button id="_IDGenButton21" icon="sap-icon://delete" type="Reject" press="onDeletefish" visible="{= ${capaModel>/fishbone}.length > 1 }"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
                                     </m:Table>
-                                    <m:Table id="tbl5Why2protect" class="sapUiLargeMarginTop" items="{capaModel>/fiveWhysprotect}" inset="false"  visible="{= ${capaModel>/rcaMethod} === '5Why' }" >
+                                    <m:Table id="tbl5Why2protect" class="sapUiLargeMarginTop" items="{capaModel>/fiveWhysprotect}" inset="false" visible="{= ${capaModel>/rcaMethod} === '5Why' }">
                                         <m:headerToolbar>
                                             <m:Toolbar id="_IDGenToolbar4">
                                                 <m:Title id="_IDGenTitle2" text="4.2. Protect ( Non Detection ) -  Why did the process not detect or contain the defect?"/>
@@ -1122,7 +1107,7 @@
                         </ObjectPageSubSection>
                         <ObjectPageSubSection id="subll" title="7C. Lesson Learned" titleUppercase="false">
                             <blocks>
-                                
+
                                 <sf:SimpleForm id="_IDGenSimpleForm12" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
                                     <!-- Label -->
                                     <m:Label id="_IDGenLabel35" text="Lesson Learned:" width="100%" design="Bold" class="sapUiTinyMarginEnd"/>
@@ -1186,25 +1171,25 @@
                         </ObjectPageSubSection>
                         <ObjectPageSubSection id="subRejectedAnalysis" title="6.2 TOTAL TIME REQUIRED FOR REJECTED PRODUCT ANALYSIS" titleUppercase="false">
                             <blocks>
-                                <m:VBox class="sapUiSmallMargin">
+                                <m:VBox id="_IDGenVBox17" class="sapUiSmallMargin">
 
                                     <!-- Description -->
-                                    <m:Text text="(Determination of root cause, corrective action &amp; monitoring effectiveness of implementation)" wrapping="true" design="Bold" class="sapUiSmallMarginBottom"/>
+                                    <m:Text id="_IDGenText140" text="(Determination of root cause, corrective action &amp; monitoring effectiveness of implementation)" wrapping="true" design="Bold" class="sapUiSmallMarginBottom"/>
 
                                     <!-- Horizontal layout for label, equals sign, &amp; value -->
-                                    <m:HBox alignItems="Center" justifyContent="Start" class="sapUiSmallMarginTop">
+                                    <m:HBox id="_IDGenHBox10" alignItems="Center" justifyContent="Start" class="sapUiSmallMarginTop">
 
                                         <!-- Label -->
-                                        <m:Label text="Total Time required for rejected product analysis in days" design="Bold"/>
+                                        <m:Label id="_IDGenLabel36" text="Total Time required for rejected product analysis in days" design="Bold"/>
 
                                         <!-- Spacer &amp; equals -->
-                                        <m:Text text="  =  " design="Bold" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+                                        <m:Text id="_IDGenText141" text="  =  " design="Bold" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
 
                                         <!-- Editable field -->
                                         <m:Input id="idRejectedAnalysisDays" value="{capaModel>totalTimeDays}" placeholder="Enter days" width="100px" textAlign="Center" type="Number"/>
 
                                         <!-- Suffix -->
-                                        <m:Text text=" Day(s)" design="Bold" class="sapUiTinyMarginBegin"/>
+                                        <m:Text id="_IDGenText142" text=" Day(s)" design="Bold" class="sapUiTinyMarginBegin"/>
                                     </m:HBox>
 
                                 </m:VBox>
@@ -1219,78 +1204,66 @@
                         <ObjectPageSubSection id="_IDGenObjectPageSubSection">
                             <blocks>
                                 <m:Table id="signOffTable" inset="false" class="sapUiTableGrid" width="100%">
-
-                                    <!-- Columns -->
                                     <m:columns>
-                                        <m:Column id="_IDGenColumn80">
-                                            <m:Text id="_IDGenText95" text="Head"/>
+                                        <m:Column>
+                                            <m:Text text="Head" />
                                         </m:Column>
-                                        <m:Column id="_IDGenColumn81">
-                                            <m:Text id="_IDGenText96" text="Production Chief"/>
+                                        <m:Column>
+                                            <m:Text text="Production Chief" />
                                         </m:Column>
-                                        <m:Column id="_IDGenColumn82">
-                                            <m:Text id="_IDGenText97" text="Quality Chief/MR"/>
+                                        <m:Column>
+                                            <m:Text text="Quality Chief/MR" />
                                         </m:Column>
-                                        <m:Column id="_IDGenColumn83">
-                                            <m:Text id="_IDGenText98" text="Design Chief"/>
+                                        <m:Column>
+                                            <m:Text text="Design Chief" />
                                         </m:Column>
-                                        <m:Column id="_IDGenColumn84">
-                                            <m:Text id="_IDGenText99" text="Process Chief"/>
+                                        <m:Column>
+                                            <m:Text text="Process Chief" />
                                         </m:Column>
-                                        <m:Column id="_IDGenColumn85">
-                                            <m:Text id="_IDGenText100" text="PLANT HEAD"/>
+                                        <m:Column>
+                                            <m:Text text="Plant Head" />
                                         </m:Column>
                                     </m:columns>
 
-                                    <!-- Items -->
                                     <m:items>
-                                        <!-- Data Rows -->
-                                        <m:ColumnListItem id="_IDGenColumnListItem10">
+                                        <!-- SIGN ROW -->
+                                        <m:ColumnListItem>
                                             <m:cells>
-                                                <m:Text id="_IDGenText101" text="Sign"/>
-                                                <m:Input id="_IDGenInput45" value=""/>
-                                                <m:Input id="_IDGenInput46" value=""/>
-                                                <m:Input id="_IDGenInput47" value=""/>
-                                                <m:Input id="_IDGenInput48" value=""/>
-                                                <m:Input id="_IDGenInput49" value=""/>
+                                                <m:Text text="Sign" />
+                                                <m:Input value="{MngVClosure>/productionchiefsign}" />
+                                                <m:Input value="{MngVClosure>/qualitychiefmrsign}" />
+                                                <m:Input value="{MngVClosure>/designchiefsign}" />
+                                                <m:Input value="{MngVClosure>/processchiefsign}" />
+                                                <m:Input value="{MngVClosure>/plantheadsign}" />
                                             </m:cells>
                                         </m:ColumnListItem>
 
-                                        <m:ColumnListItem id="_IDGenColumnListItem11">
+                                        <!-- DATE ROW -->
+                                        <m:ColumnListItem>
                                             <m:cells>
-                                                <m:Text id="_IDGenText102" text="Date"/>
-                                                <m:DatePicker id="_IDGenDatePicker14" value=""/>
-                                                <m:DatePicker id="_IDGenDatePicker15" value=""/>
-                                                <m:DatePicker id="_IDGenDatePicker16" value=""/>
-                                                <m:DatePicker id="_IDGenDatePicker17" value=""/>
-                                                <m:DatePicker id="_IDGenDatePicker18" value=""/>
+                                                <m:Text text="Date" />
+                                                <m:DatePicker value="{MngVClosure>/productionchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/qualitychiefmrdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/designchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/processchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/plantheaddate}" displayFormat="medium" />
                                             </m:cells>
                                         </m:ColumnListItem>
 
-                                        <m:ColumnListItem id="_IDGenColumnListItem12">
+                                        <!-- NAME ROW -->
+                                        <m:ColumnListItem>
                                             <m:cells>
-                                                <m:Text id="_IDGenText103" text="Name"/>
-                                                <m:Input id="_IDGenInput50" value=""/>
-                                                <m:Input id="_IDGenInput51" value=""/>
-                                                <m:Input id="_IDGenInput52" value=""/>
-                                                <m:Input id="_IDGenInput53" value=""/>
-                                                <m:Input id="_IDGenInput54" value=""/>
+                                                <m:Text text="Name" />
+                                                <m:Input value="{MngVClosure>/productionchiefname}" />
+                                                <m:Input value="{MngVClosure>/qualitychiefmrname}" />
+                                                <m:Input value="{MngVClosure>/designchiefname}" />
+                                                <m:Input value="{MngVClosure>/processchiefname}" />
+                                                <m:Input value="{MngVClosure>/plantheadname}" />
                                             </m:cells>
                                         </m:ColumnListItem>
-
-                                        <!-- Footer row as "column names" -->
-                                        <!-- <m:ColumnListItem type="Inactive" class="footerRow">
-                                            <m:cells>
-                                                <m:Text text="Head"/>
-                                                <m:Text text="Production Chief"/>
-                                                <m:Text text="Quality Chief/MR"/>
-                                                <m:Text text="Design Chief"/>
-                                                <m:Text text="Process Chief"/>
-                                                <m:Text text="PLANT HEAD"/>
-                                            </m:cells>
-                                        </m:ColumnListItem> -->
                                     </m:items>
                                 </m:Table>
+
 
                             </blocks>
                         </ObjectPageSubSection>
@@ -1298,5 +1271,13 @@
                 </ObjectPageSection>
             </sections>
         </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+                <m:Button id="_IDGenButton22" type="Emphasized" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton24" type="Accept" text="Submit" press="onSubmit"/>
+                <m:Button id="_IDGenButton23" type="Reject" text="Reject" press="onReject"/>
+            </m:OverflowToolbar>
+        </m:footer>
     </m:Page>
 </mvc:View>

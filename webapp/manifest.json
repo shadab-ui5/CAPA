@@ -41,6 +41,14 @@
           "localUri": "localService/vendorService/metadata.xml",
           "odataVersion": "2.0"
         }
+      },
+      "CapaService": {
+        "uri": "/sap/opu/odata/sap/ZUI_CAPA_SRV_DIRECT/",
+        "type": "OData",
+        "settings": {
+          "localUri": "localService/ZUI_CAPA_SRV_DIRECT/metadata.xml",
+          "odataVersion": "2.0"
+        }
       }
     },
     "crossNavigation": {
@@ -103,6 +111,15 @@
       },
       "vendorModel": {
         "dataSource": "vendorService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "capaServiceModel": {
+        "dataSource": "CapaService",
         "preload": true,
         "settings": {
           "operationMode": "Server",

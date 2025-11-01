@@ -6,8 +6,9 @@ sap.ui.define([
     'hodek/capa/utils/Formatter',
     "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
-    "sap/ui/unified/FileUploader"
-], function (Controller, JSONModel, MessageBox, Filter, Formatter, FilterOperator, MessageToast, FileUploader) {
+    "sap/ui/unified/FileUploader",
+    'hodek/capa/model/models',
+], function (Controller, JSONModel, MessageBox, Filter, Formatter, FilterOperator, MessageToast, FileUploader, Model) {
     "use strict";
 
     return Controller.extend("hodek.capa.controller.ObjectPage", {
@@ -15,7 +16,28 @@ sap.ui.define([
 
         onInit: function () {
             let oSelectModel = this.getOwnerComponent().getModel('selectedModel');
+            var oData = {
+                capaid: "",
+                head: "",
+                productionchiefsign: "",
+                qualitychiefmrsign: "",
+                designchiefsign: "",
+                processchiefsign: "",
+                plantheadsign: "",
+                productionchiefdate: null,
+                qualitychiefmrdate: null,
+                designchiefdate: null,
+                processchiefdate: null,
+                plantheaddate: null,
+                productionchiefname: "",
+                qualitychiefmrname: "",
+                designchiefname: "",
+                processchiefname: "",
+                plantheadname: ""
+            };
 
+            var oJsonModel = new sap.ui.model.json.JSONModel(oData);
+            this.getView().setModel(oJsonModel, "MngVClosure");
             let oModel = new sap.ui.model.json.JSONModel({
                 team: [{ index: 1, name: "", isChampion: false, isLeader: false, isTeamMember: false, role: "", department: "", responsibility: "", contact: "" }],
                 containmentActions: [
@@ -203,8 +225,15 @@ sap.ui.define([
                 return;
             }
             // this.getView().setBusy(true);
-
-            console.log(this.getView().getModel('selectedModel').getData());
+            this._sCapaId = oModel.getProperty("/ASN_No") + oModel.getProperty("/PurchaseOrder") + oModel.getProperty("/ItemNo");
+            this.supplier = oSelectedModel.getProperty("/Vendor");
+            this.purchaseorder = oSelectedModel.getProperty("/PurchaseOrder");
+            this.material = oSelectedModel.getProperty("/Product");
+            this.item = oSelectedModel.getProperty("/ItemNo");
+            this.asn = oSelectedModel.getProperty("/ASN_No");
+            this.invoicenumber = oSelectedModel.getProperty("/InvoiceNumber");
+            this.invoicedate = oSelectedModel.getProperty("/InvoiceDate");
+            console.log(this._sCapaId);
         },
         onAddTeamMember: function () {
             let oModel = this.getView().getModel("capaModel");
@@ -672,6 +701,15 @@ sap.ui.define([
             aData.forEach((e, i) => e.stepNumber = i + 1);
 
             oModel.setProperty("/dcpData", aData);
+        },
+        onSave: function () {
+            Model.onSaveContainment(this);
+            Model.onSaveCorrective(this);
+            Model.onSaveDcpUpdation(this);
+            Model.onSaveHorizontalDeployment(this);
+            Model.onSaveTeamMembers(this);
+            Model.onSaveMngVClosure(this);
+
         }
 
 
