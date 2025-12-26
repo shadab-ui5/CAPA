@@ -11,7 +11,7 @@ sap.ui.define([
 ], function (Controller, JSONModel, MessageBox, Filter, Formatter, FilterOperator, MessageToast, FileUploader, Model) {
     "use strict";
 
-    return Controller.extend("hodek.capa.controller.ObjectPage", {
+    return Controller.extend("hodek.capa.controller.ObjectPageCopy", {
         formatter: Formatter,
 
         onInit: function () {

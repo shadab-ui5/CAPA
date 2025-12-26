@@ -1,4 +1,4 @@
-<mvc:View controllerName="hodek.capa.controller.ObjectPage"
+<mvc:View controllerName="hodek.capa.controller.ObjectPageCopy"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
     xmlns:m="sap.m"
