@@ -1,0 +1,133 @@
+<mvc:View controllerName="hodek.capa.controller.EstablishTeam"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true"   navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox id="_IDGenVBox1">
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
+                            <m:Text id="_IDGenText2" text="Supplier: {selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                <!-- ================= 2. ESTABLISHING THE TEAM ================= -->
+                <ObjectPageSection id="secTeam" title="Establishing the Team" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subTeam">
+                            <blocks>
+                                <m:Table id="teamTable" items="{capaModel>/team}" growing="true" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar id="_IDGenToolbar1">
+                                            <m:Title id="_IDGenTitle" text="Team Members"/>
+                                            <m:ToolbarSpacer id="_IDGenToolbarSpacer"/>
+                                            <m:Button id="_IDGenButton" icon="sap-icon://add" text="Add Member" press="onAddTeamMember"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <m:columns>
+                                        <!-- Counter -->
+                                        <m:Column id="_IDGenColumn" hAlign="Center" width="3em">
+                                            <m:Text id="_IDGenText3" text="No."/>
+                                        </m:Column>
+
+                                        <!-- Name -->
+                                        <m:Column id="_IDGenColumn1" width="20rem">
+                                            <m:Text id="_IDGenText4" text="Name"/>
+                                        </m:Column>
+
+                                        <!-- Champion checkbox -->
+                                        <m:Column id="_IDGenColumn2" hAlign="Center" width="5em">
+                                            <m:Text id="_IDGenText5" text="Champion"/>
+                                        </m:Column>
+
+                                        <!-- Leader checkbox -->
+                                        <m:Column id="_IDGenColumn3" hAlign="Center" width="5em">
+                                            <m:Text id="_IDGenText6" text="Leader"/>
+                                        </m:Column>
+
+                                        <!-- Team Member checkbox -->
+                                        <m:Column id="_IDGenColumn4" hAlign="Center" width="5em">
+                                            <m:Text id="_IDGenText7" text="Team Member"/>
+                                        </m:Column>
+
+                                        <!-- Role -->
+                                        <m:Column id="_IDGenColumn5">
+                                            <m:Text id="_IDGenText8" text="Role"/>
+                                        </m:Column>
+
+                                        <!-- Department -->
+                                        <m:Column id="_IDGenColumn6">
+                                            <m:Text id="_IDGenText9" text="Department"/>
+                                        </m:Column>
+
+                                        <!-- Responsibility -->
+                                        <m:Column id="_IDGenColumn7">
+                                            <m:Text id="_IDGenText10" text="Responsibility"/>
+                                        </m:Column>
+
+                                        <!-- Contact -->
+                                        <m:Column id="_IDGenColumn8">
+                                            <m:Text id="_IDGenText11" text="Contact"/>
+                                        </m:Column>
+
+                                        <!-- Delete -->
+                                        <m:Column id="_IDGenColumn9">
+                                            <m:Text id="_IDGenText12" text="Delete"/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <m:items>
+                                        <m:ColumnListItem id="_IDGenColumnListItem">
+                                            <m:cells>
+                                                <!-- Row counter -->
+                                                <m:Text id="_IDGenText13" text="{capaModel>index}"/>
+
+                                                <!-- Name -->
+                                                <m:Input id="_IDGenInput14" value="{capaModel>name}"/>
+
+                                                <!-- Checkboxes -->
+                                                <m:CheckBox id="_IDGenCheckBox" selected="{capaModel>isChampion}" text=""/>
+                                                <m:CheckBox id="_IDGenCheckBox1" selected="{capaModel>isLeader}" text=""/>
+                                                <m:CheckBox id="_IDGenCheckBox2" selected="{capaModel>isTeamMember}" text=""/>
+
+                                                <!-- Role, Department, Responsibility, Contact -->
+                                                <m:Input id="_IDGenInput15" value="{capaModel>role}"/>
+                                                <m:Input id="_IDGenInput16" value="{capaModel>department}"/>
+                                                <m:Input id="_IDGenInput17" value="{capaModel>responsibility}"/>
+                                                <m:Input id="_IDGenInput18" value="{capaModel>contact}"/>
+
+                                                <!-- Delete button: only show if rowIndex > 0 -->
+                                                <m:Button id="_IDGenButton1" icon="sap-icon://delete" press="onDeleteTeamMember" visible="{= ${capaModel>index} > 1 }"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                
+            </sections>
+        </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+                <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

@@ -217,9 +217,6 @@ sap.ui.define([
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true); // replace with actual route
         },
-        onNext: function () {
-            this.getOwnerComponent().getRouter().navTo("RouteProblemAwareness", {}, true); // replace with actual route
-        },
         _onRouteMatched: function (oEvent) {
             let oModel = this.getView().getModel('selectedModel');
 

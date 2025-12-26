@@ -1,0 +1,105 @@
+<mvc:View controllerName="hodek.capa.controller.MngmntVeri"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true" navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox id="_IDGenVBox1">
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
+                            <m:Text id="_IDGenText2" text="Supplier: {selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                <!-- ================= 11. MANAGEMENT VERIFICATION  CLOSURE ================= -->
+                <ObjectPageSection id="secManagement" title="Management Verification  Closure" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="_IDGenObjectPageSubSection">
+                            <blocks>
+                                <m:Table id="signOffTable" inset="false" class="sapUiTableGrid" width="100%">
+                                    <m:columns>
+                                        <m:Column>
+                                            <m:Text text="Head" />
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Production Chief" />
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Quality Chief/MR" />
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Design Chief" />
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Process Chief" />
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Plant Head" />
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <m:items>
+                                        <!-- SIGN ROW -->
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Sign" />
+                                                <m:Input value="{MngVClosure>/productionchiefsign}" />
+                                                <m:Input value="{MngVClosure>/qualitychiefmrsign}" />
+                                                <m:Input value="{MngVClosure>/designchiefsign}" />
+                                                <m:Input value="{MngVClosure>/processchiefsign}" />
+                                                <m:Input value="{MngVClosure>/plantheadsign}" />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+
+                                        <!-- DATE ROW -->
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Date" />
+                                                <m:DatePicker value="{MngVClosure>/productionchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/qualitychiefmrdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/designchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/processchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker value="{MngVClosure>/plantheaddate}" displayFormat="medium" />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+
+                                        <!-- NAME ROW -->
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="Name" />
+                                                <m:Input value="{MngVClosure>/productionchiefname}" />
+                                                <m:Input value="{MngVClosure>/qualitychiefmrname}" />
+                                                <m:Input value="{MngVClosure>/designchiefname}" />
+                                                <m:Input value="{MngVClosure>/processchiefname}" />
+                                                <m:Input value="{MngVClosure>/plantheadname}" />
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+            </sections>
+        </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+                <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton24" type="Success" text="Submit" press="onSubmit"/>
+                <m:Button id="_IDGenButton23" type="Reject" text="Reject" press="onReject"/>
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

@@ -1,0 +1,209 @@
+<mvc:View controllerName="hodek.capa.controller.ValCorrAction"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true"   navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox id="_IDGenVBox1">
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
+                            <m:Text id="_IDGenText2" text="Supplier: {selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                <!-- ================= 6. Validation ACTION PLAN ================= -->
+                <ObjectPageSection id="secvalidating" title="VALIDATION OF CORRECTIVE ACTION ( Trial / tests conducted &amp; Ensure CA is Working )" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subvalidatingActions" showTitle="false">
+                            <blocks>
+                                <m:Table id="validatingTable" items="{capaModel>/validating}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar id="_IDGenToolbar6">
+                                            <!-- <m:Title text="validating Effectiveness"/> -->
+                                            <m:ToolbarSpacer id="_IDGenToolbarSpacer5"/>
+                                            <m:Button id="_IDGenButton11" icon="sap-icon://add" text="Add Entry" press="onAddvalidating"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column id="_IDGenColumn46" width="3em">
+                                            <m:Text id="_IDGenText55" text="#"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn47">
+                                            <m:Text id="_IDGenText56" text="Validating Actions Identified &amp; Taken"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn48">
+                                            <m:Text id="_IDGenText57" text="Target"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn49">
+                                            <m:Text id="_IDGenText58" text="Actual"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn50">
+                                            <m:Text id="_IDGenText59" text="Result of Actions"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn51">
+                                            <m:Text id="_IDGenText60" text="Responsibility"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn52">
+                                            <m:Text id="_IDGenText61" text="Status"/>
+                                        </m:Column>
+
+                                        <m:Column id="_IDGenColumn53" width="7rem">
+                                            <m:Text id="_IDGenText62" text=""/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <m:ColumnListItem id="_IDGenColumnListItem5">
+                                            <m:cells>
+                                                <m:Text id="_IDGenText63" text="{capaModel>stepNumber}"/>
+                                                <m:TextArea id="_IDGenTextArea20" value="{capaModel>actionTaken}" rows='2'/>
+                                                <m:DatePicker id="_IDGenDatePicker3" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker id="_IDGenDatePicker4" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:TextArea id="_IDGenTextArea21" value="{capaModel>result}" rows="2"/>
+                                                <m:Input id="_IDGenInput31" value="{capaModel>responsibe}"/>
+
+                                                <m:Select id="_IDGenSelect2" selectedKey="{capaModel>status}">
+                                                    <m:items>
+                                                        <core:Item id="_IDGenItem17" key="Open" text="Open"/>
+                                                        <core:Item id="_IDGenItem18" key="In Progress" text="In Progress"/>
+                                                        <core:Item id="_IDGenItem19" key="Closed" text="Closed"/>
+                                                    </m:items>
+                                                </m:Select>
+                                                <!-- Show attached filename -->
+                                                <!-- <m:Text text="{capaModel>attachment}"/> -->
+
+                                                <!-- Actions: Upload + Delete -->
+                                                <m:HBox id="_IDGenHBox8">
+                                                    <!-- <m:Button icon="sap-icon://upload" type="Emphasized" press="onUploadFilePress" class="sapUiSmallMarginEnd"/> -->
+                                                    <m:Button id="_IDGenButton12" icon="sap-icon://delete" type="Reject" press="onDeletevalidating" visible="{= ${capaModel>/validating}.length > 1 }"/>
+                                                </m:HBox>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="subcaimple" title="6.1 CA IMPLEMENTATION &amp; MONITORING EFFECTIVENESS OF CORRECTIVE ACTIONS (REVIEW)" showTitle="true">
+                            <blocks>
+                                <!-- Editable Header Row -->
+                                <m:VBox id="_IDGenVBox13">
+                                    <m:HBox id="_IDGenHBox9" class="sapUiTinyMarginBottom">
+                                        <m:VBox id="_IDGenVBox10" width="25%" class="sapUiSmallMarginBegin">
+                                            <m:Label id="_IDGenLabel32" text="CA Implementation Date" design="Bold"/>
+                                            <m:DatePicker id="_IDGenDatePicker5" value="{capaModel>/CAImplDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                        </m:VBox>
+
+                                        <m:VBox id="_IDGenVBox11" width="25%" class="sapUiSmallMarginBegin">
+                                            <m:Label id="_IDGenLabel33" text="Effectiveness Verification Date" design="Bold"/>
+                                            <m:DatePicker id="_IDGenDatePicker6" value="{capaModel>/EffectivenessVerificationDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                        </m:VBox>
+
+                                        <m:VBox id="_IDGenVBox12" width="25%" class="sapUiSmallMarginBegin">
+                                            <m:Label id="_IDGenLabel34" text="Effectiveness Monitoring Date" design="Bold"/>
+                                            <m:DatePicker id="_IDGenDatePicker7" value="{capaModel>/EffectivenessMonitoringDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                        </m:VBox>
+
+                                        <!-- <m:VBox id="_IDGenVBox13" width="25%" class="sapUiSmallMarginEnd">
+                                            <m:Text id="_IDGenText64" text="Add Graph here from Effectiveness monitoring sheet ↓" wrapping="true" textAlign="Center" />
+                                        </m:VBox> -->
+                                    </m:HBox>
+                                    <m:VBox id="_IDGenVBox14">
+                                        <m:Toolbar id="_IDGenToolbar8">
+                                            <m:ToolbarSpacer id="_IDGenToolbarSpacer6" />
+                                            <m:Button id="_IDGenButton13" text="Add Row" icon="sap-icon://add" press=".onAddEffectivenessRow" />
+                                        </m:Toolbar>
+                                        <!-- Data Table -->
+                                        <m:Table id="idEffectivenessTable" inset="false" width="100%" backgroundDesign="Solid" class="sapUiTinyMarginTop" items="{
+                                                path: 'capaModel>/effectivenessData'
+                                            }">
+                                            <m:columns>
+                                                <m:Column id="_IDGenColumn554">
+                                                    <m:Text id="_IDGenText365" text="No." />
+                                                </m:Column>
+                                                <m:Column id="_IDGenColumn54">
+                                                    <m:Text id="_IDGenText65" text="Month" />
+                                                </m:Column>
+                                                <m:Column id="_IDGenColumn55">
+                                                    <m:Text id="_IDGenText66" text="Mfg Qty" />
+                                                </m:Column>
+                                                <m:Column id="_IDGenColumn56">
+                                                    <m:Text id="_IDGenText67" text="Defective Qty" />
+                                                </m:Column>
+                                                <m:Column id="_IDGenColumn57">
+                                                    <m:Text id="_IDGenText68" text="Date" />
+                                                </m:Column>
+                                                <m:Column id="_IDGenColumn5888">
+
+                                                </m:Column>
+                                            </m:columns>
+
+                                            <m:items>
+                                                <m:ColumnListItem id="_IDGenColumnListItem6">
+                                                    <m:cells>
+                                                        <m:Text id="_IDGenInput332" text="{capaModel>stepNumber}" />
+                                                        <m:Input id="_IDGenInput32" value="{capaModel>Month}" />
+                                                        <m:Input id="_IDGenInput33" value="{capaModel>MfgQty}" type="Number" />
+                                                        <m:Input id="_IDGenInput34" value="{capaModel>DefQty}" type="Number" />
+                                                        <m:DatePicker id="_IDGenDatePicker8" value="{capaModel>Date}" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" />
+                                                        <m:Button id="_IDGenButton18" icon="sap-icon://delete" text="Delete Selected" type="Reject" press=".onDeleteEffectivenessRow" visible="{= ${capaModel>/effectivenessData}.length > 1 }"/>
+                                                    </m:cells>
+                                                </m:ColumnListItem>
+                                            </m:items>
+                                        </m:Table>
+                                    </m:VBox>
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="subRejectedAnalysis" title="6.2 TOTAL TIME REQUIRED FOR REJECTED PRODUCT ANALYSIS" titleUppercase="false">
+                            <blocks>
+                                <m:VBox id="_IDGenVBox17" class="sapUiSmallMargin">
+
+                                    <!-- Description -->
+                                    <m:Text id="_IDGenText140" text="(Determination of root cause, corrective action &amp; monitoring effectiveness of implementation)" wrapping="true" design="Bold" class="sapUiSmallMarginBottom"/>
+
+                                    <!-- Horizontal layout for label, equals sign, &amp; value -->
+                                    <m:HBox id="_IDGenHBox10" alignItems="Center" justifyContent="Start" class="sapUiSmallMarginTop">
+
+                                        <!-- Label -->
+                                        <m:Label id="_IDGenLabel36" text="Total Time required for rejected product analysis in days" design="Bold"/>
+
+                                        <!-- Spacer &amp; equals -->
+                                        <m:Text id="_IDGenText141" text="  =  " design="Bold" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+
+                                        <!-- Editable field -->
+                                        <m:Input id="idRejectedAnalysisDays" value="{capaModel>totalTimeDays}" placeholder="Enter days" width="100px" textAlign="Center" type="Number"/>
+
+                                        <!-- Suffix -->
+                                        <m:Text id="_IDGenText142" text=" Day(s)" design="Bold" class="sapUiTinyMarginBegin"/>
+                                    </m:HBox>
+
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                
+            </sections>
+        </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+                <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

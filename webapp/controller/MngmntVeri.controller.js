@@ -11,7 +11,7 @@ sap.ui.define([
 ], function (Controller, JSONModel, MessageBox, Filter, Formatter, FilterOperator, MessageToast, FileUploader, Model) {
     "use strict";
 
-    return Controller.extend("hodek.capa.controller.ObjectPage", {
+    return Controller.extend("hodek.capa.controller.MngmntVeri", {
         formatter: Formatter,
 
         onInit: function () {
@@ -207,7 +207,7 @@ sap.ui.define([
             oRouter.getRoute("RouteObject").attachPatternMatched(this._onRouteMatched, this);
             this.getView().setModel(oModel, "capaModel");
             if (!oSelectModel) {
-                this.getOwnerComponent().getRouter().navTo("RouteMain", {
+                this.getOwnerComponent().getRouter().navTo("RouteProblemClosureSignOff", {
                 }, true);
                 return;
             }
@@ -215,16 +215,13 @@ sap.ui.define([
             
         },
         onNavBack: function () {
-            this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true); // replace with actual route
-        },
-        onNext: function () {
-            this.getOwnerComponent().getRouter().navTo("RouteProblemAwareness", {}, true); // replace with actual route
+            this.getOwnerComponent().getRouter().navTo("RouteProblemClosureSignOff", {}, true); // replace with actual route
         },
         _onRouteMatched: function (oEvent) {
             let oModel = this.getView().getModel('selectedModel');
 
             if (!oModel) {
-                this.getOwnerComponent().getRouter().navTo("RouteMain");
+                this.getOwnerComponent().getRouter().navTo("RouteProblemClosureSignOff");
                 return;
             }
             // this.getView().setBusy(true);

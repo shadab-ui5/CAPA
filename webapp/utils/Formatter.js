@@ -11,7 +11,7 @@ sap.ui.define([
              * @returns {sap.ui.model.json.JSONModel} The device model.
              */
             formatDateToYyyyMmDd: function (oDate) {
-                if (!oDate) return;
+                if (!oDate) return "NA";
                 const year = oDate.getFullYear();
                 const month = String(oDate.getMonth() + 1).padStart(2, '0');
                 const day = String(oDate.getDate()).padStart(2, '0');
@@ -73,7 +73,7 @@ sap.ui.define([
          * @returns {string} - Remaining days or status message
          */
             getCapaCountDown: function (capaDate) {
-                if (!capaDate) return "";
+                if (!capaDate) return "NA";
 
                 // Convert OData DateTime to JS Date
                 let oDate = capaDate instanceof Date ? capaDate : new Date(capaDate);
@@ -84,14 +84,14 @@ sap.ui.define([
                 oDate.setHours(0, 0, 0, 0);
 
                 // Calculate difference in days
-                let diffTime = oDate.getTime() - oToday.getTime();
+                let diffTime = oToday.getTime() - oDate.getTime();
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 // Determine status
                 let status;
-                if(diffDays<0){
-                    status="Expired"
-                }else{
-                    status = (diffDays+1) + " days";
+                if (diffDays > 16) {
+                    status = "Expired"
+                } else {
+                    status = 15 - (diffDays + 1) + " days";
                 }
                 return status;
             },
@@ -107,9 +107,9 @@ sap.ui.define([
                 oDate.setHours(0, 0, 0, 0);
 
                 // Calculate difference in days
-                let diffTime = oDate.getTime() - oToday.getTime();
+                let diffTime = oToday.getTime() - oDate.getTime();
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+                diffDays = 15 - diffDays;
                 // Determine status
                 let status = "";
                 if (diffDays > 5) {
@@ -117,16 +117,16 @@ sap.ui.define([
                 } else {
                     switch (diffDays) {
                         case 5:
-                            status = "Success";
+                            status = "Warning";
                             break;
                         case 4:
-                            status = "Success";
+                            status = "Warning";
                             break;
                         case 3:
                             status = "Warning";
                             break;
                         case 1:
-                            status = "Warning";
+                            status = "Error";
                             break;
                         case 0:
                             status = "Error";

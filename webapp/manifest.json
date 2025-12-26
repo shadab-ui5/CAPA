@@ -162,15 +162,125 @@
             "TargetDetail"
           ]
         }
+        ,{
+          "name": "RouteContainmentAction",
+          "pattern": "ContainmentAction",
+          "target": [
+            "TargetContainmentAction"
+          ]
+        }
+        ,{
+          "name": "RouteCorrectiveAction",
+          "pattern": "CorrectiveAction",
+          "target": [
+            "TargetCorrectiveAction"
+          ]
+        }
+        ,{
+          "name": "RouteEstablishTeam",
+          "pattern": "EstablishTeam",
+          "target": [
+            "TargetEstablishTeam"
+          ]
+        }
+        ,{
+          "name": "RouteMngmntVeri",
+          "pattern": "MngmntVeri",
+          "target": [
+            "TargetMngmntVeri"
+          ]
+        }
+        ,{
+          "name": "RoutePreventingRecurrence",
+          "pattern": "PreventingRecurrence",
+          "target": [
+            "TargetPreventingRecurrence"
+          ]
+        }
+        ,{
+          "name": "RouteProblemAwareness",
+          "pattern": "ProblemAwareness",
+          "target": [
+            "TargetProblemAwareness"
+          ]
+        }
+        ,{
+          "name": "RouteProblemClosureSignOff",
+          "pattern": "ProblemClosureSignOff",
+          "target": [
+            "TargetProblemClosureSignOff"
+          ]
+        }
+        ,{
+          "name": "RouteProblemDefinition",
+          "pattern": "ProblemDefinition",
+          "target": [
+            "TargetProblemDefinition"
+          ]
+        }
+        ,{
+          "name": "RouteRootCauseAnalysis",
+          "pattern": "RootCauseAnalysis",
+          "target": [
+            "TargetRootCauseAnalysis"
+          ]
+        }
+        ,{
+          "name": "RouteValCorrAction",
+          "pattern": "ValCorrAction",
+          "target": [
+            "TargetValCorrAction"
+          ]
+        }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
-        },
-        "TargetDetail": {
+        }
+        ,"TargetDetail": {
           "id": "ObjectPage",
           "name": "ObjectPage"
+        }
+        ,"TargetContainmentAction": {
+          "id": "ContainmentAction",
+          "name": "ContainmentAction"
+        }
+        ,"TargetCorrectiveAction": {
+          "id": "CorrectiveAction",
+          "name": "CorrectiveAction"
+        }
+        ,"TargetEstablishTeam": {
+          "id": "EstablishTeam",
+          "name": "EstablishTeam"
+        }
+        ,"TargetMngmntVeri": {
+          "id": "MngmntVeri",
+          "name": "MngmntVeri"
+        }
+        ,"TargetPreventingRecurrence": {
+          "id": "PreventingRecurrence",
+          "name": "PreventingRecurrence"
+        }
+        ,"TargetProblemAwareness": {
+          "id": "ProblemAwareness",
+          "name": "ProblemAwareness"
+        }
+        ,"TargetProblemClosureSignOff": {
+          "id": "ProblemClosureSignOff",
+          "name": "ProblemClosureSignOff"
+        }
+        ,"TargetProblemDefinition": {
+          "id": "ProblemDefinition",
+          "name": "ProblemDefinition"
+        }
+        ,"TargetRootCauseAnalysis": {
+          "id": "RootCauseAnalysis",
+          "name": "RootCauseAnalysis"
+        }
+        ,"TargetValCorrAction": {
+          "id": "ValCorrAction",
+          "name": "ValCorrAction"
         }
       }
     },

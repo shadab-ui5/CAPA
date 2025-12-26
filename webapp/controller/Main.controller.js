@@ -1,24 +1,11 @@
 sap.ui.define([
 	'sap/ui/core/mvc/Controller',
-	'sap/ui/model/json/JSONModel',
-	'sap/m/p13n/Engine',
-	'sap/m/p13n/SelectionController',
-	'sap/m/p13n/SortController',
-	'sap/m/p13n/GroupController',
-	'sap/m/p13n/FilterController',
-	'sap/m/p13n/MetadataHelper',
-	'sap/ui/model/Sorter',
-	'sap/m/ColumnListItem',
-	'sap/m/Text',
-	'sap/ui/core/library',
-	'sap/m/table/ColumnWidthController',
-	'sap/ui/model/Filter',
 	'hodek/capa/utils/Formatter',
 	'sap/m/MessageBox',
 	"sap/ui/core/format/DateFormat",
 	"sap/ui/comp/valuehelpdialog/ValueHelpDialog",
 	'sap/m/MessageToast',
-], function (Controller, JSONModel, Engine, SelectionController, SortController, GroupController, FilterController, MetadataHelper, Sorter, ColumnListItem, Text, coreLibrary, ColumnWidthController, Filter, Formatter, MessageBox, DateFormat, ValueHelpDialog, MessageToast) {
+], function (Controller, Formatter, MessageBox, DateFormat, ValueHelpDialog, MessageToast) {
 	"use strict";
 
 	return Controller.extend("hodek.capa.controller.Main", {
@@ -682,77 +669,9 @@ sap.ui.define([
 				pattern: "yyyy-MM-dd"
 			});
 
-			//// ====== Invoice Number (MultiInput) ======
-			// var oBillingInput = this.byId("idAccountingDocument");
-			// var aBillingDocs = oBillingInput.getTokens();
-			// var sBillingRaw = oBillingInput.getValue(); // NEW: catch raw typed value
 
-			// if (aBillingDocs.length > 0) {
-			// 	aBillingDocs.forEach(function (oToken) {
-			// 		aFilters.push(new sap.ui.model.Filter(
-			// 			"Product",
-			// 			sap.ui.model.FilterOperator.EQ,
-			// 			oToken.getKey() || oToken.getText()
-			// 		));
-			// 	});
-			// }
-			// //if user typed directly without pressing enter
-			// if (sBillingRaw) { // NEW
-			// 	aFilters.push(new sap.ui.model.Filter(
-			// 		"Product",
-			// 		sap.ui.model.FilterOperator.Contains,
-			// 		sBillingRaw
-			// 	));
-			// }
-
-			// ====== Document Date (DateRangeSelection) ======
-			// var oDateRange = this.byId("idPostingDate");
-			// if (oDateRange.getDateValue() && oDateRange.getSecondDateValue()) {
-			// 	aFilters.push(new sap.ui.model.Filter(
-			// 		"invoice_date",
-			// 		sap.ui.model.FilterOperator.BT,
-			// 		oDateFormat.format(new Date(oDateRange.getDateValue())),
-			// 		oDateFormat.format(new Date(oDateRange.getSecondDateValue()))
-			// 	));
-			// }
-
-			// ====== Customer / ASN (MultiInput) ======
-			// var oAsnInput = this.byId("idAsn");
-			// var aCustomers = oAsnInput.getTokens();
-			// var sAsnRaw = oAsnInput.getValue(); // NEW: catch raw typed ASN
-
-			// if (aCustomers.length > 0) {
-			// 	aCustomers.forEach(function (oToken) {
-			// 		aFilters.push(new sap.ui.model.Filter(
-			// 			"ASN_No",
-			// 			sap.ui.model.FilterOperator.EQ,
-			// 			oToken.getKey() || oToken.getText()
-			// 		));
-			// 	});
-			// }
-			// // if user typed directly without pressing enter
-			// if (sAsnRaw) { // NEW
-			// 	aFilters.push(new sap.ui.model.Filter(
-			// 		"AsnNo",
-			// 		sap.ui.model.FilterOperator.Contains,
-			// 		sAsnRaw
-			// 	));
-			// }
-			// ====== Vendor / ASN (MultiInput) ======
 			var oVendorInput = this.byId("idVendor").getSelectedKey();
-			// var aCustomers = oVendorInput.getTokens();
-			// var sVendorRaw = oVendorInput.getValue(); // NEW: catch raw typed Vendor
 
-			// if (aCustomers.length > 0) {
-			// 	aCustomers.forEach(function (oToken) {
-			// 		aFilters.push(new sap.ui.model.Filter(
-			// 			"Supplier",
-			// 			sap.ui.model.FilterOperator.EQ,
-			// 			oToken.getKey() || oToken.getText()
-			// 		));
-			// 	});
-			// }
-			// if user typed directly without pressing enter
 			if (oVendorInput) { // NEW
 				aFilters.push(new sap.ui.model.Filter(
 					"Vendor",
@@ -761,14 +680,7 @@ sap.ui.define([
 				));
 			}
 
-			// ====== Status (MultiComboBox or MultiSelect) ======
-			// var aStatusKeys = this.byId("idStatus").getSelectedKeys();
-			// if (aStatusKeys.length > 0) {
-			// 	var aStatusFilters = aStatusKeys.map(function (sKey) {
-			// 		return new sap.ui.model.Filter("Status_Desc", sap.ui.model.FilterOperator.EQ, sKey);
-			// 	});
-			// 	aFilters.push(new sap.ui.model.Filter({ filters: aStatusFilters, and: false })); // OR logic
-			// }
+
 
 			this._aCurrentFilters = aFilters;
 
@@ -781,26 +693,16 @@ sap.ui.define([
 			let oContext = oPressedItem.getBindingContext("getListReport"); // use your model name
 			let oRowData = oContext.getObject();
 			let remainData = Formatter.getCapaCountDown(oRowData.capaDate)
-			// if (remainData === "Expired") {
-			// 	MessageToast.show("Days Passed,Not Allowed");
-			// 	this.getView().setBusy(false);
-			// 	return;
-			// } else if (remainData === "") {
-			// 	MessageToast.show("Date Not available");
-			// 	this.getView().setBusy(false);
-			// 	return;
-			// } else {
-			// 	this.getOwnerComponent().getModel("selectedModel").setData(oRowData);
-			// 	this.onClickNext(); // navigate or next step
-			// }
-			this.getOwnerComponent().getModel("selectedModel").setData(oRowData);
-			this.onClickNext(); // navigate or next step
+			if (remainData === "Expired") {
+				this.getView().setBusy(false);
+				MessageBox.show(`Days Expired to submit CAPA for material ${oRowData.MaterialDescription}(${oRowData.Product})`);
+			} else {
+				this.getOwnerComponent().getModel("selectedModel").setData(oRowData);
+				this.onClickNext(); // navigate or next step
+			}
 		},
 		onClickNext: function () {
-
-			this.getOwnerComponent().getRouter().navTo("RouteObject", {
-			}, true); // replace with actual route
-
+			this.getOwnerComponent().getRouter().navTo("RouteObject"); // replace with actual route
 		},
 		onLiveChange: function (oEvent) {
 			var sQuery = oEvent.getParameter("newValue");

@@ -1,0 +1,263 @@
+<mvc:View controllerName="hodek.capa.controller.PreventingRecurrence"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true"   navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox id="_IDGenVBox1">
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
+                            <m:Text id="_IDGenText2" text="Supplier: {selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                <ObjectPageSection id="preventingRecurrenceSection" title="7. Preventing Recurrence" showTitle="true">
+                    <subSections>
+
+                        <!-- Section 7: Preventing Recurrence -->
+                        <ObjectPageSubSection id="preventingRecurrenceSubSection" title="Preventive Actions" showTitle="true">
+                            <blocks>
+                                <m:VBox id="_IDGenVBox144">
+                                    <m:Toolbar id="_IDGenToolbar88">
+                                        <m:Title id="_IDGenTitle10" text="Preventive Actions Taken" level="H3" />
+                                        <m:ToolbarSpacer id="_IDGenToolbarSpacer16" />
+                                        <m:Button id="_IDGenButton133" text="Add Row" icon="sap-icon://add" press=".onAddPreventiveRow" />
+                                    </m:Toolbar>
+
+                                    <m:Table id="preventingRecurrenceTable" inset="false" items="{path: 'capaModel>/preventiveActions'}">
+                                        <m:columns>
+                                            <m:Column id="_IDGenColumn58">
+                                                <m:Text id="_IDGenText69" text="No" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn59">
+                                                <m:Text id="_IDGenText70" text="Preventive Actions Taken" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn60">
+                                                <m:Text id="_IDGenText71" text="Target" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn61">
+                                                <m:Text id="_IDGenText72" text="Actual" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn62">
+                                                <m:Text id="_IDGenText73" text="Result of Action" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn63">
+                                                <m:Text id="_IDGenText74" text="Resp." />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn64">
+                                                <m:Text id="_IDGenText75" text="Status" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn65" hAlign="Center">
+                                                <m:Text id="_IDGenText76" text="Action" />
+                                            </m:Column>
+                                        </m:columns>
+
+                                        <m:items>
+                                            <m:ColumnListItem id="_IDGenColumnListItem7">
+                                                <m:cells>
+                                                    <m:Text id="_IDGenText77" text="{capaModel>stepNumber}" />
+                                                    <!-- Auto numbering -->
+                                                    <m:Input id="_IDGenInput35" value="{capaModel>PreventiveAction}" placeholder="Enter action" width="100%" />
+                                                    <m:DatePicker id="_IDGenDatePicker9" value="{capaModel>Target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:DatePicker id="_IDGenDatePicker10" value="{capaModel>Actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:Input id="_IDGenInput36" value="{capaModel>Result}" width="100%" />
+                                                    <m:Input id="_IDGenInput37" value="{capaModel>Resp}" width="100%" />
+                                                    <m:Select id="_IDGenSelect3" selectedKey="{capaModel>status}">
+                                                        <m:items>
+                                                            <core:Item id="_IDGenItem20" key="Open" text="Open"/>
+                                                            <core:Item id="_IDGenItem21" key="In Progress" text="In Progress"/>
+                                                            <core:Item id="_IDGenItem22" key="Closed" text="Closed"/>
+                                                        </m:items>
+                                                    </m:Select>
+                                                    <m:Button id="_IDGenButton14" icon="sap-icon://delete" type="Reject" press=".onDeletePreventiveRow" visible="{= ${capaModel>/preventiveActions}.length > 1 }"/>
+                                                </m:cells>
+                                            </m:ColumnListItem>
+                                        </m:items>
+                                    </m:Table>
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+
+                        <!-- Section 7A: Horizontal Deployment -->
+                        <ObjectPageSubSection id="horizontalDeploymentSubSection" title="7A. Horizontal Deployment - Identify &amp; Implement" showTitle="true">
+                            <blocks>
+                                <m:VBox id="_IDGenVBox15">
+                                    <m:Toolbar id="_IDGenToolbar10">
+                                        <m:Title id="_IDGenTitle6" text="Horizontal Deployment" level="H3" />
+                                        <m:ToolbarSpacer id="_IDGenToolbarSpacer7" />
+                                        <m:Button id="_IDGenButton15" text="Add Row" icon="sap-icon://add" press=".onAddHorizontalRow" />
+                                    </m:Toolbar>
+
+                                    <m:Table id="horizontalDeploymentTable" inset="false" items="{path: 'capaModel>/horizontalDeployment'}">
+                                        <m:columns>
+                                            <m:Column id="_IDGenColumn66">
+                                                <m:Text id="_IDGenText78" text="No" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn67">
+                                                <m:Text id="_IDGenText79" text="Product / Process / System" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn68">
+                                                <m:Text id="_IDGenText80" text="Action Detail" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn69">
+                                                <m:Text id="_IDGenText81" text="Error Proofing" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn70">
+                                                <m:Text id="_IDGenText82" text="Responsible" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn71">
+                                                <m:Text id="_IDGenText83" text="When (Date)" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn72" hAlign="Center">
+                                                <m:Text id="_IDGenText84" text="Action" />
+                                            </m:Column>
+                                        </m:columns>
+
+                                        <m:items>
+                                            <m:ColumnListItem id="_IDGenColumnListItem8">
+                                                <m:cells>
+                                                    <m:Text id="_IDGenText85" text="{capaModel>stepNumber}" />
+                                                    <m:Input id="_IDGenInput38" value="{capaModel>Product}" placeholder="Enter product / process" width="100%" />
+                                                    <m:Input id="_IDGenInput39" value="{capaModel>ActionDetail}" placeholder="Enter action details" width="100%" />
+                                                    <m:Input id="_IDGenInput40" value="{capaModel>ErrorProofing}" placeholder="Enter error proofing" width="100%" />
+                                                    <m:Input id="_IDGenInput41" value="{capaModel>Responsible}" placeholder="Enter responsible person" width="100%" />
+                                                    <m:DatePicker id="_IDGenDatePicker11" value="{capaModel>When}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:Button id="_IDGenButton16" icon="sap-icon://delete" type="Reject" press=".onDeleteHorizontalRow" visible="{= ${capaModel>/horizontalDeployment}.length > 1 }"/>
+                                                </m:cells>
+                                            </m:ColumnListItem>
+                                        </m:items>
+                                    </m:Table>
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="subdcp" title="7B. DCP UPDATION - REVIEW - DOCUMENTS / SYSTEMS (Attach copies of all revised documents)" titleUppercase="false">
+                            <blocks>
+                                <m:VBox id="_IDGenVBox16">
+                                    <!-- Toolbar with Add/Delete -->
+                                    <m:Toolbar id="_IDGenToolbar">
+                                        <!-- <m:Title text="Problem Closure &amp; Sign-Off" level="H4" /> -->
+                                        <m:ToolbarSpacer id="_IDGenToolbarSpacer8" />
+                                        <m:Button id="_IDGenButton19" icon="sap-icon://add" text="Add Row" type="Emphasized" press=".onAddClosureRow" />
+
+                                    </m:Toolbar>
+
+                                    <!-- Table -->
+                                    <m:Table id="dcpTable" inset="false" items="{path: 'capaModel>/dcpData'}">
+
+                                        <!-- Columns -->
+                                        <m:columns>
+                                            <m:Column id="_IDGenColumn86">
+                                                <m:Text id="_IDGenText104" text="No" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn87">
+                                                <m:Text id="_IDGenText105" text="QMS Document" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn88">
+                                                <m:Text id="_IDGenText106" text="P if Yes" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn89">
+                                                <m:Text id="_IDGenText107" text="Document No" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn90">
+                                                <m:Text id="_IDGenText108" text="Rev no. &amp; Date" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn91">
+                                                <m:Text id="_IDGenText109" text="Resp." />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn92">
+                                                <m:Text id="_IDGenText110" text="Planned Date" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn93">
+                                                <m:Text id="_IDGenText111" text="Actual Date" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn94">
+                                                <m:Text id="_IDGenText112" text="Status" />
+                                            </m:Column>
+                                            <m:Column id="_IDGenColumn95">
+
+                                            </m:Column>
+                                        </m:columns>
+
+                                        <!-- Rows -->
+                                        <m:items>
+                                            <m:ColumnListItem id="_IDGenColumnListItem13">
+                                                <m:cells>
+
+                                                    <!-- No -->
+                                                    <m:Text id="_IDGenText113" text="{capaModel>stepNumber}" />
+
+                                                    <!-- QMS Document Dropdown -->
+                                                    <m:ComboBox id="_IDGenComboBox" value="{capaModel>qmsDocument}" items="{path: 'capaModel>/qmsOptions'}" placeholder="Select QMS Document">
+                                                        <core:Item id="_IDGenItem23" key="{capaModel>}" text="{capaModel>}" />
+                                                    </m:ComboBox>
+
+                                                    <!-- P if Yes -->
+                                                    <m:CheckBox id="_IDGenCheckBox8" selected="{capaModel>pIfYes}" />
+
+                                                    <!-- Document No -->
+                                                    <m:Input id="_IDGenInput55" value="{capaModel>documentNo}" placeholder="Enter Document No" />
+
+                                                    <!-- Rev No & Date -->
+                                                    <m:Input id="_IDGenInput56" value="{capaModel>revNoDate}" placeholder="Enter Rev no. &amp; Date" />
+
+                                                    <!-- Responsible -->
+                                                    <m:Input id="_IDGenInput57" value="{capaModel>resp}" placeholder="Responsible" />
+
+                                                    <!-- Planned Date -->
+                                                    <m:DatePicker id="_IDGenDatePicker19" value="{capaModel>plannedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+
+                                                    <!-- Actual Date -->
+                                                    <m:DatePicker id="_IDGenDatePicker20" value="{capaModel>actualDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+
+                                                    <!-- Status -->
+                                                    <m:Select id="_IDGenSelect5" selectedKey="{capaModel>status}">
+                                                        <m:items>
+                                                            <core:Item id="_IDGenItem26" key="Completed" text="Completed" />
+                                                            <core:Item id="_IDGenItem27" key="In Progress" text="In Progress" />
+                                                            <core:Item id="_IDGenItem28" key="Pending" text="Pending" />
+                                                        </m:items>
+                                                    </m:Select>
+                                                    <m:Button id="_IDGenButton20" icon="sap-icon://delete" text="Delete Row" type="Reject" press=".onDeleteClosureRow" visible="{= ${capaModel>/dcpData}.length > 4 }"/>
+                                                </m:cells>
+                                            </m:ColumnListItem>
+                                        </m:items>
+                                    </m:Table>
+                                </m:VBox>
+                            </blocks>
+                        </ObjectPageSubSection>
+                        <ObjectPageSubSection id="subll" title="7C. Lesson Learned" titleUppercase="false">
+                            <blocks>
+
+                                <sf:SimpleForm id="_IDGenSimpleForm12" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
+                                    <!-- Label -->
+                                    <m:Label id="_IDGenLabel35" text="Lesson Learned:" width="100%" design="Bold" class="sapUiTinyMarginEnd"/>
+
+                                    <!-- TextArea (full width next to label) -->
+                                    <m:TextArea id="_IDGenTextArea23" value="{capaModel>lessonLearned}" rows="3" width="20rem" growing="true" growingMaxLines="5" placeholder="Enter lessons learned..."/>
+                                </sf:SimpleForm>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+
+                    </subSections>
+                </ObjectPageSection>
+            </sections>
+        </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+                <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

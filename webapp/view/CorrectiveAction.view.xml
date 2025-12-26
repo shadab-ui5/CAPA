@@ -1,0 +1,177 @@
+<mvc:View controllerName="hodek.capa.controller.CorrectiveAction"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:sf="sap.ui.layout.form"
+    xmlns:un="sap.ui.unified"
+    xmlns="sap.uxap">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true"   navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+        <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
+            <headerTitle>
+                <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
+                    <actions>
+                        <m:VBox id="_IDGenVBox1">
+                            <m:Text id="_IDGenText" text="Invoice: {selectedModel>/InvoiceNumber}" />
+                            <m:Text id="_IDGenText1" text="Material: {selectedModel>/Product}" />
+                            <m:Text id="_IDGenText2" text="Supplier: {selectedModel>/VendorName}({selectedModel>/Vendor})"/>
+                        </m:VBox>
+                    </actions>
+                </ObjectPageHeader>
+            </headerTitle>
+            <sections>
+                
+
+                <!-- ================= 5. CORRECTIVE ACTION PLAN ================= -->
+                <!-- <ObjectPageSection id="secCorrective" title="Corrective Action Plan" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subCorrectiveActions">
+                            <blocks>
+                                <m:Table id="correctiveTable" items="{capaModel>/correctiveActions}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar>
+                                            <m:Title text="Corrective Actions"/>
+                                            <m:ToolbarSpacer/>
+                                            <m:Button icon="sap-icon://add" text="Add Action" press="onAddCorrective"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                            
+                                    <m:columns>
+                                        <m:Column width="3em">
+                                            <m:Text text="#"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Identified Root Cause (from 5 Why)"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Corrective Action Planned/Taken"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Error-Proofing"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Responsible"/>
+                                        </m:Column>
+                                        <m:Column>
+                                            <m:Text text="Date"/>
+                                        </m:Column>
+                                        <m:Column width="5rem">
+                                            <m:Text text=""/>
+                                        </m:Column>
+                                    </m:columns>
+
+                      
+                                    <m:items>
+                                        <m:ColumnListItem>
+                                            <m:cells>
+                                                <m:Text text="{capaModel>stepNumber}"/>
+                                                <m:Input value="{capaModel>rootCause}"/>
+                                                <m:Input value="{capaModel>action}"/>
+                                                <m:Input value="{capaModel>errorProofing}"/>
+                                                <m:Input value="{capaModel>responsible}"/>
+                                                <m:DatePicker value="{capaModel>date}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/correctiveActions}.length > 1 }"/>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection> -->
+
+                <!-- ================= 6. PREVENTIVE ACTION PLAN ================= -->
+                <ObjectPageSection id="seccorrective" title="CORRECTIVE ACTIONS / LONG TERM ACTION (Attach Photographs of actions taken)" titleUppercase="false">
+                    <subSections>
+                        <ObjectPageSubSection id="subcorrectiveActions">
+                            <blocks>
+                                <m:Table id="correctiveTable" items="{capaModel>/corrective}" inset="false">
+                                    <m:headerToolbar>
+                                        <m:Toolbar id="_IDGenToolbar5">
+                                            <!-- <m:Title text="corrective Effectiveness"/> -->
+                                            <m:ToolbarSpacer id="_IDGenToolbarSpacer4"/>
+                                            <m:Button id="_IDGenButton8" icon="sap-icon://add" text="Add Entry" press="onAddCorrective"/>
+                                        </m:Toolbar>
+                                    </m:headerToolbar>
+
+                                    <!-- Columns -->
+                                    <m:columns>
+                                        <m:Column id="_IDGenColumn37" width="3em">
+                                            <m:Text id="_IDGenText44" text="#"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn38">
+                                            <m:Text id="_IDGenText45" text="Corrective Actions - Trial / Test"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn39">
+                                            <m:Text id="_IDGenText46" text="Target"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn40">
+                                            <m:Text id="_IDGenText47" text="Actual"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn41">
+                                            <m:Text id="_IDGenText48" text="Result of Actions"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn42">
+                                            <m:Text id="_IDGenText49" text="Responsibility"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn43">
+                                            <m:Text id="_IDGenText50" text="Status"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn44">
+                                            <m:Text id="_IDGenText51" text="Attachment"/>
+                                        </m:Column>
+                                        <m:Column id="_IDGenColumn45" width="7rem">
+                                            <m:Text id="_IDGenText52" text=""/>
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <!-- Items -->
+                                    <m:items>
+                                        <m:ColumnListItem id="_IDGenColumnListItem4">
+                                            <m:cells>
+                                                <m:Text id="_IDGenText53" text="{capaModel>stepNumber}"/>
+                                                <m:TextArea id="_IDGenTextArea18" value="{capaModel>actionTaken}" rows='2'/>
+
+                                                <m:DatePicker id="_IDGenDatePicker1" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker id="_IDGenDatePicker2" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:TextArea id="_IDGenTextArea19" value="{capaModel>result}" rows="2"/>
+                                                <m:Input id="_IDGenInput30" value="{capaModel>responsibe}"/>
+
+                                                <m:Select id="_IDGenSelect1" selectedKey="{capaModel>status}">
+                                                    <m:items>
+                                                        <core:Item id="_IDGenItem14" key="Open" text="Open"/>
+                                                        <core:Item id="_IDGenItem15" key="In Progress" text="In Progress"/>
+                                                        <core:Item id="_IDGenItem16" key="Closed" text="Closed"/>
+                                                    </m:items>
+                                                </m:Select>
+                                                <!-- Show attached filename -->
+                                                <m:Text id="_IDGenText54" text="{capaModel>attachment}"/>
+
+                                                <!-- Actions: Upload + Delete -->
+                                                <m:HBox id="_IDGenHBox7">
+                                                    <m:Button id="_IDGenButton9" icon="sap-icon://upload" type="Emphasized" press="onUploadFilePress" class="sapUiSmallMarginEnd"/>
+                                                    <m:Button id="_IDGenButton10" icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/corrective}.length > 1 }"/>
+                                                </m:HBox>
+                                            </m:cells>
+                                        </m:ColumnListItem>
+                                    </m:items>
+                                </m:Table>
+
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+                
+            </sections>
+        </ObjectPageLayout>
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar1">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
+               <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

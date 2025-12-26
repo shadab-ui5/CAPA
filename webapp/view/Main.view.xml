@@ -77,13 +77,13 @@
 
                         <!-- Columns aligned with metadata -->
                         <columns>
-                            <Column id="colProduct" app:p13nKey="Product_col">
+                            <Column id="colProduct" app:p13nKey="Product_col" width="10rem">
                                 <header>
                                     <Text id="_IDGenText64" text="Material"/>
                                 </header>
                             </Column>
 
-                            <Column id="colPurchaseOrder" app:p13nKey="PurchaseOrder_col">
+                            <Column id="colPurchaseOrder" app:p13nKey="PurchaseOrder_col" width="12rem">
                                 <header>
                                     <Text id="_IDGenText114" text="Purchasing Document"/>
                                 </header>
@@ -93,7 +93,7 @@
                                     <Text id="_IDGenText115" text="Item"/>
                                 </header>
                             </Column>
-                            <Column id="colInvoiceNo" app:p13nKey="InvoiceNumber_col">
+                            <Column id="colInvoiceNo" app:p13nKey="InvoiceNumber_col" width="10rem">
                                 <header>
                                     <Text id="_IDGenText116" text="Invoice No"/>
                                 </header>
@@ -123,7 +123,12 @@
                                     <Text id="_IDGenText119" text="Material Document"/>
                                 </header>
                             </Column>
-                            <Column id="colCapa" app:p13nKey="CapaDate_col" width="12rem">
+                            <Column id="colCapaDate" app:p13nKey="CapaDate_col">
+                                <header>
+                                    <Text id="_IDGenText1117" text="CAPA Date"/>
+                                </header>
+                            </Column>
+                            <Column id="colCapa" app:p13nKey="CapaRemainDay_col" width="12rem">
                                 <header>
                                     <Text id="_IDGenText120" text="Remaining Days"/>
                                 </header>
@@ -151,6 +156,7 @@
                                     <Text id="_IDGenText128" text="{getListReport>ASN_No}"/>
                                     <!-- <Text text="{getListReport>VendorName}({getListReport>Vendor})"/> -->
                                     <Text id="_IDGenText129" text="{getListReport>MaterialDocument}"/>
+                                    <ObjectStatus id="_IDGenObjectStatus12" text="{path:'getListReport>capaDate', formatter:'.formatter.formatDateToYyyyMmDd'}" />
                                     <ObjectStatus id="_IDGenObjectStatus1" text="{path:'getListReport>capaDate', formatter:'.formatter.getCapaCountDown'}"  state="{path:'getListReport>capaDate', formatter:'.formatter.getCapaStatus'}" />
                                     <Text id="_IDGenText130" text="{getListReport>InspectionLotOKQty}"/>
                                     <Text id="_IDGenText131" text="{getListReport>InspectionLotNOTOKQty}"/>
