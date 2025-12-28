@@ -20,67 +20,6 @@
             </headerTitle>
             <sections>
                 
-
-                <!-- ================= 5. CORRECTIVE ACTION PLAN ================= -->
-                <!-- <ObjectPageSection id="secCorrective" title="Corrective Action Plan" titleUppercase="false">
-                    <subSections>
-                        <ObjectPageSubSection id="subCorrectiveActions">
-                            <blocks>
-                                <m:Table id="correctiveTable" items="{capaModel>/correctiveActions}" inset="false">
-                                    <m:headerToolbar>
-                                        <m:Toolbar>
-                                            <m:Title text="Corrective Actions"/>
-                                            <m:ToolbarSpacer/>
-                                            <m:Button icon="sap-icon://add" text="Add Action" press="onAddCorrective"/>
-                                        </m:Toolbar>
-                                    </m:headerToolbar>
-
-                            
-                                    <m:columns>
-                                        <m:Column width="3em">
-                                            <m:Text text="#"/>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:Text text="Identified Root Cause (from 5 Why)"/>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:Text text="Corrective Action Planned/Taken"/>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:Text text="Error-Proofing"/>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:Text text="Responsible"/>
-                                        </m:Column>
-                                        <m:Column>
-                                            <m:Text text="Date"/>
-                                        </m:Column>
-                                        <m:Column width="5rem">
-                                            <m:Text text=""/>
-                                        </m:Column>
-                                    </m:columns>
-
-                      
-                                    <m:items>
-                                        <m:ColumnListItem>
-                                            <m:cells>
-                                                <m:Text text="{capaModel>stepNumber}"/>
-                                                <m:Input value="{capaModel>rootCause}"/>
-                                                <m:Input value="{capaModel>action}"/>
-                                                <m:Input value="{capaModel>errorProofing}"/>
-                                                <m:Input value="{capaModel>responsible}"/>
-                                                <m:DatePicker value="{capaModel>date}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
-                                                <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/correctiveActions}.length > 1 }"/>
-                                            </m:cells>
-                                        </m:ColumnListItem>
-                                    </m:items>
-                                </m:Table>
-
-                            </blocks>
-                        </ObjectPageSubSection>
-                    </subSections>
-                </ObjectPageSection> -->
-
                 <!-- ================= 6. PREVENTIVE ACTION PLAN ================= -->
                 <ObjectPageSection id="seccorrective" title="CORRECTIVE ACTIONS / LONG TERM ACTION (Attach Photographs of actions taken)" titleUppercase="false">
                     <subSections>

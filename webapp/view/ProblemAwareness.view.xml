@@ -36,7 +36,7 @@
                                     </m:SegmentedButton>
                                     <!-- Problem Severity -->
                                     <m:Label id="_IDGenLabel12" text="Problem Severity" design="Bold" />
-                                    <m:MultiComboBox id="_IDGenMultiComboBox" selectedKeys="Safety">
+                                    <m:MultiComboBox id="_IDGenMultiComboBox" selectedKeys="{capaModel>/problemSeverity}">
                                         <m:items>
                                             <core:Item id="_IDGenItem" key="Safety" text="Safety" />
                                             <core:Item id="_IDGenItem1" key="Regulatory" text="Regulatory" />
@@ -51,9 +51,6 @@
                                     <!-- Details if any -->
                                     <m:Label id="_IDGenLabel13" text="Details (if any)" design="Bold" />
                                     <m:TextArea id="_IDGenTextArea1" value="{capaModel>/problemDetails}" rows="3" width="100%" />
-
-
-
                                     <!-- Problem Source -->
                                     <m:Label id="_IDGenLabel14" text="Problem Source" design="Bold" />
                                     <m:MultiComboBox id="_IDGenMultiComboBox1" selectedKeys="{capaModel>/problemSource}">

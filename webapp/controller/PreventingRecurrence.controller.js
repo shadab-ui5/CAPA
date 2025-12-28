@@ -691,7 +691,7 @@ sap.ui.define([
             oModel.setProperty("/dcpData", aData);
         },
 
-        onDeleteClosureRow: function () {
+        onDeleteClosureRow: function (oEvent) {
             let oModel = this.getView().getModel("capaModel");
             let aData = oModel.getProperty("/dcpData");
 
