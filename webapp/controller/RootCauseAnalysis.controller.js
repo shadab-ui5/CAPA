@@ -28,7 +28,8 @@ sap.ui.define([
                         why3: "",
                         why4: "",
                         why5: "",
-                        contribution: ""
+                        contribution: "",
+                        bButton:false
                     }
                 ],
                 fiveWhysprotect: [
@@ -41,11 +42,12 @@ sap.ui.define([
                         why3: "",
                         why4: "",
                         why5: "",
-                        contribution: ""
+                        contribution: "",
+                        bButton:false
                     }
                 ],
                 fishbone: [{
-                    stepNumber: 1, man: "", machine: "", material: "", method: "", measurment: "", environment: ""
+                    stepNumber: 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",bButton:false
                 }]
             });
             if (!oModel.getProperty("/rcaMethod")) {
@@ -107,7 +109,8 @@ sap.ui.define([
                 why3: "",
                 why4: "",
                 why5: "",
-                contribution: ""
+                contribution: "",
+                bButton:true
             });
 
             oModel.setProperty("/fiveWhys", aWhys);
@@ -117,7 +120,7 @@ sap.ui.define([
             let aWhys = oModel.getProperty("/fishbone");
 
             aWhys.push({
-                stepNumber: aWhys.length + 1, man: "", machine: "", material: "", method: "", measurment: "", environment: ""
+                stepNumber: aWhys.length + 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",bButton:true
             });
 
             oModel.setProperty("/fishbone", aWhys);
@@ -133,7 +136,8 @@ sap.ui.define([
                 why3: "",
                 why4: "",
                 why5: "",
-                contribution: ""
+                contribution: "",
+                bButton:true
             });
 
             oModel.setProperty("/fiveWhysprotect", aWhys);
@@ -222,7 +226,8 @@ sap.ui.define([
                         why3: item.threewhy || "",
                         why4: item.fourwhy || "",
                         why5: item.fivewhy || "",
-                        contribution: item.percontribution || ""
+                        contribution: item.percontribution || "",
+                        bButton:false
                     }));
 
                     oCapaModel.setProperty("/fiveWhys", aFiveWhys);
@@ -259,7 +264,8 @@ sap.ui.define([
                         why3: item.threewhy || "",
                         why4: item.fourwhy || "",
                         why5: item.fivewhy || "",
-                        contribution: item.percontribution || ""
+                        contribution: item.percontribution || "",
+                        bButton:false
                     }));
 
                     oCapaModel.setProperty("/fiveWhysprotect", aFiveWhysProtect);
@@ -294,7 +300,8 @@ sap.ui.define([
                         material: item.materialfield || "",
                         method: item.method || "",
                         measurment: item.measurement || "",
-                        environment: item.environment || ""
+                        environment: item.environment || "",
+                        bButton:false
                     }));
 
                     oCapaModel.setProperty("/fishbone", aFishbone);

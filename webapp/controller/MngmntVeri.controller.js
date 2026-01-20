@@ -114,9 +114,18 @@ sap.ui.define([
                 },
                 error: function (oError) {
                     oView.setBusy(false);
-                    sap.m.MessageBox.error("Failed to load Management Verification Closure data.");
+                    // sap.m.MessageBox.error("Failed to load Management Verification Closure data.");
                 }
             });
+        },
+        onSubmit:function(){
+            let oPayload = {
+                status: "02"
+            }
+            Model.updateRootFields(this, oPayload);
+        },
+        onReject:function(){
+            this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true); // replace with actual route
         }
 
 

@@ -90,7 +90,7 @@
                                                     <m:TextArea id="_IDGenTextArea9" value="{capaModel>why4}" rows="3"/>
                                                     <m:TextArea id="_IDGenTextArea10" value="{capaModel>why5}" rows="3"/>
                                                     <m:Input id="_IDGenInput28" value="{capaModel>contribution}" type="Number"/>
-                                                    <m:Button id="_IDGenButton5" icon="sap-icon://delete" type="Reject" press="onDeleteWhy" visible="{= ${capaModel>/fiveWhys}.length > 1 }"/>
+                                                    <m:Button id="_IDGenButton5" icon="sap-icon://delete" type="Reject" press="onDeleteWhy" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -144,7 +144,7 @@
                                                     <m:TextArea id="_IDGenTextArea26" value="{capaModel>method}" rows="3"/>
                                                     <m:TextArea id="_IDGenTextArea27" value="{capaModel>environment}" rows="3"/>
                                                     <m:TextArea id="_IDGenTextArea28" value="{capaModel>measurment}" rows="3"/>
-                                                    <m:Button id="_IDGenButton221" icon="sap-icon://delete" type="Reject" press="onDeletefish" visible="{= ${capaModel>/fishbone}.length > 1 }"/>
+                                                    <m:Button id="_IDGenButton221" icon="sap-icon://delete" type="Reject" press="onDeletefish" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -205,7 +205,7 @@
                                                     <m:TextArea id="_IDGenTextArea16" value="{capaModel>why4}" rows="3"/>
                                                     <m:TextArea id="_IDGenTextArea17" value="{capaModel>why5}" rows="3"/>
                                                     <m:Input id="_IDGenInput29" value="{capaModel>contribution}" type="Number"/>
-                                                    <m:Button id="_IDGenButton7" icon="sap-icon://delete" type="Reject" press="onDeleteWhyprotect" visible="{= ${capaModel>/fiveWhysprotect}.length > 1 }"/>
+                                                    <m:Button id="_IDGenButton7" icon="sap-icon://delete" type="Reject" press="onDeleteWhyprotect" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -222,7 +222,7 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

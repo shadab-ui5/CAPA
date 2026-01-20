@@ -55,8 +55,8 @@
                                             <m:cells>
                                                 <m:Text id="_IDGenText93" text="{capaModel>no}"/>
                                                 <m:Text id="_IDGenText94" text="{capaModel>phase}"/>
-                                                <m:DatePicker id="_IDGenDatePicker12" value="{capaModel>startDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
-                                                <m:DatePicker id="_IDGenDatePicker13" value="{capaModel>completion}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker id="_IDGenDatePicker12" value="{path:'capaModel>startDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker id="_IDGenDatePicker13" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                 <m:Input id="_IDGenInput42" value="{capaModel>teamMember}"/>
                                                 <m:Input id="_IDGenInput43" value="{capaModel>area}"/>
                                                 <m:Input id="_IDGenInput44" value="{capaModel>signOff}"/>
@@ -77,7 +77,7 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

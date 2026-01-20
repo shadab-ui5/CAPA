@@ -61,7 +61,7 @@
 
                                         <!-- Role -->
                                         <m:Column id="_IDGenColumn5">
-                                            <m:Text id="_IDGenText8" text="Role"/>
+                                            <m:Text id="_IDGenText8" text="Role" />
                                         </m:Column>
 
                                         <!-- Department -->
@@ -92,7 +92,7 @@
                                                 <m:Text id="_IDGenText13" text="{capaModel>index}"/>
 
                                                 <!-- Name -->
-                                                <m:Input id="_IDGenInput14" value="{capaModel>name}"/>
+                                                <m:Input id="_IDGenInput14" value="{capaModel>name}" maxLength="40"/>
 
                                                 <!-- Checkboxes -->
                                                 <m:CheckBox id="_IDGenCheckBox" selected="{capaModel>isChampion}" text=""/>
@@ -100,13 +100,13 @@
                                                 <m:CheckBox id="_IDGenCheckBox2" selected="{capaModel>isTeamMember}" text=""/>
 
                                                 <!-- Role, Department, Responsibility, Contact -->
-                                                <m:Input id="_IDGenInput15" value="{capaModel>role}"/>
+                                                <m:Input id="_IDGenInput15" value="{capaModel>role}" maxLength="10"/>
                                                 <m:Input id="_IDGenInput16" value="{capaModel>department}"/>
                                                 <m:Input id="_IDGenInput17" value="{capaModel>responsibility}"/>
-                                                <m:Input id="_IDGenInput18" value="{capaModel>contact}"/>
+                                                <m:Input id="_IDGenInput18" value="{capaModel>contact}" maxLength="12"/>
 
                                                 <!-- Delete button: only show if rowIndex > 0 -->
-                                                <m:Button id="_IDGenButton1" icon="sap-icon://delete" press="onDeleteTeamMember" visible="{= ${capaModel>index} > 1 }"/>
+                                                <m:Button id="_IDGenButton1" icon="sap-icon://delete" press="onDeleteTeamMember" visible="{capaModel>bButton}"/>
                                             </m:cells>
                                         </m:ColumnListItem>
                                     </m:items>
@@ -123,7 +123,7 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

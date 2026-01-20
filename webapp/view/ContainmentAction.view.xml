@@ -80,7 +80,7 @@
                                                 <m:Input id="_IDGenInput27" value="{capaModel>status}" />
 
                                                 <!-- Delete button for rows except first -->
-                                                <m:Button id="_IDGenButton3" icon="sap-icon://delete" press=".onDeleteContainment" visible="{= ${capaModel>rowIndex} > 1 }" />
+                                                <m:Button id="_IDGenButton3" icon="sap-icon://delete" press=".onDeleteContainment" visible="{capaModel>bButton}" />
                                             </m:cells>
                                         </m:ColumnListItem>
                                     </m:items>
@@ -99,7 +99,7 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

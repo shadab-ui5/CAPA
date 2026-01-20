@@ -25,7 +25,8 @@ sap.ui.define([
                         completion: null,
                         responsible: "",
                         breakPoint: "",
-                        status: ""
+                        status: "",
+                       bButton:false
                     }
                 ]
             });
@@ -71,7 +72,7 @@ sap.ui.define([
             let oModel = this.getView().getModel("capaModel");
             let aData = oModel.getProperty("/containmentActions");
             let newIndex = aData.length + 1;
-            aData.push({ rowIndex: newIndex, actionId: "", description: "", responsible: "", plannedDate: null, actualDate: null, status: "" });
+            aData.push({ rowIndex: newIndex, actionId: "", description: "", responsible: "", plannedDate: null, actualDate: null, status: "",bButton:true });
             oModel.setProperty("/containmentActions", aData);
         },
 
@@ -125,7 +126,8 @@ sap.ui.define([
                         completion: item.completiondate ? new Date(item.completiondate) : null,
                         responsible: item.responsible || "",
                         breakPoint: item.breakpoint || "",
-                        status: item.status || ""
+                        status: item.status || "",
+                        bButton:false
                     }));
 
                     oCapaModel.setProperty("/containmentActions", aContainment);

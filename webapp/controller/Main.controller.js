@@ -30,7 +30,7 @@ sap.ui.define([
 			this.getView().setModel(oSupplierModel, "SupplierModel");
 			this.byId("idVendor").setBusy(true);
 			this.getPlantData();
-			// this._loadBillingDocumentData(null, true);
+			this._loadBillingDocumentData(null, true);
 
 			const oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("RouteMain").attachPatternMatched(this._onRouteMatched, this);
@@ -693,13 +693,13 @@ sap.ui.define([
 			let oContext = oPressedItem.getBindingContext("getListReport"); // use your model name
 			let oRowData = oContext.getObject();
 			let remainData = Formatter.getCapaCountDown(oRowData.capaDate)
-			if (remainData === "Expired") {
-				this.getView().setBusy(false);
-				MessageBox.show(`Days Expired to submit CAPA for material ${oRowData.MaterialDescription}(${oRowData.Product})`);
-			} else {
+			// if (remainData === "Expired") {
+			// 	this.getView().setBusy(false);
+			// 	MessageBox.show(`Days Expired to submit CAPA for material ${oRowData.MaterialDescription}(${oRowData.Product})`);
+			// } else {
 				this.getOwnerComponent().getModel("selectedModel").setData(oRowData);
 				this.onClickNext(); // navigate or next step
-			}
+			// }
 		},
 		onClickNext: function () {
 			this.getOwnerComponent().getRouter().navTo("RouteObject"); // replace with actual route

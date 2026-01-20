@@ -18,7 +18,7 @@ sap.ui.define([
             let oSelectModel = this.getOwnerComponent().getModel('selectedModel');
 
             let oModel = new sap.ui.model.json.JSONModel({
-                team: [{ index: 1, name: "", isChampion: false, isLeader: false, isTeamMember: false, role: "", department: "", responsibility: "", contact: "" }],
+                team: [{ index: 1, name: "", isChampion: false, isLeader: false, isTeamMember: false, role: "", department: "", responsibility: "", contact: "",bButton:false}],
             });
             if (!oModel.getProperty("/rcaMethod")) {
                 oModel.setProperty("/rcaMethod", "5Why");
@@ -66,7 +66,7 @@ sap.ui.define([
             aData.push({
                 index: newIndex,
                 name: "", isChampion: false, isLeader: false, isTeamMember: false,
-                role: "", department: "", responsibility: "", contact: ""
+                role: "", department: "", responsibility: "", contact: "",bButton:true
             });
             oModel.setProperty("/team", aData);
         },
@@ -94,6 +94,82 @@ sap.ui.define([
             // Update model
             oModel.setProperty("/team", aTeam);
         },
+        // onDeleteTeamMember: function (oEvent) {
+        //     const oView = this.getView();
+        //     const oLocalModel = oView.getModel("capaModel");
+        //     const oODataModel = this.getOwnerComponent().getModel("capaServiceModel");
+
+        //     const sCapaId = this._sCapaId;
+        //     if (!sCapaId) {
+        //         sap.m.MessageBox.error("CAPA ID is mandatory.");
+        //         return;
+        //     }
+
+        //     // ===============================
+        //     // 1. Get selected row context
+        //     // ===============================
+        //     const oCtx = oEvent.getSource().getBindingContext("capaModel");
+        //     const sPath = oCtx.getPath();              // e.g. /team/1
+        //     const iIndex = parseInt(sPath.split("/").pop(), 10);
+
+        //     const aTeam = oLocalModel.getProperty("/team") || [];
+        //     const oRow = aTeam[iIndex];
+
+        //     if (!oRow) {
+        //         return;
+        //     }
+
+        //     // Serial no based on position (same logic as save)
+        //     const sSerialNo = String(iIndex + 1).padStart(2, "0");
+
+        //     // ===============================
+        //     // 2. Backend delete
+        //     // ===============================
+        //     const sKeyPath = oODataModel.createKey("/EstabTeam", {
+        //         capaid: sCapaId,
+        //         serialno: sSerialNo
+        //     });
+
+        //     sap.m.MessageBox.confirm("Do you want to delete this team member?", {
+        //         onClose: (sAction) => {
+        //             if (sAction !== sap.m.MessageBox.Action.OK) {
+        //                 return;
+        //             }
+
+        //             oView.setBusy(true);
+
+        //             oODataModel.remove(sKeyPath, {
+        //                 success: () => {
+
+        //                     // ===============================
+        //                     // 3. Remove from local model
+        //                     // ===============================
+        //                     aTeam.splice(iIndex, 1);
+
+        //                     // Recalculate serial/index
+        //                     aTeam.forEach((oItem, i) => {
+        //                         oItem.index = i + 1;
+        //                     });
+
+        //                     oLocalModel.setProperty("/team", aTeam);
+
+        //                     sap.m.MessageToast.show("Team member deleted successfully");
+        //                     oView.setBusy(false)
+        //                     oODataModel.refresh(true);
+        //                 },
+        //                 error: (oError) => {
+        //                     let sMsg = "Error while deleting team member";
+        //                     try {
+        //                         const oErr = JSON.parse(oError.responseText);
+        //                         sMsg = oErr?.error?.message?.value || sMsg;
+        //                     } catch (e) { }
+        //                     oView.setBusy(false)
+        //                     sap.m.MessageBox.error(sMsg);
+        //                 },
+        //             });
+        //         }
+        //     });
+        // },
 
         onSave: function () {
             Model.onSaveTeamMembers(this);
@@ -123,7 +199,8 @@ sap.ui.define([
                         role: item.role || "",
                         department: item.department || "",
                         responsibility: item.responsibilty || "",
-                        contact: item.contact || ""
+                        contact: item.contact || "",
+                        bButton:false
                     }));
 
                     oCapaModel.setProperty("/team", aTeam);

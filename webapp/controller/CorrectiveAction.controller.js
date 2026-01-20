@@ -29,7 +29,8 @@ sap.ui.define([
                         responsibe: "",
                         status: "Open",
                         attachment: "", // will hold filename
-                        attachmentContent: ""  // base64 content
+                        attachmentContent: "",  // base64 content,
+                        bButton:false
                     }
                 ]
             });
@@ -84,7 +85,8 @@ sap.ui.define([
                 responsibe: "",
                 status: "Open",
                 attachment: "", // will hold filename
-                attachmentContent: ""  // base64 content
+                attachmentContent: "",
+                bButton:true  // base64 content
             });
 
             oModel.setProperty("/corrective", aActions);
@@ -118,7 +120,8 @@ sap.ui.define([
                 status: "Open",
                 attachment: "", // will hold filename
                 attachmentContent: "",  // base64 content
-                file: ""
+                file: "",
+                bButton:true
             });
 
             oModel.setProperty("/validating", aActions);
@@ -174,7 +177,72 @@ sap.ui.define([
 
             oModel.setProperty("/monitoring", aData);
         },
+onUploadFilePress: function (oEvent) {
+            let that = this;
 
+            // Get the row context of the clicked row
+            let oRow = oEvent.getSource().getParent().getParent(); // HBox → ColumnListItem
+            let oRowContext = oRow.getBindingContext("capaModel");
+
+            // Create dialog once
+            if (!this._oUploadDialog) {
+                this._oUploadDialog = new sap.m.Dialog({
+                    title: "Upload Attachment",
+                    content: [
+                        new sap.m.HBox({
+                            justifyContent: "Center",
+                            items: [
+                                new FileUploader("fileUploader", {
+                                    name: "uploadFile",
+                                    uploadUrl: "/upload",
+                                    change: function (oFileEvent) {
+                                        let oFile = oFileEvent.getParameter("files")[0];
+                                        if (!oFile) return;
+
+                                        // Always get current row context from the FileUploader's stored property
+                                        let oContext = this.data("rowContext");
+                                        let sPath = oContext.getPath();
+                                        let oModel = oContext.getModel("capaModel");
+
+                                        let reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            let sBase64 = e.target.result.split(",")[1];
+                                            oModel.setProperty(sPath + "/attachment", oFile.name);
+                                            oModel.setProperty(sPath + "/attachmentContent", sBase64);
+                                        };
+                                        reader.readAsDataURL(oFile);
+                                    }
+                                })
+                            ]
+                        })
+                    ],
+                    beginButton: new sap.m.Button({
+                        text: "OK",
+                        press: function () {
+                            let oUploader = sap.ui.getCore().byId("fileUploader");
+                            if (oUploader) oUploader.setValue("");
+                            that._oUploadDialog.close();
+                        }
+                    }),
+                    endButton: new sap.m.Button({
+                        text: "Cancel",
+                        press: function () {
+                            let oUploader = sap.ui.getCore().byId("fileUploader");
+                            if (oUploader) oUploader.setValue("");
+                            that._oUploadDialog.close();
+                        }
+                    })
+                });
+                this.getView().addDependent(this._oUploadDialog);
+            }
+
+            // ✅ Store the current row context on the uploader every time
+            let oUploader = sap.ui.getCore().byId("fileUploader");
+            oUploader.data("rowContext", oRowContext);
+            oUploader.setValue(""); // clear previous selection
+
+            this._oUploadDialog.open();
+        },
         onUploadFile: async function () {
             const oView = this.getView();
             const oCapaModel = oView.getModel("capaModel");
@@ -428,7 +496,8 @@ sap.ui.define([
                         responsibe: item.responsibility || "",
                         status: item.status || "Open",
                         attachment: "",
-                        attachmentContent: ""
+                        attachmentContent: "",
+                        bButton:false
                     }));
 
                     oLocalModel.setProperty("/corrective", aCorrective);
@@ -438,7 +507,67 @@ sap.ui.define([
                     sap.m.MessageBox.error("Failed to load corrective actions");
                 }
             });
+        },
+        _loadDcpUpdation: function (_this) {
+            const oView = _this.getView();
+            const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+            const oLocalModel = oView.getModel("capaModel");
+            const sCapaId = _this._sCapaId;
+
+            if (!sCapaId) {
+                return;
+            }
+
+            oView.setBusy(true);
+
+            oODataModel.read("/DcpUpdation", {
+                filters: [
+                    new sap.ui.model.Filter(
+                        "capaid",
+                        sap.ui.model.FilterOperator.EQ,
+                        sCapaId
+                    )
+                ],
+                success: function (oData) {
+                    const aResults = oData.results || [];
+
+                    if (!aResults.length) {
+                        oLocalModel.setProperty("/dcpData", []);
+                        oView.setBusy(false);
+                        return;
+                    }
+
+                    // 🔁 OData → Local model mapping
+                    const aDcpData = aResults
+                        .map(oRow => ({
+                            qmsDocument: oRow.qmsdocument || "",
+                            pIfYes: oRow.pifyes === "P",          // 🔁 flag → boolean
+                            documentNo: oRow.documentno || "",
+                            revNoDate: oRow.revnodate || "",
+                            resp: oRow.resp || "",
+                            plannedDate: oRow.planneddate
+                                ? new Date(oRow.planneddate)
+                                : null,
+                            actualDate: oRow.actualdate
+                                ? new Date(oRow.actualdate)
+                                : null,
+                            status: oRow.status || "",
+                            bButton:false
+                        }))
+                        // keep UI row order stable
+                        .sort((a, b) => Number(a.serialno) - Number(b.serialno));
+
+                    oLocalModel.setProperty("/dcpData", aDcpData);
+
+                    oView.setBusy(false);
+                },
+                error: function () {
+                    oView.setBusy(false);
+                    sap.m.MessageBox.error("Failed to load DCP Updation data");
+                }
+            });
         }
+
 
 
 

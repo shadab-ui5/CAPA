@@ -66,8 +66,8 @@
                                                     <m:Text id="_IDGenText77" text="{capaModel>stepNumber}" />
                                                     <!-- Auto numbering -->
                                                     <m:Input id="_IDGenInput35" value="{capaModel>PreventiveAction}" placeholder="Enter action" width="100%" />
-                                                    <m:DatePicker id="_IDGenDatePicker9" value="{capaModel>Target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
-                                                    <m:DatePicker id="_IDGenDatePicker10" value="{capaModel>Actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:DatePicker id="_IDGenDatePicker9" value="{path:'capaModel>Target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                    <m:DatePicker id="_IDGenDatePicker10" value="{path:'capaModel>Actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                     <m:Input id="_IDGenInput36" value="{capaModel>Result}" width="100%" />
                                                     <m:Input id="_IDGenInput37" value="{capaModel>Resp}" width="100%" />
                                                     <m:Select id="_IDGenSelect3" selectedKey="{capaModel>status}">
@@ -77,7 +77,7 @@
                                                             <core:Item id="_IDGenItem22" key="Closed" text="Closed"/>
                                                         </m:items>
                                                     </m:Select>
-                                                    <m:Button id="_IDGenButton14" icon="sap-icon://delete" type="Reject" press=".onDeletePreventiveRow" visible="{= ${capaModel>/preventiveActions}.length > 1 }"/>
+                                                    <m:Button id="_IDGenButton14" icon="sap-icon://delete" type="Reject" press=".onDeletePreventiveRow" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -129,8 +129,8 @@
                                                     <m:Input id="_IDGenInput39" value="{capaModel>ActionDetail}" placeholder="Enter action details" width="100%" />
                                                     <m:Input id="_IDGenInput40" value="{capaModel>ErrorProofing}" placeholder="Enter error proofing" width="100%" />
                                                     <m:Input id="_IDGenInput41" value="{capaModel>Responsible}" placeholder="Enter responsible person" width="100%" />
-                                                    <m:DatePicker id="_IDGenDatePicker11" value="{capaModel>When}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
-                                                    <m:Button id="_IDGenButton16" icon="sap-icon://delete" type="Reject" press=".onDeleteHorizontalRow" visible="{= ${capaModel>/horizontalDeployment}.length > 1 }"/>
+                                                    <m:DatePicker id="_IDGenDatePicker11" value="{path:'capaModel>When', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                    <m:Button id="_IDGenButton16" icon="sap-icon://delete" type="Reject" press=".onDeleteHorizontalRow" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -225,7 +225,7 @@
                                                             <core:Item id="_IDGenItem28" key="Pending" text="Pending" />
                                                         </m:items>
                                                     </m:Select>
-                                                    <m:Button id="_IDGenButton20" icon="sap-icon://delete" text="Delete Row" type="Reject" press=".onDeleteClosureRow" visible="{= ${capaModel>/dcpData}.length > 4 }"/>
+                                                    <m:Button id="_IDGenButton20" icon="sap-icon://delete" text="Delete Row" type="Reject" press=".onDeleteClosureRow" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
                                         </m:items>
@@ -238,10 +238,10 @@
 
                                 <sf:SimpleForm id="_IDGenSimpleForm12" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
                                     <!-- Label -->
-                                    <m:Label id="_IDGenLabel35" text="Lesson Learned:" width="100%" design="Bold" class="sapUiTinyMarginEnd"/>
+                                    <m:Label id="_IDGenLabel35" text="Lesson Learned" width="100%" design="Bold" class="sapUiTinyMarginEnd"/>
 
                                     <!-- TextArea (full width next to label) -->
-                                    <m:TextArea id="_IDGenTextArea23" value="{capaModel>lessonLearned}" rows="3" width="20rem" growing="true" growingMaxLines="5" placeholder="Enter lessons learned..."/>
+                                    <m:TextArea id="idLessonLearned" value="{capaModel>/lessonLearned}" rows="3" width="20rem" growing="true" growingMaxLines="5" placeholder="Enter lessons learned..."/>
                                 </sf:SimpleForm>
 
                             </blocks>
@@ -255,7 +255,7 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

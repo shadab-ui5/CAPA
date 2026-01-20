@@ -98,12 +98,12 @@ sap.ui.define([
                     oCapaModel.setProperty("/failure_detected", "");
                     oCapaModel.setProperty("/failure_occur", "");
 
-                    if (oError?.statusCode !== 404) {
-                        sap.m.MessageBox.error(
-                            "Failed to load Problem Description: " +
-                            (oError.message || "Unknown error")
-                        );
-                    }
+                    // if (oError?.statusCode !== 404) {
+                    //     sap.m.MessageBox.error(
+                    //         "Failed to load Problem Description: " +
+                    //         (oError.message || "Unknown error")
+                    //     );
+                    // }
                 }
             });
         },

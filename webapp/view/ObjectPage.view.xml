@@ -39,7 +39,7 @@
                                         <!-- 8D Initiated Date -->
                                         <m:HBox id="_IDGenHBox3" width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
                                             <m:Label id="_IDGenLabel3" text="8D Initiated Date :" design="Bold"/>
-                                            <m:DatePicker id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"  class="sapUiTinyMarginBegin"/>
+                                            <m:DatePicker id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy"  class="sapUiTinyMarginBegin"/>
                                         </m:HBox>
                                     </m:HBox>
                                     <!-- Part Name -->
@@ -82,7 +82,7 @@
                
                 
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>
         </m:footer>

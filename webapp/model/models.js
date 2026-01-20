@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/model/json/JSONModel",
-    "sap/ui/Device"
+    "sap/ui/Device",
+    'hodek/capa/utils/Formatter',
 ],
-    function (JSONModel, Device) {
+    function (JSONModel, Device, Formatter) {
         "use strict";
         this.baseObjectStoreUrl = "https://hodek-vibration-technologies-pvt-ltd-dev-hodek-eklefds556845713.cfapps.us10-001.hana.ondemand.com/odata/v4/object-store";
         return {
@@ -15,6 +16,7 @@ sap.ui.define([
                 oModel.setDefaultBindingMode("OneWay");
                 return oModel;
             },
+
             onSaveContainment: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -210,68 +212,112 @@ sap.ui.define([
                     })
                     .finally(() => oView.setBusy(false));
             },
+
             onSaveDcpUpdation: function (_this) {
                 const oView = _this.getView();
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
                 const oLocalModel = oView.getModel("capaModel");
                 const aDcpData = oLocalModel.getProperty("/dcpData") || [];
 
-                // Common fields (populate these as available from context)
-                const sCapaId = _this._sCapaId || "CAPA001";
+                if (aDcpData.length < 4) {
+                    sap.m.MessageToast.show("Must have 4 mandat options!!");
+                    return;
+                }
 
-
-                // --- Build Payload ---
-                const aPayload = aDcpData.map((oRow, i) => ({
-                    capaid: sCapaId,
-                    serialno: String(i + 1).padStart(2, "0"),       // Key field
-                    supplier: _this.supplier,
-                    purchaseorder: _this.purchaseorder,
-                    material: _this.material,
-                    item: _this.item,
-                    asn: _this.asn,
-                    invoicenumber: _this.invoicenumber,
-                    invoicedate: _this.invoicedate,
-
-                    // === Map UI fields to OData entity ===
-                    qmsdocument: oRow.qmsDocument || "",
-                    pifyes: oRow.pIfYes ? "P" : "",               // convert boolean -> string flag
-                    documentno: oRow.documentNo || "",
-                    revnodate: oRow.revNoDate || "",
-                    resp: oRow.resp || "",
-                    planneddate: oRow.plannedDate ? new Date(oRow.plannedDate) : null,
-                    actualdate: oRow.actualDate ? new Date(oRow.actualDate) : null,
-                    status: oRow.status || ""
-                }));
-
-                // --- Save Loop ---
-                if (!aPayload.length) {
-                    sap.m.MessageToast.show("No DCP Updation data to save.");
+                const sCapaId = _this._sCapaId;
+                if (!sCapaId) {
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
                     return;
                 }
 
                 oView.setBusy(true);
-                let iSaved = 0;
 
-                aPayload.forEach(oEntry => {
-                    oODataModel.create("/DcpUpdation", oEntry, {
-                        success: () => {
-                            iSaved++;
-                            if (iSaved === aPayload.length) {
-                                oView.setBusy(false);
-                                sap.m.MessageToast.show("All DCP Updation entries saved successfully.");
+                const aPromises = aDcpData.map((oRow, i) => {
+
+                    // 🔑 Composite key
+                    const sSerialNo = String(i + 1).padStart(2, "0");
+
+                    const oPayload = {
+                        capaid: sCapaId,
+                        serialno: sSerialNo,
+
+                        // supplier: _this.supplier,
+                        purchaseorder: _this.purchaseorder,
+                        material: _this.material,
+                        item: _this.item,
+                        asn: _this.asn,
+                        invoicenumber: _this.invoicenumber,
+                        invoicedate: _this.invoicedate,
+
+                        // === UI → OData mapping ===
+                        qmsdocument: oRow.qmsDocument || "",
+                        pifyes: oRow.pIfYes ? "P" : "",
+                        documentno: oRow.documentNo || "",
+                        revnodate: oRow.revNoDate || "",
+                        resp: oRow.resp || "",
+                        planneddate: oRow.plannedDate ? new Date(oRow.plannedDate) : null,
+                        actualdate: oRow.actualDate ? new Date(oRow.actualDate) : null,
+                        status: oRow.status || ""
+                    };
+
+                    // 🔑 Build key path
+                    const sKeyPath = oODataModel.createKey("/DcpUpdation", {
+                        capaid: oPayload.capaid,
+                        serialno: oPayload.serialno
+                    });
+
+                    return new Promise((resolve, reject) => {
+
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+
+                                // 🔍 Exists → UPDATE
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    // 🟢 Empty response → CREATE
+                                    oODataModel.create("/DcpUpdation", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                const sStatus = String(oError.statusCode);
+
+                                // ➕ 404 → CREATE
+                                if (sStatus === "404") {
+                                    oODataModel.create("/DcpUpdation", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
                             }
-                        },
-                        error: (oError) => {
-                            oView.setBusy(false);
-                            console.error("Error saving DCP Updation:", oError);
-                            sap.m.MessageBox.error("Failed to save DCP Updation entries. Check console for details.");
-                        }
+                        });
                     });
                 });
+
+                Promise.allSettled(aPromises)
+                    .then((results) => {
+                        const iSuccess = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+
+                        sap.m.MessageToast.show(`${iSuccess} saved, ${iFail} failed`);
+                        if (iSuccess > 0) {
+                            oODataModel.refresh(true);
+                        }
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSaveHorizontalDeployment: function (_this) {
                 const oView = _this.getView();
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
                 const oLocalModel = oView.getModel("capaModel");
                 const aHorizontal = oLocalModel.getProperty("/horizontalDeployment") || [];
 
@@ -280,51 +326,93 @@ sap.ui.define([
                     return;
                 }
 
-                // --- Common CAPA context fields ---
-                const sCapaId = _this._sCapaId || "CAPA001";
-
-
-                // --- Build Payloads ---
-                const aPayload = aHorizontal.map((oRow, i) => ({
-                    capaid: sCapaId,
-                    serialno: String(i + 1).padStart(2, "0"),
-
-                    supplier: _this.supplier,
-                    purchaseorder: _this.purchaseorder,
-                    material: _this.material,
-                    item: _this.item,
-                    asn: _this.asn,
-                    invoicenumber: _this.invoicenumber,
-                    invoicedate: _this.invoicedate,
-
-                    productprocesssystem: oRow.Product || "",
-                    actiondetail: oRow.ActionDetail || "",
-                    errorproofing: oRow.ErrorProofing || "",
-                    responsible: oRow.Responsible || "",
-                    whendate: oRow.When ? new Date(oRow.When) : null
-                }));
+                const sCapaId = _this._sCapaId;
+                if (!sCapaId) {
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
+                    return;
+                }
 
                 oView.setBusy(true);
 
-                // --- Save Each Row ---
-                let iSuccess = 0;
-                aPayload.forEach(oEntry => {
-                    oODataModel.create("/HoDeploy", oEntry, {
-                        success: () => {
-                            iSuccess++;
-                            if (iSuccess === aPayload.length) {
-                                oView.setBusy(false);
-                                sap.m.MessageToast.show("Horizontal Deployment data saved successfully.");
+                const aPromises = aHorizontal.map((oRow, i) => {
+
+                    // 🔑 Composite key
+                    const sSerialNo = String(i + 1).padStart(2, "0");
+
+                    const oPayload = {
+                        capaid: sCapaId,
+                        serialno: sSerialNo,
+
+                        // supplier: _this.supplier,
+                        purchaseorder: _this.purchaseorder,
+                        material: _this.material,
+                        item: _this.item,
+                        asn: _this.asn,
+                        invoicenumber: _this.invoicenumber,
+                        invoicedate: _this.invoicedate,
+
+                        productprocesssystem: oRow.Product || "",
+                        actiondetail: oRow.ActionDetail || "",
+                        errorproofing: oRow.ErrorProofing || "",
+                        responsible: oRow.Responsible || "",
+                        whendate: oRow.When ? new Date(oRow.When) : null
+                    };
+
+                    // 🔑 Build key path
+                    const sKeyPath = oODataModel.createKey("/HoDeploy", {
+                        capaid: oPayload.capaid,
+                        serialno: oPayload.serialno
+                    });
+
+                    return new Promise((resolve, reject) => {
+
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+
+                                // 🔍 Exists → UPDATE
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    // 🟢 Empty response → CREATE
+                                    oODataModel.create("/HoDeploy", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                const sStatus = String(oError.statusCode);
+
+                                // ➕ Not Found → CREATE
+                                if (sStatus === "404") {
+                                    oODataModel.create("/HoDeploy", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
                             }
-                        },
-                        error: (oError) => {
-                            oView.setBusy(false);
-                            console.error("Error saving Horizontal Deployment:", oError);
-                            sap.m.MessageBox.error("Error saving some records. Please check console.");
-                        }
+                        });
                     });
                 });
+
+                Promise.allSettled(aPromises)
+                    .then((results) => {
+                        const iSuccess = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+
+                        sap.m.MessageToast.show(`${iSuccess} saved, ${iFail} failed`);
+                        if (iSuccess > 0) {
+                            oODataModel.refresh(true);
+                        }
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSaveTeamMembers: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -424,6 +512,7 @@ sap.ui.define([
                     })
                     .finally(() => oView.setBusy(false));
             },
+
             onSaveMngVClosure: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -447,8 +536,8 @@ sap.ui.define([
                 };
 
                 const oPayload = {
-                    ...commData,
-                    ...oMngVClosure
+                    ...oMngVClosure,
+                    ...commData
                 };
 
                 oView.setBusy(true);
@@ -463,15 +552,15 @@ sap.ui.define([
                         // Exists → UPDATE
                         oODataModel.update(sKeyPath, oPayload, {
                             success: function () {
+                                oView.setBusy(false);
                                 sap.m.MessageToast.show("Management Verification Closure updated successfully!");
                             },
                             error: function (oError) {
                                 sap.m.MessageBox.error("Error updating Management Verification Closure");
+                                oView.setBusy(false);
                                 console.error(oError);
                             },
-                            complete: function () {
-                                oView.setBusy(false);
-                            }
+
                         });
                     },
                     error: function (oError) {
@@ -479,15 +568,14 @@ sap.ui.define([
                             // Not found → CREATE
                             oODataModel.create("/MngVClosure", oPayload, {
                                 success: function () {
+                                    oView.setBusy(false);
                                     sap.m.MessageToast.show("Management Verification Closure saved successfully!");
                                 },
                                 error: function (oError) {
                                     sap.m.MessageBox.error("Error saving Management Verification Closure");
+                                    oView.setBusy(false);
                                     console.error(oError);
                                 },
-                                complete: function () {
-                                    oView.setBusy(false);
-                                }
                             });
                         } else {
                             oView.setBusy(false);
@@ -497,18 +585,26 @@ sap.ui.define([
                     }
                 });
             },
+
             onSaveClosure: function (_this) {
-                let oView = _this.getView();
-                let oModel = oView.getModel("capaModel");
-                let aClosureData = oModel.getProperty("/closureData") || [];
+                const oView = _this.getView();
+                const oModel = oView.getModel("capaModel");
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
 
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const aClosureData = oModel.getProperty("/closureData") || [];
 
-                // Basic header details
-                let sCapaId = _this._sCapaId || "CAPA001";
+                if (!aClosureData.length) {
+                    sap.m.MessageToast.show("No Closure data to save.");
+                    return;
+                }
 
-                // Shared header data
-                let oHeaderData = {
+                const sCapaId = _this._sCapaId;
+                if (!sCapaId) {
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
+                    return;
+                }
+
+                const oHeaderData = {
                     capaid: sCapaId,
                     supplier: _this.supplier,
                     purchaseorder: _this.purchaseorder,
@@ -519,45 +615,101 @@ sap.ui.define([
                     invoicedate: _this.invoicedate
                 };
 
-                // === Build final payloads ===
-                let aPayloads = aClosureData.map(function (entry, index) {
-                    return {
-                        ...oHeaderData,
-                        srnumber: (index + 1).toString().padStart(3, "0"),
-                        startdate: entry.startDate,
-                        completion: entry.completion,
-                        teammember: entry.teamMember,
-                        area: entry.area,
-                        signoff: entry.signOff
-                    };
-                });
+                oView.setBusy(true);
 
-                // === Create each entry in OData ===
-                aPayloads.forEach(function (oEntry) {
-                    oODataModel.create("/PrbClSignoff", oEntry, {
-                        success: function () {
-                            console.log("Saved:", oEntry);
-                        },
-                        error: function (oError) {
-                            console.error("Error saving:", oEntry, oError);
-                        }
+                const aPromises = aClosureData.map((entry, index) => {
+
+                    // 🔑 Composite key
+                    const sSrNumber = String(index + 1).padStart(2, "0");
+
+                    const oPayload = {
+                        ...oHeaderData,
+                        srnumber: sSrNumber,
+                        serialno: sSrNumber,
+                        startdate: entry.startDate ? new Date(entry.startDate) : null,
+                        completion: entry.completion ? new Date(entry.completion) : null,
+                        teammember: entry.teamMember || "",
+                        area: entry.area || "",
+                        phase: entry.phase || "",
+                        signoff: entry.signOff || ""
+                    };
+
+                    // 🔑 Build key path
+                    const sKeyPath = oODataModel.createKey("/PrbClSignoff", {
+                        capaid: oPayload.capaid,
+                        serialno: oPayload.srnumber
+                    });
+
+                    return new Promise((resolve, reject) => {
+
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+
+                                // 🔍 Exists → UPDATE
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    // 🟢 Empty response → CREATE
+                                    oODataModel.create("/PrbClSignoff", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                const sStatus = String(
+                                    oError.statusCode || oError.response?.statusCode || ""
+                                );
+
+                                // ➕ 404 → CREATE
+                                if (sStatus === "404") {
+                                    oODataModel.create("/PrbClSignoff", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
+                            }
+                        });
                     });
                 });
 
-                sap.m.MessageToast.show("Problem Closure & Sign-Off data saved successfully!");
+                Promise.allSettled(aPromises)
+                    .then((results) => {
+                        const iSuccess = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+
+                        sap.m.MessageToast.show(`${iSuccess} saved, ${iFail} failed`);
+                        if (iSuccess > 0) {
+                            oODataModel.refresh(true);
+                        }
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSavePreventiveActions: function (_this) {
-                let oView = _this.getView();
+                const oView = _this.getView();
+                const oCapaModel = oView.getModel("capaModel");
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
 
-                let oCapaModel = oView.getModel("capaModel");
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const aPreventiveActions = oCapaModel.getProperty("/preventiveActions") || [];
 
-                // Get preventive actions array
-                let aPreventiveActions = oCapaModel.getProperty("/preventiveActions") || [];
+                if (!aPreventiveActions.length) {
+                    sap.m.MessageToast.show("No Preventive Actions data to save.");
+                    return;
+                }
 
-                // Common CAPA header data (replace with your actual lets)
-                let sCapaId = _this._sCapaId || "CAPA001";
-                let oHeaderData = {
+                const sCapaId = _this._sCapaId;
+                if (!sCapaId) {
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
+                    return;
+                }
+
+                const oHeaderData = {
                     capaid: sCapaId,
                     purchaseorder: _this.purchaseorder,
                     material: _this.material,
@@ -567,34 +719,80 @@ sap.ui.define([
                     invoicedate: _this.invoicedate
                 };
 
-                // === Step 1: Build payload for each row ===
-                let aPayloads = aPreventiveActions.map(function (entry, index) {
-                    return {
+                oView.setBusy(true);
+
+                const aPromises = aPreventiveActions.map((entry, index) => {
+
+                    // 🔑 Composite key
+                    const sSerialNo = String(index + 1).padStart(2, "0");
+
+                    const oPayload = {
                         ...oHeaderData,
-                        serialno: (index + 1).toString().padStart(2, "0"),
+                        serialno: sSerialNo,
+
                         preventiveactionstaken: entry.PreventiveAction || "",
-                        target: entry.Target || null,
-                        actual: entry.Actual || null,
+                        target: entry.Target ? new Date(entry.Target) : null,
+                        actual: entry.Actual ? new Date(entry.Actual) : null,
                         resultofaction: entry.Result || "",
                         resp: entry.Resp || "",
                         status: entry.status || ""
                     };
-                });
 
-                // === Step 2: Save to OData (one by one) ===
-                aPayloads.forEach(function (oEntry) {
-                    oODataModel.create("/PrevAction", oEntry, {
-                        success: function () {
-                            console.log("Saved Preventive Action:", oEntry);
-                        },
-                        error: function (oError) {
-                            console.error("Error saving Preventive Action:", oError);
-                        }
+                    // 🔑 Key path
+                    const sKeyPath = oODataModel.createKey("/PrevAction", {
+                        capaid: oPayload.capaid,
+                        serialno: oPayload.serialno
+                    });
+
+                    return new Promise((resolve, reject) => {
+
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+
+                                // 🔍 Exists → UPDATE
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    // 🟢 Empty response → CREATE
+                                    oODataModel.create("/PrevAction", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                const sStatus = String(oError.statusCode);
+
+                                // ➕ 404 → CREATE
+                                if (sStatus === "404") {
+                                    oODataModel.create("/PrevAction", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
+                            }
+                        });
                     });
                 });
 
-                sap.m.MessageToast.show("Preventive Actions saved successfully!");
+                Promise.allSettled(aPromises)
+                    .then((results) => {
+                        const iSuccess = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+
+                        sap.m.MessageToast.show(`${iSuccess} saved, ${iFail} failed`);
+                        if (iSuccess > 0) {
+                            oODataModel.refresh(true);
+                        }
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSaveProblemAwareness: function (_this) {
                 let oView = _this.getView();
                 let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -675,7 +873,7 @@ sap.ui.define([
 
                 oView.setBusy(true);
                 const sPath = `/ProbAware('${sCapaId}')`;
-
+                let that = this;
                 oODataModel.read(sPath, {
                     success: () => {
                         // Record exists → call update method
@@ -697,39 +895,46 @@ sap.ui.define([
                 });
 
             },
+
             onSaveCAImplementation: function (_this) {
-                let oView = _this.getView();
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel"); // your OData model (cds_zui_capa_srv_direct)
-                let oCapaModel = oView.getModel("capaModel"); // local JSON model with data
+                const oView = _this.getView();
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const oCapaModel = oView.getModel("capaModel");
 
-                // === Step 1: Read header fields ===
-                let sCAImplDate = oView.byId("_IDGenDatePicker5").getDateValue();
-                let sEffVerDate = oView.byId("_IDGenDatePicker6").getDateValue();
-                let sEffMonDate = oView.byId("_IDGenDatePicker7").getDateValue();
-
-                // Format to backend-compatible date (ISO)
-                let oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({ pattern: "yyyy-MM-dd'T'00:00:00" });
-                let sCAImplDateISO = sCAImplDate ? oDateFormat.format(sCAImplDate) : null;
-                let sEffVerDateISO = sEffVerDate ? oDateFormat.format(sEffVerDate) : null;
-                let sEffMonDateISO = sEffMonDate ? oDateFormat.format(sEffMonDate) : null;
-
-                // === Step 2: Read table data ===
-                let aEffectivenessData = oCapaModel.getProperty("/effectivenessData") || [];
-
-                // === Step 3: Prepare payloads ===
-                // assuming `capaid` and `serial` exist in your model (keys)
-                let sCapaId = _this._sCapaId
-
+                const sCapaId = _this._sCapaId;
                 if (!sCapaId) {
-                    sap.m.MessageToast.show("Missing CAPA ID or Serial number");
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
                     return;
                 }
 
-                // Create an array of entries to send to OData
-                let aPayload = aEffectivenessData.map((item, index) => {
-                    return {
+                const oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+                    pattern: "yyyy-MM-dd'T'00:00:00"
+                });
+
+                const sCAImplDate = oView.byId("idCaimpldate").getDateValue();
+                const sEffVerDate = oView.byId("idEffectiveVerif").getDateValue();
+                const sEffMonDate = oView.byId("idEffectiveMonitoring").getDateValue();
+
+                const sCAImplISO = sCAImplDate ? oDateFormat.format(sCAImplDate) : null;
+                const sEffVerISO = sEffVerDate ? oDateFormat.format(sEffVerDate) : null;
+                const sEffMonISO = sEffMonDate ? oDateFormat.format(sEffMonDate) : null;
+
+                const aData = oCapaModel.getProperty("/effectivenessData") || [];
+                const oMonth = oCapaModel.getProperty("/month") || [];
+                if (!aData.length) {
+                    sap.m.MessageToast.show("No effectiveness data to save.");
+                    return;
+                }
+
+                oView.setBusy(true);
+
+                const aPromises = aData.map((item, index) => {
+
+                    const sSerial = String(index + 1).padStart(2, "0");
+
+                    const oPayload = {
                         capaid: sCapaId,
-                        serial: String(index + 1).padStart(2, "0"),
+                        serial: sSerial,
                         supplier: _this.supplier,
                         purchaseorder: _this.purchaseorder,
                         material: _this.material,
@@ -737,109 +942,143 @@ sap.ui.define([
                         asn: _this.asn,
                         invoicenumber: _this.invoicenumber,
                         invoicedate: _this.invoicedate,
-                        effverdate: sEffVerDateISO,
-                        caimpdate: sCAImplDateISO,
-                        effectmontdate: sEffMonDateISO,
-                        monthfield: item.Month || "",
-                        mfgqty: parseFloat(item.MfgQty) || 0,
-                        defectqty: parseFloat(item.DefQty) || 0,
+                        effverdate: sEffVerISO,
+                        caimpdate: sCAImplISO,
+                        effectmontdate: sEffMonISO,
+                        monthfield: oCapaModel.getProperty("/month/" + item.Month).text || "",
+                        mfgqty: parseFloat(item.DefQty).toFixed(2) || 0,
+                        defectqty: parseFloat(item.DefQty).toFixed(2) || 0,
                         datefield: item.Date ? oDateFormat.format(new Date(item.Date)) : null
                     };
+
+                    const sKeyPath = oODataModel.createKey("/CAImpleMon", {
+                        capaid: sCapaId,
+                        serial: sSerial
+                    });
+
+                    return new Promise((resolve, reject) => {
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    oODataModel.create("/CAImpleMon", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                if (String(oError.statusCode) === "404") {
+                                    oODataModel.create("/CAImpleMon", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
+                            }
+                        });
+                    });
                 });
 
-                // === Step 4: Save data via OData ===
-                oView.setBusy(true);
-
-                let iSuccessCount = 0;
-                let iErrorCount = 0;
-                let iTotal = aPayload.length;
-                return aPayload;
-                // aPayload.forEach(function (oEntry) {
-                //     oODataModel.create("/CAImpleMon", oEntry, {
-                //         success: function () {
-                //             iSuccessCount++;
-                //             if (iSuccessCount + iErrorCount === iTotal) {
-                //                 oView.setBusy(false);
-                //                 sap.m.MessageToast.show("Successfully saved " + iSuccessCount + " records.");
-                //             }
-                //         },
-                //         error: function (oError) {
-                //             iErrorCount++;
-                //             console.error("Error saving CAImpleMonType entry:", oError);
-                //             if (iSuccessCount + iErrorCount === iTotal) {
-                //                 oView.setBusy(false);
-                //                 sap.m.MessageBox.error("Some records failed to save. Check console for details.");
-                //             }
-                //         }
-                //     });
-                // });
+                Promise.allSettled(aPromises)
+                    .then(results => {
+                        const iOk = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+                        sap.m.MessageToast.show(`${iOk} saved, ${iFail} failed`);
+                        oODataModel.refresh(true);
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSaveValidationActions: function (_this) {
-                var oView = _this.getView();
-                let oODataModel = _this.getOwnerComponent().getModel("capaServiceModel"); // your OData model (cds_zui_capa_srv_direct) // OData model (e.g., cds_zui_capa_srv_direct)
-                var oCapaModel = oView.getModel("capaModel"); // local JSON model with frontend data
+                const oView = _this.getView();
+                const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                const oCapaModel = oView.getModel("capaModel");
 
-                // Step 1: Get CAPA key fields
-                var sCapaId = _this._sCapaId;
-
+                const sCapaId = _this._sCapaId;
                 if (!sCapaId) {
-                    sap.m.MessageToast.show("CAPA ID or Serial number missing");
+                    sap.m.MessageBox.error("CAPA ID is mandatory.");
                     return;
                 }
 
-                // Step 2: Get validating data array
-                var aValidating = oCapaModel.getProperty("/validating") || [];
-
+                const aValidating = oCapaModel.getProperty("/validating") || [];
                 if (!aValidating.length) {
-                    sap.m.MessageToast.show("No validation data to save");
+                    sap.m.MessageToast.show("No validation data to save.");
                     return;
                 }
 
-                // Step 3: Prepare date formatter (ISO)
-                var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+                const oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
                     pattern: "yyyy-MM-dd'T'00:00:00"
                 });
 
-                // Step 4: Prepare payload array
-                var aPayload = aValidating.map((oRow, index) => {
-                    return {
+                oView.setBusy(true);
+
+                const aPromises = aValidating.map((oRow, index) => {
+
+                    const sSerial = String(index + 1).padStart(2, "0");
+
+                    const oPayload = {
                         capaid: sCapaId,
-                        serial: String(index + 1).padStart(2, "0"),
-                        valactiden: oRow.actionTaken || "",   // Maps to "Validating Actions Identified & Taken"
+                        serial: sSerial,
+                        valactiden: oRow.actionTaken || "",
                         target: oRow.target ? oDateFormat.format(new Date(oRow.target)) : null,
                         actual: oRow.actual ? oDateFormat.format(new Date(oRow.actual)) : null,
                         resodact: oRow.result || "",
                         responsibility: oRow.responsibe || "",
                         status: oRow.status || ""
                     };
+
+                    const sKeyPath = oODataModel.createKey("/ValCorrAct", {
+                        capaid: sCapaId,
+                        serial: sSerial
+                    });
+
+                    return new Promise((resolve, reject) => {
+                        oODataModel.read(sKeyPath, {
+                            success: function (oData) {
+                                // 🔁 Exists or empty response → UPDATE
+                                if (oData && oData.capaid) {
+                                    oODataModel.update(sKeyPath, oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    // 🟢 Empty read treated as NOT FOUND
+                                    oODataModel.create("/ValCorrAct", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                }
+                            },
+                            error: function (oError) {
+                                if (String(oError.statusCode) === "404") {
+                                    oODataModel.create("/ValCorrAct", oPayload, {
+                                        success: resolve,
+                                        error: reject
+                                    });
+                                } else {
+                                    reject(oError);
+                                }
+                            }
+                        });
+                    });
                 });
 
-                // Step 5: Call OData create for each record
-                oView.setBusy(true);
-                var iSuccessCount = 0;
-                var iErrorCount = 0;
-                var iTotal = aPayload.length;
-                return aPayload;
-                // aPayload.forEach(function (oEntry) {
-                //     oODataModel.create("/ValCorrAct", oEntry, {
-                //         success: function () {
-                //             iSuccessCount++;
-                //             if (iSuccessCount + iErrorCount === iTotal) {
-                //                 oView.setBusy(false);
-                //                 sap.m.MessageToast.show("Validation data saved successfully (" + iSuccessCount + ")");
-                //             }
-                //         },
-                //         error: function (oError) {
-                //             iErrorCount++;
-                //             console.error("Error saving ValCorrActType entry:", oError);
-                //             if (iSuccessCount + iErrorCount === iTotal) {
-                //                 oView.setBusy(false);
-                //                 sap.m.MessageBox.error("Some validation records failed to save. Check console for details.");
-                //             }
-                //         }
-                //     });
-                // });
+                Promise.allSettled(aPromises)
+                    .then(results => {
+                        const iOk = results.filter(r => r.status === "fulfilled").length;
+                        const iFail = results.filter(r => r.status === "rejected").length;
+                        sap.m.MessageToast.show(`${iOk} saved, ${iFail} failed`);
+                        oODataModel.refresh(true);
+                    })
+                    .finally(() => oView.setBusy(false));
             },
+
             onSaveFish: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -927,6 +1166,7 @@ sap.ui.define([
                     })
                     .finally(() => oView.setBusy(false));
             },
+
             onSaveFiveWhy: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -1021,6 +1261,7 @@ sap.ui.define([
                     })
                     .finally(() => oView.setBusy(false));
             },
+
             onSaveWhyProtect: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -1115,6 +1356,7 @@ sap.ui.define([
                     })
                     .finally(() => oView.setBusy(false));
             },
+
             onSaveRoot: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel"); // OData V2 model
@@ -1150,7 +1392,7 @@ sap.ui.define([
                     drgrev: oCapaData.drgRev || "",
                     // totaltimerequired: String(oCapaData.totalTimeDays) || "",
                     // lessonlearned: oCapaData.lessonLearned || "",
-                    // status: oCapaData.status || ""
+                    status: "01"
                 };
 
 
@@ -1185,6 +1427,7 @@ sap.ui.define([
                     }
                 });
             },
+
             onSaveProblemDescription: function (_this) {
                 const oView = _this.getView();
                 const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
@@ -1280,13 +1523,14 @@ sap.ui.define([
             _mapRootDataToLocalModel: function (oData, _this) {
                 let oView = _this.getView();
                 let oCapaModel = oView.getModel("capaModel");
+                let oSelectModel = oView.getModel("selectedModel");
 
                 // === 1️⃣ Save snapshot for change detection ===
                 this._originalCapaSnapshot = JSON.parse(JSON.stringify(oData));
                 // === Root Level ===
                 oCapaModel.setProperty("/typeOfNC", oData.typeofnc || "");
                 oCapaModel.setProperty("/refMessage", oData.ref || "");
-                oCapaModel.setProperty("/initiatedDate", oData.rd_initiateddate ? new Date(oData.rd_initiateddate) : null);
+                oCapaModel.setProperty("/initiatedDate", oData.rd_initiateddate ? Formatter.formatDateToYyyyMmDd(new Date(oData.rd_initiateddate)) : null);
                 oCapaModel.setProperty("/partName", oData.partname || "");
                 oCapaModel.setProperty("/customerName", oData.customername || "");
                 oCapaModel.setProperty("/customerPartNo", oData.hodekpartnumber || "");
@@ -1296,7 +1540,9 @@ sap.ui.define([
                 oCapaModel.setProperty("/drgRev", oData.drgrev || "");
                 oCapaModel.setProperty("/totalTimeDays", parseInt(oData.totaltimerequired) || 0);
                 oCapaModel.setProperty("/lessonLearned", oData.lessonlearned || "");
-                oCapaModel.setProperty("/status", oData.status || "");
+                oCapaModel.setProperty("/status", oData.status === "01" ? true : false);
+                oSelectModel.setProperty("/status", oData.status === "01" ? true : false);
+                oCapaModel.setProperty()
                 oCapaModel.refresh(true);
             },
 
@@ -1321,7 +1567,36 @@ sap.ui.define([
                 });
             },
 
+            updateRootFields: function (_this, oPayload) {
+                var oModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                var sPath = `/Root(capaid='${_this._sCapaId}')`;
 
+                oModel.update(sPath, oPayload, {
+                    merge: true, // PATCH / MERGE
+                    success: function () {
+                        sap.m.MessageToast.show("Updated successfully");
+                    },
+                    error: function (oError) {
+                        console.error(oError);
+                    }
+                });
+
+            },
+            fetchRootFields: function (_this, sField, localProp) {
+                var oModel = _this.getOwnerComponent().getModel("capaServiceModel");
+                var sPath = `/Root(capaid='${_this._sCapaId}')`;
+                let oLocalModel = _this.getView().getModel("capaModel");
+                oModel.read(sPath, {
+                    success: function (oData) {
+                        console.log(oData);
+                        oLocalModel.setProperty(localProp, oData[sField]);
+                    },
+                    error: function (oError) {
+                        console.error(oError);
+                    }
+                });
+
+            }
         };
 
     });

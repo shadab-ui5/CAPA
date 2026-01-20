@@ -43,10 +43,10 @@
         }
       },
       "CapaService": {
-        "uri": "/sap/opu/odata/sap/ZUI_CAPA_SRV_DIRECT/",
+        "uri": "/sap/opu/odata/sap/ZUI_QM_CA_IMPLEMENT_V2/",
         "type": "OData",
         "settings": {
-          "localUri": "localService/ZUI_CAPA_SRV_DIRECT/metadata.xml",
+          "localUri": "localService/ZUI_QM_CA_IMPLEMENT_V2/metadata.xml",
           "odataVersion": "2.0"
         }
       }

@@ -63,11 +63,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Date" />
-                                                <m:DatePicker value="{MngVClosure>/productionchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker value="{MngVClosure>/qualitychiefmrdate}" displayFormat="medium" />
-                                                <m:DatePicker value="{MngVClosure>/designchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker value="{MngVClosure>/processchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker value="{MngVClosure>/plantheaddate}" displayFormat="medium" />
+                                                <m:DatePicker value="{path:'MngVClosure>/productionchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker value="{path:'MngVClosure>/qualitychiefmrdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker value="{path:'MngVClosure>/designchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker value="{path:'MngVClosure>/processchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker value="{path:'MngVClosure>/plantheaddate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                             </m:cells>
                                         </m:ColumnListItem>
 
@@ -96,9 +96,9 @@
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
                 <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
-                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" />
+                <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton24" type="Success" text="Submit" press="onSubmit"/>
-                <m:Button id="_IDGenButton23" type="Reject" text="Reject" press="onReject"/>
+                <m:Button id="_IDGenButton23" type="Reject" text="Cancel" press="onReject"/>
             </m:OverflowToolbar>
         </m:footer>
     </m:Page>

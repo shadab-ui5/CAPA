@@ -15,7 +15,7 @@ sap.ui.define([
                 const year = oDate.getFullYear();
                 const month = String(oDate.getMonth() + 1).padStart(2, '0');
                 const day = String(oDate.getDate()).padStart(2, '0');
-                return `${day}-${month}-${year}`; // e.g. "2025-08-07"
+                return `${year}-${month}-${day}`; // e.g. "2025-08-07"
             },
             formatIcon: function (sStatus) {
                 switch (sStatus) {
@@ -88,10 +88,10 @@ sap.ui.define([
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 // Determine status
                 let status;
-                if (diffDays > 16) {
+                if (diffDays > 10) {
                     status = "Expired"
                 } else {
-                    status = 15 - (diffDays + 1) + " days";
+                    status = 11 - (diffDays + 1) + " days";
                 }
                 return status;
             },
