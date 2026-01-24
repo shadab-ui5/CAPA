@@ -30,7 +30,7 @@
                                     <!-- Attachments Section -->
                                     <m:Label id="_IDGenLabel23" text="Attachments" />
                                     <m:VBox id="_IDGenVBox19">
-                                    <m:RadioButtonGroup id="rbgAttachments" columns="5" selectedIndex="{capaModel>/attachments/selectedIndex}">
+                                        <m:RadioButtonGroup id="rbgAttachments" columns="5" select=".onAttachmentSelect" selectedIndex="{capaModel>/attachments/selectedRadioIndex}">
                                             <m:buttons>
                                                 <m:RadioButton id="_IDGenRadioButton1" text="Photo / Sketch" />
                                                 <m:RadioButton id="_IDGenRadioButton2" text="Trend Chart" />
@@ -45,9 +45,13 @@
                                     <!-- File Upload for selected option -->
                                     <m:Label id="_IDGenLabel37" text="Upload File" />
                                     <m:VBox id="_IDGenVBox18">
-                                        <m:HBox id="_IDGenHBox12" justifyContent="Start">
+                                        <m:HBox id="_IDGenHBox12" justifyContent="Start" visible="{selectedModel>/status}">
                                             <un:FileUploader id="idFileUploader" name="file" width="300px" placeholder="Choose a file..." sendXHR="true" useMultipart="false" />
                                             <m:Button id="_IDGenButton25" type="Emphasized" class="sapUiTinyMarginBegin" text="Upload" press="onUploadFile" />
+                                        </m:HBox>
+                                        <m:HBox>
+                                            <m:Text id="idUploadFileText" text="" visible="{= !${selectedModel>/status}}"/>
+                                            <m:Button  type="Emphasized" class="sapUiTinyMarginBegin" text="Download" press="onDownload" />
                                         </m:HBox>
                                     </m:VBox>
 

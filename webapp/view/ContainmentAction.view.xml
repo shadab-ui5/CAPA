@@ -30,7 +30,7 @@
                                     <m:headerToolbar>
                                         <m:Toolbar id="_IDGenToolbar2">
                                             <m:ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                                            <m:Button id="_IDGenButton2" icon="sap-icon://add" text="Add" press=".onAddContainment"/>
+                                            <m:Button id="_IDGenButton2" icon="sap-icon://add"  visible="{selectedModel>/status}" text="Add" press=".onAddContainment"/>
                                         </m:Toolbar>
                                     </m:headerToolbar>
 
@@ -65,19 +65,19 @@
                                                 <m:Text id="_IDGenText21" text="{= ${capaModel>rowIndex}}"/>
 
                                                 <!-- Immediate Action Taken -->
-                                                <m:Input id="_IDGenInput24" value="{capaModel>immediateAction}" />
+                                                <m:Input   id="_IDGenInput24" value="{capaModel>immediateAction}" />
 
                                                 <!-- Completion -->
-                                                <m:DatePicker id="_IDGenDatePicker" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
 
                                                 <!-- Responsible -->
-                                                <m:Input id="_IDGenInput25" value="{capaModel>responsible}" />
+                                                <m:Input   id="_IDGenInput25" value="{capaModel>responsible}" />
 
                                                 <!-- Break Point -->
-                                                <m:Input id="_IDGenInput26" value="{capaModel>breakPoint}" />
+                                                <m:Input   id="_IDGenInput26" value="{capaModel>breakPoint}" />
 
                                                 <!-- Status -->
-                                                <m:Input id="_IDGenInput27" value="{capaModel>status}" />
+                                                <m:Input   id="_IDGenInput27" value="{capaModel>status}" />
 
                                                 <!-- Delete button for rows except first -->
                                                 <m:Button id="_IDGenButton3" icon="sap-icon://delete" press=".onDeleteContainment" visible="{capaModel>bButton}" />

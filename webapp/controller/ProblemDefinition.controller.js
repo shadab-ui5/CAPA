@@ -17,11 +17,13 @@ sap.ui.define([
         onInit: function () {
             this.baseObjectStoreUrl = "https://hodek-vibration-technologies-pvt-ltd-dev-hodek-eklefds556845713.cfapps.us10-001.hana.ondemand.com/odata/v4/object-store";
             let oSelectModel = this.getOwnerComponent().getModel('selectedModel');
-            
-            let oModel = new sap.ui.model.json.JSONModel({
 
+            let oModel = new sap.ui.model.json.JSONModel({
+                attachments: {
+                    selectedRadioIndex: -1
+                }
             });
-           
+
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("RouteProblemDefinition").attachPatternMatched(this._onRouteMatched, this);
             this.getView().setModel(oModel, "capaModel");
@@ -115,7 +117,15 @@ sap.ui.define([
                 sap.m.MessageToast.show("Please select a file first.");
                 return;
             }
+            const oRBG = this.byId("rbgAttachments");
+            const iSelectedIndex = oRBG.getSelectedIndex();
 
+            const oModel = this.getView().getModel("capaModel");
+            const selectionRadio = oModel.getProperty("/attachments/selectedRadioIndex");
+            if (selectionRadio === -1) {
+                MessageBox.show("Please select any one option before uploading file");
+                return;
+            }
             // Busy indicator
             this.getView().setBusy(true);
 
@@ -134,7 +144,7 @@ sap.ui.define([
                 const arrayBuffer = await oFile.arrayBuffer();
                 const base64 = arrayBufferToBase64(arrayBuffer);
 
-                const sObjectName = `${this._sCapaId}/${oFile.name}`;
+                const sObjectName = `${this._sCapaId}/ProblemDef/${oFile.name}#${selectionRadio}`;
 
                 // Upload
                 const oResponse = await fetch(
@@ -183,7 +193,7 @@ sap.ui.define([
         },
         refreshFiles: async function () {
             let url = this.baseObjectStoreUrl + "/listFiles";
-            let folderName =this._sCapaId;
+            let folderName = this._sCapaId + "/ProblemDef";
             const res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -191,8 +201,60 @@ sap.ui.define([
             });
             const data = await res.json();
             console.log(data);
-            this.getView().byId('idFileUploader').setValue(data.value[0].objectName.split('/')[1] || []);
+
+            let nlength = data.value.length;
+            if (nlength) {
+                const aFiles = data.value; // your array
+                const oLatestFile = aFiles.reduce((latest, current) => {
+                    return new Date(current.lastModified) > new Date(latest.lastModified)
+                        ? current
+                        : latest;
+                });
+
+                const oModel = this.getView().getModel("capaModel");
+                oModel.setProperty("/objectFileName", oLatestFile.objectName);
+                this.getView().byId('idFileUploader').setValue(oLatestFile.objectName.split('/')[2].split('#')[0] || []);
+                this.getView().byId('idUploadFileText').setText(oLatestFile.objectName.split('/')[2].split('#')[0] || []);
+                this.getView().byId('rbgAttachments').setSelectedIndex(parseInt(oLatestFile.objectName.split('#')[1]));
+            }
             this.getView().setBusy(false);
+        },
+        onAttachmentSelect: function (oEvent) {
+            const oRBG = oEvent.getSource();
+
+            const iIndex = oRBG.getSelectedIndex();
+            const sText = oRBG.getButtons()[iIndex].getText();
+
+            console.log("Index:", iIndex);
+            console.log("Text:", sText);
+
+            // store safely in model if needed
+            const oModel = this.getView().getModel("capaModel");
+            oModel.setProperty("/attachments/selectedRadioIndex", iIndex);
+            oModel.setProperty("/attachments/selectedRadioText", sText);
+        },
+        onDownload: async function () {
+            const oModel = this.getView().getModel("capaModel");
+            let objectName = oModel.getProperty("/objectFileName");
+
+            const res = await fetch(this.baseObjectStoreUrl + "/downloadFile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ objectName })
+            });
+            const data = await res.json();
+
+            const byteCharacters = atob(data.content);
+            const byteNumbers = Array.from(byteCharacters).map(c => c.charCodeAt(0));
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray]);
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = data.objectName.split("/")[2].split('#')[0];
+            a.click();
+            URL.revokeObjectURL(url);
         },
 
 

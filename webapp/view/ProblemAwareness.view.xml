@@ -27,7 +27,7 @@
                                 <sf:SimpleForm id="formProblemAwareness" editable="true" layout="ResponsiveGridLayout" labelSpanM="3" labelSpanL="2" adjustLabelSpan="false" emptySpanM="1" emptySpanL="1">
                                     <!-- Problem Type (New / Existing / Reopened) -->
                                     <m:Label id="_IDGenLabel11" text="Problem Scope" design="Bold" />
-                                    <m:SegmentedButton id="_IDGenSegmentedButton" selectedKey="{capaModel>/problemType}">
+                                    <m:SegmentedButton   id="_IDGenSegmentedButton" selectedKey="{capaModel>/problemType}">
                                         <m:items>
                                             <m:SegmentedButtonItem id="_IDGenSegmentedButtonItem" key="New" text="New" />
                                             <m:SegmentedButtonItem id="_IDGenSegmentedButtonItem1" key="Existing" text="Existing" />
@@ -36,7 +36,7 @@
                                     </m:SegmentedButton>
                                     <!-- Problem Severity -->
                                     <m:Label id="_IDGenLabel12" text="Problem Severity" design="Bold" />
-                                    <m:MultiComboBox id="_IDGenMultiComboBox" selectedKeys="{capaModel>/problemSeverity}">
+                                    <m:MultiComboBox   id="_IDGenMultiComboBox" selectedKeys="{capaModel>/problemSeverity}">
                                         <m:items>
                                             <core:Item id="_IDGenItem" key="Safety" text="Safety" />
                                             <core:Item id="_IDGenItem1" key="Regulatory" text="Regulatory" />
@@ -50,10 +50,10 @@
 
                                     <!-- Details if any -->
                                     <m:Label id="_IDGenLabel13" text="Details (if any)" design="Bold" />
-                                    <m:TextArea id="_IDGenTextArea1" value="{capaModel>/problemDetails}" rows="3" width="100%" />
+                                    <m:TextArea  id="_IDGenTextArea1" value="{capaModel>/problemDetails}" rows="3" width="100%" />
                                     <!-- Problem Source -->
                                     <m:Label id="_IDGenLabel14" text="Problem Source" design="Bold" />
-                                    <m:MultiComboBox id="_IDGenMultiComboBox1" selectedKeys="{capaModel>/problemSource}">
+                                    <m:MultiComboBox   id="_IDGenMultiComboBox1" selectedKeys="{capaModel>/problemSource}">
                                         <m:items>
                                             <core:Item id="_IDGenItem6" key="InHouse" text="In-House MFG / Line" />
                                             <core:Item id="_IDGenItem7" key="Supplier" text="Supplier / Incoming" />
@@ -66,7 +66,7 @@
 
                                     <!-- % Defect -->
                                     <m:Label id="_IDGenLabel15" text="% Defect" design="Bold" />
-                                    <m:Input id="_IDGenInput8" value="{capaModel>/percentDefect}" type="Number" />
+                                    <m:Input   id="_IDGenInput8" value="{capaModel>/percentDefect}" type="Number" />
 
                                     <!-- Process History / Metrics -->
                                     <m:Label id="_IDGenLabel16" text="Process History  Metrics" design="Bold" />
@@ -74,30 +74,30 @@
                                         <m:HBox id="_IDGenHBox4">
                                             <m:VBox id="_IDGenVBox3" width="20%" class="sapUiTinyMarginEnd">
                                                 <m:Label id="_IDGenLabel17" text="PPAP - Ppk" design="Bold" />
-                                                <m:Input id="_IDGenInput9" value="{capaModel>/ppapPpk}" />
+                                                <m:Input   id="_IDGenInput9" value="{capaModel>/ppapPpk}" />
                                             </m:VBox>
                                             <m:VBox id="_IDGenVBox4" width="20%" class="sapUiTinyMarginEnd">
                                                 <m:Label id="_IDGenLabel18" text="RPN Rating" design="Bold" />
-                                                <m:Input id="_IDGenInput10" value="{capaModel>/rpnRating}" />
+                                                <m:Input   id="_IDGenInput10" value="{capaModel>/rpnRating}" />
                                             </m:VBox>
                                             <m:VBox id="_IDGenVBox5" width="20%" class="sapUiTinyMarginEnd">
                                                 <m:Label id="_IDGenLabel19" text="Present Ppk / Cpk" design="Bold" />
-                                                <m:Input id="_IDGenInput11" value="{capaModel>/presentPpkCpk}" />
+                                                <m:Input   id="_IDGenInput11" value="{capaModel>/presentPpkCpk}" />
                                             </m:VBox>
                                             <m:VBox id="_IDGenVBox6" width="20%" class="sapUiTinyMarginEnd">
                                                 <m:Label id="_IDGenLabel20" text="Present PPM" design="Bold" />
-                                                <m:Input id="_IDGenInput12" value="{capaModel>/presentPpm}" />
+                                                <m:Input   id="_IDGenInput12" value="{capaModel>/presentPpm}" />
                                             </m:VBox>
                                             <m:VBox id="_IDGenVBox7" width="20%" class="sapUiTinyMarginEnd">
                                                 <m:Label id="_IDGenLabel21" text="Internal Audit Rating / Score" design="Bold" />
-                                                <m:Input id="_IDGenInput13" value="{capaModel>/internalAuditScore}" />
+                                                <m:Input   id="_IDGenInput13" value="{capaModel>/internalAuditScore}" />
                                             </m:VBox>
                                         </m:HBox>
                                     </m:VBox>
 
                                     <!-- Free space / Remarks -->
                                     <m:Label id="_IDGenLabel22" text="Remarks" design="Bold" />
-                                    <m:TextArea id="_IDGenTextArea2" value="{capaModel>/remarks}" rows="2" width="100%" />
+                                    <m:TextArea  id="_IDGenTextArea2" value="{capaModel>/remarks}" rows="2" width="100%" />
 
                                 </sf:SimpleForm>
                             </blocks>

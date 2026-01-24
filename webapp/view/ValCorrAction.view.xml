@@ -29,7 +29,7 @@
                                         <m:Toolbar id="_IDGenToolbar6">
                                             <!-- <m:Title text="validating Effectiveness"/> -->
                                             <m:ToolbarSpacer id="_IDGenToolbarSpacer5"/>
-                                            <m:Button id="_IDGenButton11" icon="sap-icon://add" text="Add Entry" press="onAddvalidating"/>
+                                            <m:Button id="_IDGenButton11" icon="sap-icon://add" visible="{selectedModel>/status}" text="Add Entry" press="onAddvalidating"/>
                                         </m:Toolbar>
                                     </m:headerToolbar>
 
@@ -68,8 +68,8 @@
                                             <m:cells>
                                                 <m:Text id="_IDGenText63" text="{capaModel>stepNumber}"/>
                                                 <m:TextArea id="_IDGenTextArea20" value="{capaModel>actionTaken}" rows='2'/>
-                                                <m:DatePicker id="_IDGenDatePicker3" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
-                                                <m:DatePicker id="_IDGenDatePicker4" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker3" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker4" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                 <m:TextArea id="_IDGenTextArea21" value="{capaModel>result}" rows="2"/>
                                                 <m:Input id="_IDGenInput31" value="{capaModel>responsibe}"/>
 
@@ -101,17 +101,17 @@
                                     <m:HBox id="_IDGenHBox9" class="sapUiTinyMarginBottom">
                                         <m:VBox id="_IDGenVBox10" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel32" text="CA Implementation Date" design="Bold"/>
-                                            <m:DatePicker id="idCaimpldate" value="{path:'capaModel>/CAImplDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                            <m:DatePicker enabled="{selectedModel>/status}" id="idCaimpldate" value="{path:'capaModel>/CAImplDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                         </m:VBox>
 
                                         <m:VBox id="_IDGenVBox11" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel33" text="Effectiveness Verification Date" design="Bold"/>
-                                            <m:DatePicker id="idEffectiveVerif" value="{path:'capaModel>/EffectivenessVerificationDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                            <m:DatePicker enabled="{selectedModel>/status}" id="idEffectiveVerif" value="{path:'capaModel>/EffectivenessVerificationDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                         </m:VBox>
 
                                         <m:VBox id="_IDGenVBox12" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel34" text="Effectiveness Monitoring Date" design="Bold"/>
-                                            <m:DatePicker id="idEffectiveMonitoring" value="{path:'capaModel>/EffectivenessMonitoringDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                            <m:DatePicker enabled="{selectedModel>/status}" id="idEffectiveMonitoring" value="{path:'capaModel>/EffectivenessMonitoringDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                         </m:VBox>
 
                                         <!-- <m:VBox id="_IDGenVBox13" width="25%" class="sapUiSmallMarginEnd">
@@ -121,7 +121,7 @@
                                     <m:VBox id="_IDGenVBox14">
                                         <m:Toolbar id="_IDGenToolbar8">
                                             <m:ToolbarSpacer id="_IDGenToolbarSpacer6" />
-                                            <m:Button id="_IDGenButton13" text="Add Row" icon="sap-icon://add" press=".onAddEffectivenessRow" />
+                                            <m:Button id="_IDGenButton13" text="Add Row" icon="sap-icon://add" visible="{selectedModel>/status}" press=".onAddEffectivenessRow" />
                                         </m:Toolbar>
                                         <!-- Data Table -->
                                         <m:Table id="idEffectivenessTable" inset="false" width="100%" backgroundDesign="Solid" class="sapUiTinyMarginTop" items="{
@@ -156,8 +156,8 @@
                                                             <core:Item key="{capaModel>key}" text="{capaModel>text}" />
                                                         </m:Select>
                                                         <m:Input id="_IDGenInput33" value="{capaModel>MfgQty}" type="Number" />
-                                                        <m:Input id="_IDGenInput34" value="{capaModel>DefQty}" type="Number" />
-                                                        <m:DatePicker id="_IDGenDatePicker14" value="{path:'capaModel>Date', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                        <m:Input id="_IDGenInput34" value="{capaModel>DefQty}" type="Number" valueState="{= Number(${capaModel>DefQty}) > Number(${capaModel>MfgQty}) ? 'Error' : 'None' }" valueStateText="Defect Qty must be ≤ Mfg Qty"/>
+                                                        <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker14" value="{path:'capaModel>Date', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                         <m:Button id="_IDGenButton18" icon="sap-icon://delete" text="Delete Selected" type="Reject" press=".onDeleteEffectivenessRow" visible="{capaModel>bButton}"/>
                                                     </m:cells>
                                                 </m:ColumnListItem>

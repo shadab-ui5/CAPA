@@ -30,7 +30,7 @@ sap.ui.define([
 			this.getView().setModel(oSupplierModel, "SupplierModel");
 			this.byId("idVendor").setBusy(true);
 			this.getPlantData();
-			this._loadBillingDocumentData(null, true);
+			// this._loadBillingDocumentData(null, true); // commented to avoid loading initially without supplier 
 
 			const oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("RouteMain").attachPatternMatched(this._onRouteMatched, this);

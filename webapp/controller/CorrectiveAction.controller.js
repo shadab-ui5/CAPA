@@ -30,7 +30,8 @@ sap.ui.define([
                         status: "Open",
                         attachment: "", // will hold filename
                         attachmentContent: "",  // base64 content,
-                        bButton:false
+                        objectFullName: "",
+                        bButton: false
                     }
                 ]
             });
@@ -86,7 +87,8 @@ sap.ui.define([
                 status: "Open",
                 attachment: "", // will hold filename
                 attachmentContent: "",
-                bButton:true  // base64 content
+                objectFullName: "",
+                bButton: true  // base64 content
             });
 
             oModel.setProperty("/corrective", aActions);
@@ -120,8 +122,9 @@ sap.ui.define([
                 status: "Open",
                 attachment: "", // will hold filename
                 attachmentContent: "",  // base64 content
+                objectFullName: "",
                 file: "",
-                bButton:true
+                bButton: true
             });
 
             oModel.setProperty("/validating", aActions);
@@ -156,6 +159,7 @@ sap.ui.define([
                 status: "Open",
                 attachment: "",
                 attachmentContent: "",
+                objectFullName: "",
                 file: ""
             });
 
@@ -177,7 +181,7 @@ sap.ui.define([
 
             oModel.setProperty("/monitoring", aData);
         },
-onUploadFilePress: function (oEvent) {
+        onUploadFilePress: function (oEvent) {
             let that = this;
 
             // Get the row context of the clicked row
@@ -208,6 +212,7 @@ onUploadFilePress: function (oEvent) {
                                         reader.onload = function (e) {
                                             let sBase64 = e.target.result.split(",")[1];
                                             oModel.setProperty(sPath + "/attachment", oFile.name);
+                                            oModel.setProperty(sPath + "/file", oFile);
                                             oModel.setProperty(sPath + "/attachmentContent", sBase64);
                                         };
                                         reader.readAsDataURL(oFile);
@@ -243,98 +248,13 @@ onUploadFilePress: function (oEvent) {
 
             this._oUploadDialog.open();
         },
-        onUploadFile: async function () {
-            const oView = this.getView();
-            const oCapaModel = oView.getModel("capaModel");
-            const aCorrective = oCapaModel.getProperty("/corrective") || [];
-
-            if (!aCorrective.length) {
-                sap.m.MessageToast.show("No corrective attachments found.");
-                return;
-            }
-
-            oView.setBusy(true);
-
-            try {
-                // Safe base64 converter
-                const arrayBufferToBase64 = (buffer) => {
-                    let binary = "";
-                    const bytes = new Uint8Array(buffer);
-                    for (let i = 0; i < bytes.length; i++) {
-                        binary += String.fromCharCode(bytes[i]);
-                    }
-                    return btoa(binary);
-                };
-
-                for (const oItem of aCorrective) {
-                    const oFile = oItem.file;               // File object
-                    const sFileName = oItem.attachment;     // File name
-
-                    if (!oFile || !sFileName) {
-                        console.warn("Skipping invalid corrective item:", oItem);
-                        continue;
-                    }
-
-                    // Read file
-                    const arrayBuffer = await oFile.arrayBuffer();
-                    const base64 = arrayBufferToBase64(arrayBuffer);
-
-                    const sObjectName = `${this._sCapaId}/${sFileName}`;
-
-                    const oResponse = await fetch(
-                        this.baseObjectStoreUrl + "/uploadFile",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                objectName: sObjectName,
-                                content: base64
-                            })
-                        }
-                    );
-
-                    if (!oResponse.ok) {
-                        const sErrorText = await oResponse.text();
-                        throw new Error(
-                            `Upload failed for ${sFileName}: ${sErrorText}`
-                        );
-                    }
-
-                    console.log(`Uploaded: ${sFileName}`);
-                }
-
-                sap.m.MessageToast.show("All corrective attachments uploaded successfully");
-
-                // Optional refresh
-                this._refreshFileList?.();
-
-            } catch (oError) {
-                sap.m.MessageBox.error(
-                    "File upload failed.\n" + (oError.message || oError)
-                );
-                console.error(oError);
-            } finally {
-                oView.setBusy(false);
-            }
-        },
-
 
         onSave: function () {
-
             Model.onSaveCorrective(this);
         },
-        onUploadFile: async function () {
+        onUploadFile: async function (oItem) {
+
             const oView = this.getView();
-            const oCapaModel = oView.getModel("capaModel");
-            const aCorrective = oCapaModel.getProperty("/corrective") || [];
-
-            if (!aCorrective.length) {
-                sap.m.MessageToast.show("No corrective attachments found.");
-                return;
-            }
-
             oView.setBusy(true);
 
             try {
@@ -348,44 +268,44 @@ onUploadFilePress: function (oEvent) {
                     return btoa(binary);
                 };
 
-                for (const oItem of aCorrective) {
-                    const oFile = oItem.file;               // File object
-                    const sFileName = oItem.attachment;     // File name
 
-                    if (!oFile || !sFileName) {
-                        console.warn("Skipping invalid corrective item:", oItem);
-                        continue;
-                    }
+                const oFile = oItem.file;               // File object
+                const sFileName = oItem.attachment;     // File name
 
-                    // Read file
-                    const arrayBuffer = await oFile.arrayBuffer();
-                    const base64 = arrayBufferToBase64(arrayBuffer);
+                if (!oFile || !sFileName) {
+                    console.warn("Skipping invalid corrective item:", oItem);
 
-                    const sObjectName = `${this._sCapaId}/${sFileName}_${oItem.stepNumber}`;
-
-                    const oResponse = await fetch(
-                        this.baseObjectStoreUrl + "/uploadFile",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                objectName: sObjectName,
-                                content: base64
-                            })
-                        }
-                    );
-
-                    if (!oResponse.ok) {
-                        const sErrorText = await oResponse.text();
-                        throw new Error(
-                            `Upload failed for ${sFileName}: ${sErrorText}`
-                        );
-                    }
-
-                    console.log(`Uploaded: ${sFileName}`);
                 }
+
+                // Read file
+                const arrayBuffer = await oFile.arrayBuffer();
+                const base64 = arrayBufferToBase64(arrayBuffer);
+
+                const sObjectName = `${this._sCapaId}/corrective/${sFileName}#${oItem.stepNumber}`;
+
+                const oResponse = await fetch(
+                    this.baseObjectStoreUrl + "/uploadFile",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            objectName: sObjectName,
+                            content: base64
+                        })
+                    }
+                );
+
+                if (!oResponse.ok) {
+                    const sErrorText = await oResponse.text();
+                    throw new Error(
+                        `Upload failed for ${sFileName}: ${sErrorText}`
+                    );
+                }
+
+                console.log(`Uploaded: ${sFileName}`);
+
 
                 sap.m.MessageToast.show("All corrective attachments uploaded successfully");
 
@@ -407,10 +327,10 @@ onUploadFilePress: function (oEvent) {
             const oCapaModel = oView.getModel("capaModel");
 
             oView.setBusy(true);
-
+            let that = this;
             try {
                 const url = this.baseObjectStoreUrl + "/listFiles";
-                const folderName = this._sCapaId + "CA";
+                const folderName = this._sCapaId + "/corrective";
 
                 const res = await fetch(url, {
                     method: "POST",
@@ -424,37 +344,15 @@ onUploadFilePress: function (oEvent) {
 
                 const data = await res.json();
                 const aFiles = data?.value || [];
-
+                console.log(aFiles)
                 let aCorrective = oCapaModel.getProperty("/corrective") || [];
+                aCorrective.forEach(oRow => {
+                    const oLatestFile = that.getLatestAttachmentForStep(aFiles, oRow.stepNumber);
 
-                aFiles.forEach(oFile => {
-                    const sObjectName = oFile.objectName;
-                    if (!sObjectName) {
-                        return;
-                    }
-
-                    // CAPA123CA/CAPA123_2_report.pdf
-                    const sFileName = sObjectName.split("/")[1];
-                    if (!sFileName) {
-                        return;
-                    }
-
-                    // Extract stepNumber from filename
-                    const aParts = sFileName.split("_");
-                    const iStepNumber = parseInt(aParts[1], 10);
-
-                    if (isNaN(iStepNumber)) {
-                        console.warn("Invalid filename format:", sFileName);
-                        return;
-                    }
-
-                    // 🔑 Find corrective item by stepNumber
-                    const oCorrectiveItem = aCorrective.find(
-                        oItem => Number(oItem.stepNumber) === iStepNumber
-                    );
-
-                    if (oCorrectiveItem) {
-                        oCorrectiveItem.attachment = sFileName;
+                    if (oLatestFile) {
+                        oRow.attachment = oLatestFile.objectName.split("/")[2].split('#')[0];
+                        oRow.attachmentContent = oLatestFile; // optional (full object)
+                        oRow.objectFullName = oLatestFile.objectName
                     }
                 });
 
@@ -477,7 +375,7 @@ onUploadFilePress: function (oEvent) {
             const oLocalModel = oView.getModel("capaModel");
             oView.setBusy(true);
             const sCapaId = this._sCapaId;
-
+            let that = this;
             oODataModel.read("/CorrActions", {
                 filters: [
                     new sap.ui.model.Filter("capaid", sap.ui.model.FilterOperator.EQ, sCapaId)
@@ -497,10 +395,14 @@ onUploadFilePress: function (oEvent) {
                         status: item.status || "Open",
                         attachment: "",
                         attachmentContent: "",
-                        bButton:false
+                        objectFullName: "",
+                        bButton: false
                     }));
 
                     oLocalModel.setProperty("/corrective", aCorrective);
+                    that.refreshFiles();
+
+
                 },
                 error: function (oError) {
                     oView.setBusy(false);
@@ -508,70 +410,43 @@ onUploadFilePress: function (oEvent) {
                 }
             });
         },
-        _loadDcpUpdation: function (_this) {
-            const oView = _this.getView();
-            const oODataModel = _this.getOwnerComponent().getModel("capaServiceModel");
-            const oLocalModel = oView.getModel("capaModel");
-            const sCapaId = _this._sCapaId;
+        getLatestAttachmentForStep: function (aFiles, stepNumber) {
+            const aMatched = aFiles.filter(f =>
+                f.objectName.endsWith(`#${stepNumber}`)
+            );
 
-            if (!sCapaId) {
-                return;
+            if (!aMatched.length) {
+                return null;
             }
 
-            oView.setBusy(true);
-
-            oODataModel.read("/DcpUpdation", {
-                filters: [
-                    new sap.ui.model.Filter(
-                        "capaid",
-                        sap.ui.model.FilterOperator.EQ,
-                        sCapaId
-                    )
-                ],
-                success: function (oData) {
-                    const aResults = oData.results || [];
-
-                    if (!aResults.length) {
-                        oLocalModel.setProperty("/dcpData", []);
-                        oView.setBusy(false);
-                        return;
-                    }
-
-                    // 🔁 OData → Local model mapping
-                    const aDcpData = aResults
-                        .map(oRow => ({
-                            qmsDocument: oRow.qmsdocument || "",
-                            pIfYes: oRow.pifyes === "P",          // 🔁 flag → boolean
-                            documentNo: oRow.documentno || "",
-                            revNoDate: oRow.revnodate || "",
-                            resp: oRow.resp || "",
-                            plannedDate: oRow.planneddate
-                                ? new Date(oRow.planneddate)
-                                : null,
-                            actualDate: oRow.actualdate
-                                ? new Date(oRow.actualdate)
-                                : null,
-                            status: oRow.status || "",
-                            bButton:false
-                        }))
-                        // keep UI row order stable
-                        .sort((a, b) => Number(a.serialno) - Number(b.serialno));
-
-                    oLocalModel.setProperty("/dcpData", aDcpData);
-
-                    oView.setBusy(false);
-                },
-                error: function () {
-                    oView.setBusy(false);
-                    sap.m.MessageBox.error("Failed to load DCP Updation data");
-                }
+            return aMatched.reduce((latest, current) =>
+                new Date(current.lastModified) > new Date(latest.lastModified)
+                    ? current
+                    : latest
+            );
+        },
+        onDownload: async function (oEvent) {
+            const oCtx = oEvent.getSource().getBindingContext("capaModel");
+            const objectFullName = oCtx.getProperty("objectFullName");
+            const res = await fetch(this.baseObjectStoreUrl + "/downloadFile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "objectName":objectFullName })
             });
-        }
+            const data = await res.json();
 
+            const byteCharacters = atob(data.content);
+            const byteNumbers = Array.from(byteCharacters).map(c => c.charCodeAt(0));
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray]);
+            const url = URL.createObjectURL(blob);
 
-
-
-
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = data.objectName.split('#')[0];
+            a.click();
+            URL.revokeObjectURL(url);
+        },
 
 
     });

@@ -153,8 +153,8 @@ sap.ui.define([
             oModel.setProperty("/effectivenessData", aData);
         },
         onSave: function () {
-            Model.onSaveValidationActions(this);
             Model.onSaveCAImplementation(this);
+            Model.onSaveValidationActions(this);
             let oPayload = {
                 totaltimerequired: this.getView()
                     .byId("idRejectedAnalysisDays")
@@ -262,7 +262,9 @@ sap.ui.define([
                     sap.m.MessageBox.error("Failed to load CA Implementation data");
                 }
             });
-        }
+        },
+        
+
 
 
 

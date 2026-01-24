@@ -29,46 +29,46 @@
                                     <m:HBox id="_IDGenHBox" justifyContent="Center" alignItems="Center">
                                         <m:HBox id="_IDGenHBox1" width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
                                             <m:Label id="_IDGenLabel1" text="Type of NC :" design="Bold" />
-                                            <m:Input id="_IDGenInput" value="{capaModel>/typeOfNC}" editable="true" valueState="None" class="sapUiTinyMarginBegin"/>
+                                            <m:Input   id="_IDGenInput" value="{capaModel>/typeOfNC}" editable="true" valueState="None" class="sapUiTinyMarginBegin"/>
                                         </m:HBox>
                                         <!-- Ref / Message -->
                                         <m:HBox id="_IDGenHBox2" width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
                                             <m:Label id="_IDGenLabel2" text="Ref :" design="Bold" />
-                                            <m:Input id="_IDGenInput1" value="{capaModel>/refMessage}" editable="true" class="sapUiTinyMarginBegin"/>
+                                            <m:Input   id="_IDGenInput1" value="{capaModel>/refMessage}" editable="true" class="sapUiTinyMarginBegin"/>
                                         </m:HBox>
                                         <!-- 8D Initiated Date -->
                                         <m:HBox id="_IDGenHBox3" width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
                                             <m:Label id="_IDGenLabel3" text="8D Initiated Date :" design="Bold"/>
-                                            <m:DatePicker id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy"  class="sapUiTinyMarginBegin"/>
+                                            <m:DatePicker enabled="{selectedModel>/status}"  id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy"  class="sapUiTinyMarginBegin"/>
                                         </m:HBox>
                                     </m:HBox>
                                     <!-- Part Name -->
                                     <m:Label id="_IDGenLabel4" text="Part Name" design="Bold"/>
-                                    <m:Input id="_IDGenInput2" value="{capaModel>/partName}" editable="true" />
+                                    <m:Input   id="_IDGenInput2" value="{capaModel>/partName}" editable="true" />
 
                                     <!-- Customer Name -->
                                     <m:Label id="_IDGenLabel5" text="Customer Name" design="Bold"/>
-                                    <m:Input id="_IDGenInput3" value="{capaModel>/customerName}" editable="true" />
+                                    <m:Input   id="_IDGenInput3" value="{capaModel>/customerName}" editable="true" />
 
                                     <!-- Hodek / Customer Part No -->
                                     <m:Label id="_IDGenLabel6" text="Hodek / Customer Part No" design="Bold"/>
-                                    <m:Input id="_IDGenInput4" value="{capaModel>/customerPartNo}" editable="true" />
+                                    <m:Input   id="_IDGenInput4" value="{capaModel>/customerPartNo}" editable="true" />
 
                                     <!-- Vehicle Model -->
                                     <m:Label id="_IDGenLabel7" text="Vehicle Model" design="Bold"/>
-                                    <m:Input id="_IDGenInput5" value="{capaModel>/vehicleModel}" editable="true" />
+                                    <m:Input   id="_IDGenInput5" value="{capaModel>/vehicleModel}" editable="true" />
 
                                     <!-- Drg Ref No -->
                                     <m:Label id="_IDGenLabel8" text="Drg Ref No" design="Bold"/>
-                                    <m:Input id="_IDGenInput6" value="{capaModel>/drgRefNo}" editable="true" />
+                                    <m:Input   id="_IDGenInput6" value="{capaModel>/drgRefNo}" editable="true" />
 
                                     <!-- Problem -->
                                     <m:Label id="_IDGenLabel9" text="Problem" design="Bold"/>
-                                    <m:TextArea id="_IDGenTextArea" value="{capaModel>/problem}" rows="2" width="100%" />
+                                    <m:TextArea  id="_IDGenTextArea" value="{capaModel>/problem}" rows="2" width="100%" />
 
                                     <!-- Drg Rev -->
                                     <m:Label id="_IDGenLabel10" text="Drg Rev" design="Bold"/>
-                                    <m:Input id="_IDGenInput7" value="{capaModel>/drgRev}" editable="true" />
+                                    <m:Input   id="_IDGenInput7" value="{capaModel>/drgRev}" editable="true" />
                                 </sf:SimpleForm>
                             </blocks>
                         </ObjectPageSubSection>

@@ -39,7 +39,7 @@
                                             <m:Toolbar id="_IDGenToolbar3">
                                                 <m:Title id="_IDGenTitle1" text="4.1. Preventive ( Occurrence )-  Why did the process make the defect?"/>
                                                 <m:ToolbarSpacer id="_IDGenToolbarSpacer2"/>
-                                                <m:Button id="_IDGenButton4" icon="sap-icon://add" text="Add Why" press="onAddWhy"/>
+                                                <m:Button id="_IDGenButton4" icon="sap-icon://add"  visible="{selectedModel>/status}" text="Add Why" press="onAddWhy"/>
                                             </m:Toolbar>
                                         </m:headerToolbar>
 
@@ -82,14 +82,14 @@
                                             <m:ColumnListItem id="_IDGenColumnListItem2">
                                                 <m:cells>
                                                     <m:Text id="_IDGenText32" text="Cause-{capaModel>stepNumber}"/>
-                                                    <m:TextArea id="_IDGenTextArea4" value="{capaModel>cause}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea5" value="{capaModel>definition}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea6" value="{capaModel>why1}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea7" value="{capaModel>why2}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea8" value="{capaModel>why3}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea9" value="{capaModel>why4}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea10" value="{capaModel>why5}" rows="3"/>
-                                                    <m:Input id="_IDGenInput28" value="{capaModel>contribution}" type="Number"/>
+                                                    <m:TextArea  id="_IDGenTextArea4" value="{capaModel>cause}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea5" value="{capaModel>definition}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea6" value="{capaModel>why1}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea7" value="{capaModel>why2}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea8" value="{capaModel>why3}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea9" value="{capaModel>why4}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea10" value="{capaModel>why5}" rows="3"/>
+                                                    <m:Input   id="_IDGenInput28" value="{capaModel>contribution}" type="Number"/>
                                                     <m:Button id="_IDGenButton5" icon="sap-icon://delete" type="Reject" press="onDeleteWhy" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
@@ -100,7 +100,7 @@
                                             <m:Toolbar id="_IDGenToolbar7">
                                                 <m:Title id="_IDGenTitle3" text="Fishbone / Ishikawa"/>
                                                 <m:ToolbarSpacer id="_IDGenToolbarSpacer11" />
-                                                <m:Button id="_IDGenButton17" icon="sap-icon://add" text="Add" press="onAddfish"/>
+                                                <m:Button id="_IDGenButton17" icon="sap-icon://add"  visible="{selectedModel>/status}" text="Add" press="onAddfish"/>
                                             </m:Toolbar>
                                         </m:headerToolbar>
 
@@ -138,12 +138,12 @@
                                             <m:ColumnListItem id="_IDGenColumnListItem15">
                                                 <m:cells>
                                                     <m:Text id="_IDGenText139" text="Cause-{capaModel>stepNumber}"/>
-                                                    <m:TextArea id="_IDGenTextArea22" value="{capaModel>man}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea24" value="{capaModel>machine}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea25" value="{capaModel>material}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea26" value="{capaModel>method}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea27" value="{capaModel>environment}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea28" value="{capaModel>measurment}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea22" value="{capaModel>man}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea24" value="{capaModel>machine}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea25" value="{capaModel>material}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea26" value="{capaModel>method}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea27" value="{capaModel>environment}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea28" value="{capaModel>measurment}" rows="3"/>
                                                     <m:Button id="_IDGenButton221" icon="sap-icon://delete" type="Reject" press="onDeletefish" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
@@ -154,7 +154,7 @@
                                             <m:Toolbar id="_IDGenToolbar4">
                                                 <m:Title id="_IDGenTitle2" text="4.2. Protect ( Non Detection ) -  Why did the process not detect or contain the defect?"/>
                                                 <m:ToolbarSpacer id="_IDGenToolbarSpacer3"/>
-                                                <m:Button id="_IDGenButton6" icon="sap-icon://add" text="Add Why" press="onAddWhyProtect"/>
+                                                <m:Button id="_IDGenButton6" icon="sap-icon://add"  visible="{selectedModel>/status}" text="Add Why" press="onAddWhyProtect"/>
                                             </m:Toolbar>
                                         </m:headerToolbar>
 
@@ -197,14 +197,14 @@
                                             <m:ColumnListItem id="_IDGenColumnListItem3">
                                                 <m:cells>
                                                     <m:Text id="_IDGenText43" text="Cause-{capaModel>stepNumber}"/>
-                                                    <m:TextArea id="_IDGenTextArea11" value="{capaModel>cause}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea12" value="{capaModel>definition}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea13" value="{capaModel>why1}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea14" value="{capaModel>why2}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea15" value="{capaModel>why3}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea16" value="{capaModel>why4}" rows="3"/>
-                                                    <m:TextArea id="_IDGenTextArea17" value="{capaModel>why5}" rows="3"/>
-                                                    <m:Input id="_IDGenInput29" value="{capaModel>contribution}" type="Number"/>
+                                                    <m:TextArea  id="_IDGenTextArea11" value="{capaModel>cause}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea12" value="{capaModel>definition}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea13" value="{capaModel>why1}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea14" value="{capaModel>why2}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea15" value="{capaModel>why3}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea16" value="{capaModel>why4}" rows="3"/>
+                                                    <m:TextArea  id="_IDGenTextArea17" value="{capaModel>why5}" rows="3"/>
+                                                    <m:Input   id="_IDGenInput29" value="{capaModel>contribution}" type="Number"/>
                                                     <m:Button id="_IDGenButton7" icon="sap-icon://delete" type="Reject" press="onDeleteWhyprotect" visible="{capaModel>bButton}"/>
                                                 </m:cells>
                                             </m:ColumnListItem>

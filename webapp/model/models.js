@@ -170,14 +170,24 @@ sap.ui.define([
                                 // 🔍 Exists → UPDATE
                                 if (oData && oData.capaid) {
                                     oODataModel.update(sKeyPath, oPayload, {
-                                        success: resolve,
-                                        error: reject
+                                        success: (oResponse) => {
+                                            _this.onUploadFile(oRow);   // 👈 call here
+                                            resolve(oResponse);             // 👈 keep promise chain
+                                        },
+                                        error: (oError) => {
+                                            reject(oError);
+                                        }
                                     });
                                 } else {
                                     // 🟢 Empty response → CREATE
                                     oODataModel.create("/CorrActions", oPayload, {
-                                        success: resolve,
-                                        error: reject
+                                        success: (oResponse) => {
+                                            _this.onUploadFile(oRow);   // 👈 call here
+                                            resolve(oResponse);             // 👈 keep promise chain
+                                        },
+                                        error: (oError) => {
+                                            reject(oError);
+                                        }
                                     });
                                 }
                             },
@@ -188,8 +198,13 @@ sap.ui.define([
                                 // ➕ Not found → CREATE
                                 if (sStatus === "404") {
                                     oODataModel.create("/CorrActions", oPayload, {
-                                        success: resolve,
-                                        error: reject
+                                        success: (oResponse) => {
+                                            _this.onUploadFile(oRow);   // 👈 call here
+                                            resolve(oResponse);             // 👈 keep promise chain
+                                        },
+                                        error: (oError) => {
+                                            reject(oError);
+                                        }
                                     });
                                 } else {
                                     reject(oError);
@@ -926,10 +941,19 @@ sap.ui.define([
                     return;
                 }
 
+                
+                const bHasInvalidQty = aData.some(item =>
+                    Number(item.DefQty) > Number(item.MfgQty)
+                );
+
+                if (bHasInvalidQty) {
+                    sap.m.MessageToast.show(
+                        "Defective Qty cannot be greater than Manufacturing Qty!!"
+                    );
+                    return; // ⛔ stop everything here
+                }
                 oView.setBusy(true);
-
                 const aPromises = aData.map((item, index) => {
-
                     const sSerial = String(index + 1).padStart(2, "0");
 
                     const oPayload = {
@@ -945,8 +969,8 @@ sap.ui.define([
                         effverdate: sEffVerISO,
                         caimpdate: sCAImplISO,
                         effectmontdate: sEffMonISO,
-                        monthfield: oCapaModel.getProperty("/month/" + item.Month).text || "",
-                        mfgqty: parseFloat(item.DefQty).toFixed(2) || 0,
+                        monthfield: item.Month || "",
+                        mfgqty: parseFloat(item.MfgQty).toFixed(2) || 0,
                         defectqty: parseFloat(item.DefQty).toFixed(2) || 0,
                         datefield: item.Date ? oDateFormat.format(new Date(item.Date)) : null
                     };
@@ -1540,8 +1564,8 @@ sap.ui.define([
                 oCapaModel.setProperty("/drgRev", oData.drgrev || "");
                 oCapaModel.setProperty("/totalTimeDays", parseInt(oData.totaltimerequired) || 0);
                 oCapaModel.setProperty("/lessonLearned", oData.lessonlearned || "");
-                oCapaModel.setProperty("/status", oData.status === "01" ? true : false);
-                oSelectModel.setProperty("/status", oData.status === "01" ? true : false);
+                oCapaModel.setProperty("/status", oData.status === "02" ? false : true);
+                oSelectModel.setProperty("/status", oData.status === "02" ? false : true);
                 oCapaModel.setProperty()
                 oCapaModel.refresh(true);
             },

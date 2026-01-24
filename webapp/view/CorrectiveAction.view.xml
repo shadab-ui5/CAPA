@@ -5,7 +5,7 @@
     xmlns:sf="sap.ui.layout.form"
     xmlns:un="sap.ui.unified"
     xmlns="sap.uxap">
-    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true"   navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
+    <m:Page id="page2" title="{i18n>title}" class="ICTBCustom" showHeader="true" navButtonPress="onNavBack" floatingFooter="true" enableScrolling="false">
         <ObjectPageLayout id="ObjectPageLayout" class="sapUiNoContentPadding" upperCaseAnchorBar="false">
             <headerTitle>
                 <ObjectPageHeader id="_IDGenObjectPageHeader" objectTitle="8D - PROBLEM RESOLUTION REPORT" objectImageURI="/images/GlobalActionBar.jpg" objectImageShape="Square" objectImageAlt="Company Logo" showTitleSelector="false" showMarkers="false" isObjectIconAlwaysVisible="true">
@@ -19,7 +19,7 @@
                 </ObjectPageHeader>
             </headerTitle>
             <sections>
-                
+
                 <!-- ================= 6. PREVENTIVE ACTION PLAN ================= -->
                 <ObjectPageSection id="seccorrective" title="CORRECTIVE ACTIONS / LONG TERM ACTION (Attach Photographs of actions taken)" titleUppercase="false">
                     <subSections>
@@ -30,7 +30,7 @@
                                         <m:Toolbar id="_IDGenToolbar5">
                                             <!-- <m:Title text="corrective Effectiveness"/> -->
                                             <m:ToolbarSpacer id="_IDGenToolbarSpacer4"/>
-                                            <m:Button id="_IDGenButton8" icon="sap-icon://add" text="Add Entry" press="onAddCorrective"/>
+                                            <m:Button id="_IDGenButton8" icon="sap-icon://add" visible="{selectedModel>/status}" text="Add Entry" press="onAddCorrective"/>
                                         </m:Toolbar>
                                     </m:headerToolbar>
 
@@ -72,8 +72,8 @@
                                                 <m:Text id="_IDGenText53" text="{capaModel>stepNumber}"/>
                                                 <m:TextArea id="_IDGenTextArea18" value="{capaModel>actionTaken}" rows='2'/>
 
-                                                <m:DatePicker id="_IDGenDatePicker1" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker id="_IDGenDatePicker2" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker1" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker2" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                 <m:TextArea id="_IDGenTextArea19" value="{capaModel>result}" rows="2"/>
                                                 <m:Input id="_IDGenInput30" value="{capaModel>responsibe}"/>
 
@@ -85,12 +85,13 @@
                                                     </m:items>
                                                 </m:Select>
                                                 <!-- Show attached filename -->
-                                                <m:Text id="_IDGenText54" text="{capaModel>attachment}"/>
+                                                <m:Link id="_IDGenLinkAttachment" text="{capaModel>attachment}" press=".onDownload" />
 
                                                 <!-- Actions: Upload + Delete -->
-                                                <m:HBox id="_IDGenHBox7">
-                                                    <m:Button id="_IDGenButton9" icon="sap-icon://upload" type="Emphasized" press="onUploadFilePress" class="sapUiSmallMarginEnd"/>
-                                                    <m:Button id="_IDGenButton10" icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{capaModel>bButton}"/>
+                                                <m:HBox id="_IDGenHBox11">
+                                                    <m:Button id="_IDGenButton28" icon="sap-icon://upload" type="Emphasized" press="onUploadFilePress" class="sapUiSmallMarginEnd"/>
+                                                    <m:Button id="_IDGenButton29" type="Emphasized" class="sapUiTinyMarginBegin" text="Download" press="onDownload" visible="{= !${selectedModel>/status}}"/>
+                                                    <m:Button id="_IDGenButton30" icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{capaModel>bButton}"/>
                                                 </m:HBox>
                                             </m:cells>
                                         </m:ColumnListItem>
@@ -101,13 +102,13 @@
                         </ObjectPageSubSection>
                     </subSections>
                 </ObjectPageSection>
-                
+
             </sections>
         </ObjectPageLayout>
         <m:footer>
             <m:OverflowToolbar id="_IDGenOverflowToolbar1">
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer12"/>
-               <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
+                <m:Button id="_IDGenButton21" type="Emphasized" icon="sap-icon://close-command-field" text="Prev" press="onNavBack" />
                 <m:Button id="_IDGenButton22" type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{selectedModel>/status}"/>
                 <m:Button id="_IDGenButton26" type="Emphasized" icon="sap-icon://open-command-field" text="Next" press="onNext" />
             </m:OverflowToolbar>

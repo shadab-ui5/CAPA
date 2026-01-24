@@ -51,11 +51,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Sign" />
-                                                <m:Input value="{MngVClosure>/productionchiefsign}" />
-                                                <m:Input value="{MngVClosure>/qualitychiefmrsign}" />
-                                                <m:Input value="{MngVClosure>/designchiefsign}" />
-                                                <m:Input value="{MngVClosure>/processchiefsign}" />
-                                                <m:Input value="{MngVClosure>/plantheadsign}" />
+                                                <m:Input   value="{MngVClosure>/productionchiefsign}" />
+                                                <m:Input   value="{MngVClosure>/qualitychiefmrsign}" />
+                                                <m:Input   value="{MngVClosure>/designchiefsign}" />
+                                                <m:Input   value="{MngVClosure>/processchiefsign}" />
+                                                <m:Input   value="{MngVClosure>/plantheadsign}" />
                                             </m:cells>
                                         </m:ColumnListItem>
 
@@ -63,11 +63,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Date" />
-                                                <m:DatePicker value="{path:'MngVClosure>/productionchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker value="{path:'MngVClosure>/qualitychiefmrdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker value="{path:'MngVClosure>/designchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker value="{path:'MngVClosure>/processchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker value="{path:'MngVClosure>/plantheaddate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/productionchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/qualitychiefmrdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/designchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/processchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/plantheaddate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                             </m:cells>
                                         </m:ColumnListItem>
 
@@ -75,11 +75,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Name" />
-                                                <m:Input value="{MngVClosure>/productionchiefname}" />
-                                                <m:Input value="{MngVClosure>/qualitychiefmrname}" />
-                                                <m:Input value="{MngVClosure>/designchiefname}" />
-                                                <m:Input value="{MngVClosure>/processchiefname}" />
-                                                <m:Input value="{MngVClosure>/plantheadname}" />
+                                                <m:Input   value="{MngVClosure>/productionchiefname}" />
+                                                <m:Input   value="{MngVClosure>/qualitychiefmrname}" />
+                                                <m:Input   value="{MngVClosure>/designchiefname}" />
+                                                <m:Input   value="{MngVClosure>/processchiefname}" />
+                                                <m:Input   value="{MngVClosure>/plantheadname}" />
                                             </m:cells>
                                         </m:ColumnListItem>
                                     </m:items>

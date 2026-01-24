@@ -29,7 +29,7 @@
                                         <m:Toolbar id="_IDGenToolbar1">
                                             <m:Title id="_IDGenTitle" text="Team Members"/>
                                             <m:ToolbarSpacer id="_IDGenToolbarSpacer"/>
-                                            <m:Button id="_IDGenButton" icon="sap-icon://add" text="Add Member" press="onAddTeamMember"/>
+                                            <m:Button id="_IDGenButton" icon="sap-icon://add"  visible="{selectedModel>/status}" text="Add Member" press="onAddTeamMember"/>
                                         </m:Toolbar>
                                     </m:headerToolbar>
 
@@ -92,7 +92,7 @@
                                                 <m:Text id="_IDGenText13" text="{capaModel>index}"/>
 
                                                 <!-- Name -->
-                                                <m:Input id="_IDGenInput14" value="{capaModel>name}" maxLength="40"/>
+                                                <m:Input   id="_IDGenInput14" value="{capaModel>name}" maxLength="40"/>
 
                                                 <!-- Checkboxes -->
                                                 <m:CheckBox id="_IDGenCheckBox" selected="{capaModel>isChampion}" text=""/>
@@ -100,10 +100,10 @@
                                                 <m:CheckBox id="_IDGenCheckBox2" selected="{capaModel>isTeamMember}" text=""/>
 
                                                 <!-- Role, Department, Responsibility, Contact -->
-                                                <m:Input id="_IDGenInput15" value="{capaModel>role}" maxLength="10"/>
-                                                <m:Input id="_IDGenInput16" value="{capaModel>department}"/>
-                                                <m:Input id="_IDGenInput17" value="{capaModel>responsibility}"/>
-                                                <m:Input id="_IDGenInput18" value="{capaModel>contact}" maxLength="12"/>
+                                                <m:Input   id="_IDGenInput15" value="{capaModel>role}" maxLength="10"/>
+                                                <m:Input   id="_IDGenInput16" value="{capaModel>department}"/>
+                                                <m:Input   id="_IDGenInput17" value="{capaModel>responsibility}"/>
+                                                <m:Input   id="_IDGenInput18" value="{capaModel>contact}" maxLength="12"/>
 
                                                 <!-- Delete button: only show if rowIndex > 0 -->
                                                 <m:Button id="_IDGenButton1" icon="sap-icon://delete" press="onDeleteTeamMember" visible="{capaModel>bButton}"/>
