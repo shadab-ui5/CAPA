@@ -28,6 +28,7 @@ sap.ui.define([
                         why3: "",
                         why4: "",
                         why5: "",
+                        why6: "",
                         contribution: "",
                         bButton:false
                     }
@@ -42,12 +43,13 @@ sap.ui.define([
                         why3: "",
                         why4: "",
                         why5: "",
+                        why6: "",
                         contribution: "",
                         bButton:false
                     }
                 ],
                 fishbone: [{
-                    stepNumber: 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",bButton:false
+                    stepNumber: 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",prblmdef:"",bButton:false
                 }]
             });
             if (!oModel.getProperty("/rcaMethod")) {
@@ -109,6 +111,7 @@ sap.ui.define([
                 why3: "",
                 why4: "",
                 why5: "",
+                why6: "",
                 contribution: "",
                 bButton:true
             });
@@ -120,7 +123,7 @@ sap.ui.define([
             let aWhys = oModel.getProperty("/fishbone");
 
             aWhys.push({
-                stepNumber: aWhys.length + 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",bButton:true
+                stepNumber: aWhys.length + 1, man: "", machine: "", material: "", method: "", measurment: "", environment: "",prblmdef:"",bButton:true
             });
 
             oModel.setProperty("/fishbone", aWhys);
@@ -136,6 +139,7 @@ sap.ui.define([
                 why3: "",
                 why4: "",
                 why5: "",
+                why6: "",
                 contribution: "",
                 bButton:true
             });
@@ -226,6 +230,7 @@ sap.ui.define([
                         why3: item.threewhy || "",
                         why4: item.fourwhy || "",
                         why5: item.fivewhy || "",
+                        why6: item.sixwhy || "",
                         contribution: item.percontribution || "",
                         bButton:false
                     }));
@@ -264,6 +269,7 @@ sap.ui.define([
                         why3: item.threewhy || "",
                         why4: item.fourwhy || "",
                         why5: item.fivewhy || "",
+                        why6: item.sixwhy || "",
                         contribution: item.percontribution || "",
                         bButton:false
                     }));
@@ -301,6 +307,7 @@ sap.ui.define([
                         method: item.method || "",
                         measurment: item.measurement || "",
                         environment: item.environment || "",
+                        prblmdef:item.prblmdef || "",
                         bButton:false
                     }));
 

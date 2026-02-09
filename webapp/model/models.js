@@ -941,7 +941,7 @@ sap.ui.define([
                     return;
                 }
 
-                
+
                 const bHasInvalidQty = aData.some(item =>
                     Number(item.DefQty) > Number(item.MfgQty)
                 );
@@ -1136,6 +1136,7 @@ sap.ui.define([
                         materialfield: oItem.material || "",
                         method: oItem.method || "",
                         environment: oItem.environment || "",
+                        prblmdef: oItem.prblmdef || "",
                         measurement: oItem.measurment || oItem.measurement || ""
                     };
 
@@ -1227,6 +1228,7 @@ sap.ui.define([
                         threewhy: oRow.why3 || "",
                         fourwhy: oRow.why4 || "",
                         fivewhy: oRow.why5 || "",
+                        sixwhy: oRow.why6 || "",
                         percontribution: oRow.contribution || ""
                     };
 
@@ -1322,6 +1324,7 @@ sap.ui.define([
                         threewhy: item.why3 || "",
                         fourwhy: item.why4 || "",
                         fivewhy: item.why5 || "",
+                        sixwhy: item.why6 || "",
                         percontribution: item.contribution || ""
                     };
 
@@ -1566,7 +1569,8 @@ sap.ui.define([
                 oCapaModel.setProperty("/lessonLearned", oData.lessonlearned || "");
                 oCapaModel.setProperty("/status", oData.status === "02" ? false : true);
                 oSelectModel.setProperty("/status", oData.status === "02" ? false : true);
-                oCapaModel.setProperty()
+                oSelectModel.setProperty("/status", oData.status === "02" ? false : true);
+
                 oCapaModel.refresh(true);
             },
 
@@ -1591,20 +1595,49 @@ sap.ui.define([
                 });
             },
 
-            updateRootFields: function (_this, oPayload) {
+            updateRootFields: function (_this, oPayload, flag) {
                 var oModel = _this.getOwnerComponent().getModel("capaServiceModel");
                 var sPath = `/Root(capaid='${_this._sCapaId}')`;
-
+                let that = this;
                 oModel.update(sPath, oPayload, {
                     merge: true, // PATCH / MERGE
                     success: function () {
-                        sap.m.MessageToast.show("Updated successfully");
+                        if (flag === "X") {
+                            that.updateVendorQualiFields(_this);
+                        }else{
+                            _this.onSaveFiles();
+                        }
                     },
                     error: function (oError) {
                         console.error(oError);
                     }
                 });
 
+            },
+            updateVendorQualiFields: function (_this) {
+                var oModel = _this.getOwnerComponent().getModel();
+                var that = this;
+                let oPayload = {
+                    asnno: _this.asn,
+                    itemno: _this.item,
+                    material: _this.product,
+                    appname: "SUBMIT",
+                }
+                // Perform jQuery POST
+                $.ajax({
+                    url: "/sap/bc/http/sap/ZVENDOR_MAIL",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(
+                        oPayload
+                    ),
+                    success: function (oResponse) {
+                        _this.getOwnerComponent().getRouter().navTo("RouteMain");
+                    },
+                    error: function (oError) {
+
+                    }
+                });
             },
             fetchRootFields: function (_this, sField, localProp) {
                 var oModel = _this.getOwnerComponent().getModel("capaServiceModel");

@@ -50,7 +50,7 @@
                                         <!-- 8D Initiated Date -->
                                         <m:HBox id="_IDGenHBox3" width="25%" class="sapUiTinyMarginBeginEnd" justifyContent="Center" alignItems="Center">
                                             <m:Label id="_IDGenLabel3" text="8D Initiated Date :" design="Bold"/>
-                                            <m:DatePicker enabled="{selectedModel>/status}"  id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"  class="sapUiTinyMarginBegin"/>
+                                            <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="id8dInitiated" value="{capaModel>/initiatedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"  class="sapUiTinyMarginBegin"/>
                                         </m:HBox>
                                     </m:HBox>
                                     <!-- Part Name -->
@@ -379,7 +379,7 @@
                                                 <m:Input   id="_IDGenInput24" value="{capaModel>immediateAction}" />
 
                                                 <!-- Completion -->
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
 
                                                 <!-- Responsible -->
                                                 <m:Input   id="_IDGenInput25" value="{capaModel>responsible}" />
@@ -649,7 +649,7 @@
                                                 <m:Input   value="{capaModel>action}"/>
                                                 <m:Input   value="{capaModel>errorProofing}"/>
                                                 <m:Input   value="{capaModel>responsible}"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{capaModel>date}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{capaModel>date}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
                                                 <m:Button icon="sap-icon://delete" type="Reject" press="onDeleteCorrective" visible="{= ${capaModel>/correctiveActions}.length > 1 }"/>
                                             </m:cells>
                                         </m:ColumnListItem>
@@ -713,8 +713,8 @@
                                                 <m:Text id="_IDGenText53" text="{capaModel>stepNumber}"/>
                                                 <m:TextArea  id="_IDGenTextArea18" value="{capaModel>actionTaken}" rows='2'/>
 
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker1" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker2" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker1" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker2" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
                                                 <m:TextArea  id="_IDGenTextArea19" value="{capaModel>result}" rows="2"/>
                                                 <m:Input   id="_IDGenInput30" value="{capaModel>responsibe}"/>
 
@@ -791,8 +791,8 @@
                                             <m:cells>
                                                 <m:Text id="_IDGenText63" text="{capaModel>stepNumber}"/>
                                                 <m:TextArea  id="_IDGenTextArea20" value="{capaModel>actionTaken}" rows='2'/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker3" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker4" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker3" value="{capaModel>target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker4" value="{capaModel>actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
                                                 <m:TextArea  id="_IDGenTextArea21" value="{capaModel>result}" rows="2"/>
                                                 <m:Input   id="_IDGenInput31" value="{capaModel>responsibe}"/>
 
@@ -824,17 +824,17 @@
                                     <m:HBox id="_IDGenHBox9" class="sapUiTinyMarginBottom">
                                         <m:VBox id="_IDGenVBox10" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel32" text="CA Implementation Date" design="Bold"/>
-                                            <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker5" value="{capaModel>/CAImplDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                            <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker5" value="{capaModel>/CAImplDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
                                         </m:VBox>
 
                                         <m:VBox id="_IDGenVBox11" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel33" text="Effectiveness Verification Date" design="Bold"/>
-                                            <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker6" value="{capaModel>/EffectivenessVerificationDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                            <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker6" value="{capaModel>/EffectivenessVerificationDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
                                         </m:VBox>
 
                                         <m:VBox id="_IDGenVBox12" width="25%" class="sapUiSmallMarginBegin">
                                             <m:Label id="_IDGenLabel34" text="Effectiveness Monitoring Date" design="Bold"/>
-                                            <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker7" value="{capaModel>/EffectivenessMonitoringDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                            <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker7" value="{capaModel>/EffectivenessMonitoringDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
                                         </m:VBox>
 
                                         <!-- <m:VBox id="_IDGenVBox13" width="25%" class="sapUiSmallMarginEnd">
@@ -878,7 +878,7 @@
                                                         <m:Input   id="_IDGenInput32" value="{capaModel>Month}" />
                                                         <m:Input   id="_IDGenInput33" value="{capaModel>MfgQty}" type="Number" />
                                                         <m:Input   id="_IDGenInput34" value="{capaModel>DefQty}" type="Number" />
-                                                        <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker8" value="{capaModel>Date}" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" />
+                                                        <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker8" value="{capaModel>Date}" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" />
                                                         <m:Button id="_IDGenButton18" icon="sap-icon://delete" text="Delete Selected" type="Reject" press=".onDeleteEffectivenessRow" visible="{= ${capaModel>/effectivenessData}.length > 1 }"/>
                                                     </m:cells>
                                                 </m:ColumnListItem>
@@ -938,8 +938,8 @@
                                                     <m:Text id="_IDGenText77" text="{capaModel>stepNumber}" />
                                                     <!-- Auto numbering -->
                                                     <m:Input   id="_IDGenInput35" value="{capaModel>PreventiveAction}" placeholder="Enter action" width="100%" />
-                                                    <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker9" value="{capaModel>Target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
-                                                    <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker10" value="{capaModel>Actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker9" value="{capaModel>Target}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker10" value="{capaModel>Actual}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
                                                     <m:Input   id="_IDGenInput36" value="{capaModel>Result}" width="100%" />
                                                     <m:Input   id="_IDGenInput37" value="{capaModel>Resp}" width="100%" />
                                                     <m:Select id="_IDGenSelect3" selectedKey="{capaModel>status}">
@@ -1001,7 +1001,7 @@
                                                     <m:Input   id="_IDGenInput39" value="{capaModel>ActionDetail}" placeholder="Enter action details" width="100%" />
                                                     <m:Input   id="_IDGenInput40" value="{capaModel>ErrorProofing}" placeholder="Enter error proofing" width="100%" />
                                                     <m:Input   id="_IDGenInput41" value="{capaModel>Responsible}" placeholder="Enter responsible person" width="100%" />
-                                                    <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker11" value="{capaModel>When}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
+                                                    <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker11" value="{capaModel>When}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" width="100%" />
                                                     <m:Button id="_IDGenButton16" icon="sap-icon://delete" type="Reject" press=".onDeleteHorizontalRow" visible="{= ${capaModel>/horizontalDeployment}.length > 1 }"/>
                                                 </m:cells>
                                             </m:ColumnListItem>
@@ -1084,10 +1084,10 @@
                                                     <m:Input   id="_IDGenInput57" value="{capaModel>resp}" placeholder="Responsible" />
 
                                                     <!-- Planned Date -->
-                                                    <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker19" value="{capaModel>plannedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                                    <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker19" value="{capaModel>plannedDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
 
                                                     <!-- Actual Date -->
-                                                    <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker20" value="{capaModel>actualDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
+                                                    <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker20" value="{capaModel>actualDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd" />
 
                                                     <!-- Status -->
                                                     <m:Select id="_IDGenSelect5" selectedKey="{capaModel>status}">
@@ -1158,8 +1158,8 @@
                                             <m:cells>
                                                 <m:Text id="_IDGenText93" text="{capaModel>no}"/>
                                                 <m:Text id="_IDGenText94" text="{capaModel>phase}"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker12" value="{capaModel>startDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker13" value="{capaModel>completion}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker12" value="{capaModel>startDate}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker13" value="{capaModel>completion}" displayFormat="dd.MM.yyyy" valueFormat="yyyy-MM-dd"/>
                                                 <m:Input   id="_IDGenInput42" value="{capaModel>teamMember}"/>
                                                 <m:Input   id="_IDGenInput43" value="{capaModel>area}"/>
                                                 <m:Input   id="_IDGenInput44" value="{capaModel>signOff}"/>
@@ -1242,11 +1242,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Date" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{MngVClosure>/productionchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{MngVClosure>/qualitychiefmrdate}" displayFormat="medium" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{MngVClosure>/designchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{MngVClosure>/processchiefdate}" displayFormat="medium" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{MngVClosure>/plantheaddate}" displayFormat="medium" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{MngVClosure>/productionchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{MngVClosure>/qualitychiefmrdate}" displayFormat="medium" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{MngVClosure>/designchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{MngVClosure>/processchiefdate}" displayFormat="medium" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{MngVClosure>/plantheaddate}" displayFormat="medium" />
                                             </m:cells>
                                         </m:ColumnListItem>
 

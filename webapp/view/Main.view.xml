@@ -157,7 +157,7 @@
                                     <!-- <Text text="{getListReport>VendorName}({getListReport>Vendor})"/> -->
                                     <Text id="_IDGenText129" text="{getListReport>MaterialDocument}"/>
                                     <ObjectStatus id="_IDGenObjectStatus12" text="{path:'getListReport>capaDate', formatter:'.formatter.formatDateToYyyyMmDd'}" />
-                                    <ObjectStatus id="_IDGenObjectStatus1" text="{path:'getListReport>capaDate', formatter:'.formatter.getCapaCountDown'}"  state="{path:'getListReport>capaDate', formatter:'.formatter.getCapaStatus'}" />
+                                    <ObjectStatus id="_IDGenObjectStatus1" text="{parts: [{ path:'getListReport>capaDate'},{ path: 'getListReport>ReopenDate'}],formatter: '.formatter.getCapaCountDown'}" state="{parts: [{ path: 'getListReport>capaDate' },{ path: 'getListReport>ReopenDate' }],formatter: '.formatter.getCapaStatus'}" />
                                     <Text id="_IDGenText130" text="{getListReport>InspectionLotOKQty}"/>
                                     <Text id="_IDGenText131" text="{getListReport>InspectionLotNOTOKQty}"/>
                                 </cells>

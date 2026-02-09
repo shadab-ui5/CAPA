@@ -55,8 +55,8 @@
                                             <m:cells>
                                                 <m:Text id="_IDGenText93" text="{capaModel>no}"/>
                                                 <m:Text id="_IDGenText94" text="{capaModel>phase}"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker12" value="{path:'capaModel>startDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
-                                                <m:DatePicker enabled="{selectedModel>/status}"  id="_IDGenDatePicker13" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker12" value="{path:'capaModel>startDate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  id="_IDGenDatePicker13" value="{path:'capaModel>completion', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                 <m:Input   id="_IDGenInput42" value="{capaModel>teamMember}"/>
                                                 <m:Input   id="_IDGenInput43" value="{capaModel>area}"/>
                                                 <m:Input   id="_IDGenInput44" value="{capaModel>signOff}"/>

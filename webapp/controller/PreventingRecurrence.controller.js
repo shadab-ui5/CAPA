@@ -2,17 +2,18 @@ sap.ui.define([
     'sap/ui/core/mvc/Controller',
     'hodek/capa/utils/Formatter',
     'hodek/capa/model/models',
-], function (Controller, Formatter, Model) {
+    "sap/ui/model/json/JSONModel"
+], function (Controller, Formatter, Model, JSONModel) {
     "use strict";
 
     return Controller.extend("hodek.capa.controller.PreventingRecurrence", {
         formatter: Formatter,
 
         onInit: function () {
+            this.baseObjectStoreUrl = "https://hodek-vibration-technologies-pvt-ltd-dev-hodek-eklefds556845713.cfapps.us10-001.hana.ondemand.com/odata/v4/object-store";
             let oSelectModel = this.getOwnerComponent().getModel('selectedModel');
-
+            this.getView().setModel(new JSONModel([]), "pendingFiles");
             let oModel = new sap.ui.model.json.JSONModel({
-
                 horizontalDeployment: [{
                     stepNumber: 1,
                     Product: "",
@@ -20,7 +21,7 @@ sap.ui.define([
                     ErrorProofing: "",
                     Responsible: "",
                     When: "",
-                    bButton:false
+                    bButton: false
                 }],
 
                 preventiveActions: [{
@@ -31,13 +32,13 @@ sap.ui.define([
                     Result: "",
                     Resp: "",
                     Status: "",
-                    bButton:false
+                    bButton: false
                 }],
                 dcpData: [
-                    { stepNumber: 1, "qmsDocument": "PFMEA / DFMEA", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed","bButton":false },
-                    { stepNumber: 2, "qmsDocument": "Control Plan", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed","bButton":false },
-                    { stepNumber: 3, "qmsDocument": "SOP / WI", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed","bButton":false },
-                    { stepNumber: 4, "qmsDocument": "OPL / Quality Alert", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed","bButton":false }
+                    { stepNumber: 1, "qmsDocument": "PFMEA / DFMEA", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed", "bButton": false, "selectEnable": false },
+                    { stepNumber: 2, "qmsDocument": "Control Plan", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed", "bButton": false, "selectEnable": false },
+                    { stepNumber: 3, "qmsDocument": "SOP / WI", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed", "bButton": false, "selectEnable": false },
+                    { stepNumber: 4, "qmsDocument": "OPL / Quality Alert", "pIfYes": false, "documentNo": "", "revNoDate": "", "resp": "", "plannedDate": "", "actualDate": "", "status": "Completed", "bButton": false, "selectEnable": false }
                 ],
                 qmsOptions: [
                     "Quality Management System",
@@ -77,10 +78,11 @@ sap.ui.define([
                 oModel.setProperty("/rcaMethod", "5Why");
             }
             const oRouter = this.getOwnerComponent().getRouter();
+
+            this.getView().setModel(oModel, "capaModel"); 
             oRouter.getRoute("RoutePreventingRecurrence").attachPatternMatched(this._onRouteMatched, this);
-            this.getView().setModel(oModel, "capaModel");
             if (!oSelectModel) {
-                this.getOwnerComponent().getRouter().navTo("RouteValCorrAction", {
+                this.getOwnerComponent().getRouter().navTo("RouteMain", {
                 }, true);
                 return;
             }
@@ -100,7 +102,7 @@ sap.ui.define([
             let oModel = this.getView().getModel('selectedModel');
 
             if (!oModel) {
-                this.getOwnerComponent().getRouter().navTo("RouteValCorrAction");
+                this.getOwnerComponent().getRouter().navTo("RouteMain");
                 return;
             }
             // this.getView().setBusy(true);
@@ -113,9 +115,10 @@ sap.ui.define([
             this.invoicenumber = oModel.getProperty("/InvoiceNumber");
             this.invoicedate = oModel.getProperty("/InvoiceDate");
             this._loadHorizontalDeployment();
-            Model.fetchRootFields(this,"lessonlearned","/lessonLearned");
+            Model.fetchRootFields(this, "lessonlearned", "/lessonLearned");
             this._loadDcpUpdation();
             this._loadPreventiveActions();
+            this.refreshFiles();
             console.log(this._sCapaId);
         },
 
@@ -130,7 +133,7 @@ sap.ui.define([
                 Result: "",
                 Resp: "",
                 Status: "",
-                bButton:true
+                bButton: true
             });
             oModel.setProperty("/preventiveActions", aData);
         },
@@ -161,7 +164,7 @@ sap.ui.define([
                 ErrorProofing: "",
                 Responsible: "",
                 When: "",
-                bButton:true
+                bButton: true
             });
             oModel.setProperty("/horizontalDeployment", aData);
         },
@@ -196,7 +199,7 @@ sap.ui.define([
                 plannedDate: "",
                 actualDate: "",
                 status: "Pending",
-                bButton:true
+                bButton: true
             });
 
             oModel.setProperty("/dcpData", aData);
@@ -265,7 +268,7 @@ sap.ui.define([
                             Result: oRow.resultofaction || "",
                             Resp: oRow.resp || "",
                             status: oRow.status || "",
-                            bButton:false
+                            bButton: false
                         }))
                         .sort((a, b) =>
                             Number(a.serialno) - Number(b.serialno)
@@ -313,10 +316,10 @@ sap.ui.define([
 
                     // 🔁 OData → Local model mapping
                     const aDcpData = aResults
-                        .map(oRow => ({
+                        .map((oRow, iIndex) => ({
                             stepNumber: oRow.serialno,
                             qmsDocument: oRow.qmsdocument || "",
-                            pIfYes: oRow.pifyes === "P",          // 🔁 flag → boolean
+                            pIfYes: oRow.pifyes === "P",          // flag → boolean
                             documentNo: oRow.documentno || "",
                             revNoDate: oRow.revnodate || "",
                             resp: oRow.resp || "",
@@ -327,10 +330,11 @@ sap.ui.define([
                                 ? new Date(oRow.actualdate)
                                 : null,
                             status: oRow.status || "",
-                            bButton:false
+                            bButton: false,
+                            selectEnable: iIndex >= 4   // ❌ first 4 false, rest true
                         }))
                         // keep UI row order stable
-                        .sort((a, b) => Number(a.serialno) - Number(b.serialno));
+                        .sort((a, b) => Number(a.stepNumber) - Number(b.stepNumber));
 
                     oLocalModel.setProperty("/dcpData", aDcpData);
 
@@ -383,7 +387,7 @@ sap.ui.define([
                             When: oRow.whendate
                                 ? new Date(oRow.whendate)
                                 : null,
-                            bButton:false
+                            bButton: false
                         }))
                         // keep table order stable
                         .sort((a, b) =>
@@ -400,6 +404,225 @@ sap.ui.define([
                     );
                 }
             });
+        },
+        onFileSelect: function (oEvent) {
+            const oTable = oEvent.getSource();
+            const aSelectedContexts = oTable.getSelectedContexts("pendingFiles"); // or your model name
+
+            const bHasSelection = aSelectedContexts.length > 0;
+
+            // Update RoutePoData>/attachbtn
+            this.getView().getModel("selectedModel").setProperty("/attachbtndcp", bHasSelection);
+        },
+        onUpload: function () {
+            const that = this;
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.multiple = true; // allow multiple
+            fileInput.onchange = async function (e) {
+                const files = Array.from(e.target.files);
+                if (!files.length) return;
+
+                const aPending = that.getView().getModel("pendingFiles").getData();
+                // Validation: max 5 files total
+                // if (aPending.length + files.length > 5) {
+                //     MessageToast.show("You can only attach up to 5 files.");
+                //     return;
+                // }
+
+                files.forEach(file => {
+                    aPending.push({
+                        objectName: file.name,
+                        size: file.size,
+                        lastModified: file.lastModified,
+                        file: file, // keep raw file for later upload
+                        remove:true
+                    });
+                });
+
+                that.getView().getModel("pendingFiles").setData(aPending);
+            };
+            fileInput.click();
+        },
+
+        onDownload: async function (oEvent) {
+             const oCtx = oEvent.getSource().getBindingContext("pendingFiles");
+            const objectFullName = oCtx.getProperty("fullpath");
+            if (!objectFullName) return;
+            const res = await fetch(this.baseObjectStoreUrl + "/downloadFile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ objectName:objectFullName })
+            });
+            const data = await res.json();
+
+            const byteCharacters = atob(data.content);
+            const byteNumbers = Array.from(byteCharacters).map(c => c.charCodeAt(0));
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray]);
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = data.objectName.split("/")[2];
+            a.click();
+            URL.revokeObjectURL(url);
+        },
+
+        onDelete: async function () {
+            const table = this.byId("fileTable");
+            const selected = table.getSelectedItem();
+            if (!selected) return;
+
+            const objectName = selected.getBindingContext("pendingFiles").getObject().fullpath;
+            const res = await fetch(this.baseObjectStoreUrl + "/deleteFile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ objectName })
+            });
+            const result = await res.json();
+
+            sap.m.MessageToast.show(result.value || "Deleted");
+            this.refreshFiles();
+        },
+       
+        /** 🔹 Formatter - file size */
+        formatSize: function (iSize) {
+            if (!iSize) return "0 KB";
+            let sUnit = "Bytes";
+            let iCalc = iSize;
+
+            if (iSize > 1024) {
+                iCalc = (iSize / 1024).toFixed(1);
+                sUnit = "KB";
+            }
+            if (iSize > 1024 * 1024) {
+                iCalc = (iSize / (1024 * 1024)).toFixed(1);
+                sUnit = "MB";
+            }
+            return iCalc + " " + sUnit;
+        },
+
+        /** 🔹 Formatter - icon based on MIME type */
+        getIconSrc: function (sFileName) {
+            if (sFileName) {
+                const sExt = sFileName.split(".").pop().toLowerCase();
+                if (sExt === "pdf") return "sap-icon://pdf-attachment";
+                if (["png", "jpg", "jpeg"].includes(sExt)) return "sap-icon://attachment-photo";
+                return "sap-icon://document";
+            }
+            return "sap-icon://document";
+        },
+        onSaveFiles: async function () {
+            const that = this;
+            const pending = this.getView().getModel("pendingFiles").getData();
+
+            if (!pending || pending.length === 0) {
+                sap.m.MessageToast.show("No files to upload");
+                return;
+            }
+
+            // Safe base64 converter (no spread operator)
+            const arrayBufferToBase64 = buffer => {
+                let binary = "";
+                const bytes = new Uint8Array(buffer);
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return btoa(binary);
+            };
+
+            for (let fileEntry of pending) {
+                const file = fileEntry.file;
+
+                // Read file as binary
+                const arrayBuffer = await file.arrayBuffer();
+
+                // Convert safely to base64
+                const base64 = arrayBufferToBase64(arrayBuffer);
+
+                const fileName = `${this._sCapaId}/dcpFiles/${file.name}`;
+
+                // Upload to backend
+                await fetch(this.baseObjectStoreUrl + "/uploadFile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        objectName: fileName,
+                        content: base64
+                    })
+                });
+            }
+
+            sap.m.MessageToast.show("Files uploaded");
+
+            // Clear pending
+            this.getView().getModel("pendingFiles").setData([]);
+
+            // OPTIONAL: Refresh backend files if it does NOT call onSaveFiles()
+            // await this.refreshFiles();
+        },
+
+        onRemovePendingFile: function (oEvent) {
+            const oItem = oEvent.getSource().getParent(); // ColumnListItem
+            const oCtx = oItem.getBindingContext("pendingFiles");
+            const oData = this.getView().getModel("pendingFiles").getData();
+
+            const index = oData.indexOf(oCtx.getObject());
+            if (index > -1) {
+                oData.splice(index, 1);
+            }
+            this.getView().getModel("pendingFiles").setData(oData);
+        },
+        convertToCaps: function (oEvent) {
+            const oInput = oEvent.getSource();
+            const value = oEvent.getParameter("value");
+            const caps = value.toUpperCase();
+            if (value !== caps) {
+                oInput.setValue(caps);
+                oInput.fireChange({ value: caps });  // Force change event
+            }
+        },
+        refreshFiles: async function () {
+            this.getView().setBusy(true);
+
+            let url = this.baseObjectStoreUrl + "/listFiles";
+            let folderName = this._sCapaId + "/dcpFiles";
+
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ folder: folderName })
+            });
+
+            const data = await res.json();
+
+            if (!data?.value?.length) {
+                this.getView().setBusy(false);
+                return;
+            }
+
+            /* ==============================
+               Feed data into pendingFiles
+               ============================== */
+
+            const aPending = data.value.map(file => ({
+                objectName: file.objectName?.split("/")[2],
+                fullpath:file.objectName,
+                size: file.size || 0,
+                lastModified: file.lastModified,
+                file: null,
+                remove:false
+                 // server file, no raw File object
+            }));
+
+            const oPendingModel = this.getView().getModel("pendingFiles");
+            oPendingModel.setData(aPending);
+            oPendingModel.refresh(true);
+            this.getView().setBusy(false);
         }
+
+
     });
 });

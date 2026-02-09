@@ -62,6 +62,7 @@ sap.ui.define([
             }
             // this.getView().setBusy(true);
             this._sCapaId = oModel.getProperty("/ASN_No") + oModel.getProperty("/Product");
+            this.product=oModel.getProperty("/Product");
             this.supplier = oModel.getProperty("/Vendor");
             this.purchaseorder = oModel.getProperty("/PurchaseOrder");
             this.material = oModel.getProperty("/Product");
@@ -122,7 +123,7 @@ sap.ui.define([
             let oPayload = {
                 status: "02"
             }
-            Model.updateRootFields(this, oPayload);
+            Model.updateRootFields(this, oPayload,"X");
         },
         onReject:function(){
             this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true); // replace with actual route

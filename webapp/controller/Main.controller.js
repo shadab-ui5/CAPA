@@ -679,7 +679,11 @@ sap.ui.define([
 					oVendorInput
 				));
 			}
-
+			aFilters.push(new sap.ui.model.Filter(
+				"Status",
+				sap.ui.model.FilterOperator.NE,
+				"02"
+			))
 
 
 			this._aCurrentFilters = aFilters;
@@ -692,14 +696,20 @@ sap.ui.define([
 			let oPressedItem = oEvent.getParameter("listItem"); // item that was pressed
 			let oContext = oPressedItem.getBindingContext("getListReport"); // use your model name
 			let oRowData = oContext.getObject();
-			let remainData = Formatter.getCapaCountDown(oRowData.capaDate)
-			// if (remainData === "Expired") {
-			// 	this.getView().setBusy(false);
-			// 	MessageBox.show(`Days Expired to submit CAPA for material ${oRowData.MaterialDescription}(${oRowData.Product})`);
-			// } else {
+			let remainData;
+			if (oRowData.ReopenDate) {
+				remainData = Formatter.getCapaCountDown("", oRowData.ReopenDate);
+			} else {
+				remainData = Formatter.getCapaCountDown(oRowData.capaDate, "");
+			}
+			oRowData.attachbtndcp = false
+			if (remainData === "Expired") {
+				this.getView().setBusy(false);
+				MessageBox.show(`Days Expired to submit CAPA for material ${oRowData.MaterialDescription}(${oRowData.Product})`);
+			} else {
 				this.getOwnerComponent().getModel("selectedModel").setData(oRowData);
 				this.onClickNext(); // navigate or next step
-			// }
+			}
 		},
 		onClickNext: function () {
 			this.getOwnerComponent().getRouter().navTo("RouteObject"); // replace with actual route

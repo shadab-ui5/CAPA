@@ -63,11 +63,11 @@
                                         <m:ColumnListItem>
                                             <m:cells>
                                                 <m:Text text="Date" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/productionchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/qualitychiefmrdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/designchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/processchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/plantheaddate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/productionchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/qualitychiefmrdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/designchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/processchiefdate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}"  value="{path:'MngVClosure>/plantheaddate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
                                             </m:cells>
                                         </m:ColumnListItem>
 

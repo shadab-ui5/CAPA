@@ -72,11 +72,18 @@ sap.ui.define([
          * @param {Date|string} capaDate - Date from OData (Edm.DateTime)
          * @returns {string} - Remaining days or status message
          */
-            getCapaCountDown: function (capaDate) {
-                if (!capaDate) return "NA";
-
+            getCapaCountDown: function (capaDate, reopenDate) {
+                const baseDate = reopenDate || capaDate;
+                let nday;
+                if (reopenDate) {
+                    nday = 5;
+                } else {
+                    nday = 10;
+                }
+                if (!baseDate) return "NA";
+                nday = parseInt(nday);
                 // Convert OData DateTime to JS Date
-                let oDate = capaDate instanceof Date ? capaDate : new Date(capaDate);
+                let oDate = baseDate instanceof Date ? baseDate : new Date(baseDate);
 
                 // Get today (set time to 00:00:00)
                 let oToday = new Date();
@@ -88,18 +95,19 @@ sap.ui.define([
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 // Determine status
                 let status;
-                if (diffDays > 10) {
+                if (diffDays > nday) {
                     status = "Expired"
                 } else {
-                    status = 11 - (diffDays + 1) + " days";
+                    status = (nday + 1) - (diffDays + 1) + " days";
                 }
                 return status;
             },
-            getCapaStatus: function (capaDate) {
-                if (!capaDate) return "None";
+            getCapaStatus: function (capaDate, reopenDate) {
+                const baseDate = reopenDate || capaDate;
+                if (!baseDate) return "None";
 
                 // Convert OData DateTime to JS Date
-                let oDate = capaDate instanceof Date ? capaDate : new Date(capaDate);
+                let oDate = baseDate instanceof Date ? baseDate : new Date(baseDate);
 
                 // Get today (set time to 00:00:00)
                 let oToday = new Date();
@@ -109,7 +117,7 @@ sap.ui.define([
                 // Calculate difference in days
                 let diffTime = oToday.getTime() - oDate.getTime();
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                diffDays = 15 - diffDays;
+                diffDays = 10 - diffDays;
                 // Determine status
                 let status = "";
                 if (diffDays > 5) {
@@ -137,7 +145,17 @@ sap.ui.define([
                     }
                 }
                 return status;
-            }
+            },
+            formatDateToDDMMYYYY: function (oDate) {
+                if (!oDate) return "";
+
+                const date = new Date(oDate);
+                const dd = String(date.getDate()).padStart(2, '0');
+                const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const yyyy = date.getFullYear();
+
+                return `${dd}-${mm}-${yyyy}`;
+            },
 
         };
 

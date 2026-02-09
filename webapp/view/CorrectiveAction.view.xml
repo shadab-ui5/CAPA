@@ -72,8 +72,8 @@
                                                 <m:Text id="_IDGenText53" text="{capaModel>stepNumber}"/>
                                                 <m:TextArea id="_IDGenTextArea18" value="{capaModel>actionTaken}" rows='2'/>
 
-                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker1" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
-                                                <m:DatePicker enabled="{selectedModel>/status}" id="_IDGenDatePicker2" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}" id="_IDGenDatePicker1" value="{path:'capaModel>target', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}" />
+                                                <m:DatePicker minDate="{selectedModel>/capaDate}"  enabled="{selectedModel>/status}" id="_IDGenDatePicker2" value="{path:'capaModel>actual', type:'sap.ui.model.type.Date', formatOptions:{pattern:'dd.MM.yyyy'}}"/>
                                                 <m:TextArea id="_IDGenTextArea19" value="{capaModel>result}" rows="2"/>
                                                 <m:Input id="_IDGenInput30" value="{capaModel>responsibe}"/>
 
